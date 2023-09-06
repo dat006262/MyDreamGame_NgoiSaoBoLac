@@ -152,6 +152,7 @@ public partial struct HackJob : IJobEntity
                 Source = Entity.Null
             };
             ecbp.AppendToBuffer<StatModify>(ciqi, ent, newModifi);
+
         }
         if (input.Calculate.keyVal)
         {

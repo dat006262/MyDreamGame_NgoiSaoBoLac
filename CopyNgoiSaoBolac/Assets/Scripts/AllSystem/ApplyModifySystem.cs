@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -9,7 +11,6 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.VisualScripting;
 using UnityEngine;
-
 
 [BurstCompile]
 [UpdateAfter(typeof(HackStatusSystem))]
@@ -52,6 +53,7 @@ public partial struct ApplyModifySystem : ISystem
 [BurstCompile]
 public partial struct ApplyModifyJob : IJobEntity
 {
+
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent,
                         in HackInputComponent input, in CharacterStat stat, in DynamicBuffer<StatModify> dynamicBuffer,
@@ -62,10 +64,14 @@ public partial struct ApplyModifyJob : IJobEntity
         if (check.dirty)
         {
             var finalValue = stat.BaseValueHealth;
-            //StartCalcucalte
-            for (int i = 0; i < dynamicBuffer.Length; i++)
+
+            var x = dynamicBuffer.AsNativeArray();
+            NativeArray<StatModify> copyBuffer = new NativeArray<StatModify>(x.Length, Allocator.Temp);
+            x.CopyTo(copyBuffer);
+            copyBuffer.Sort(new CompareModifierOrder());
+            for (int i = 0; i < copyBuffer.Length; i++)
             {
-                var modify = dynamicBuffer[i];
+                var modify = copyBuffer[i];
 
                 if (modify.statType == StatType.Health)
                 {
@@ -79,7 +85,7 @@ public partial struct ApplyModifyJob : IJobEntity
                     else if (modify.statModType == StatModType.PercentAdd)
                     {
                         sumPercentAdd += modify.Value;
-                        if (i + 1 >= dynamicBuffer.Length /*|| dynamicBuffer.ElementAt(i+1).statModType != StatModType.PercentAdd*/)
+                        if (i + 1 >= copyBuffer.Length /*|| hits[i].statModType != StatModType.PercentAdd*/)
                         {
                             finalValue *= 1 + sumPercentAdd;
                             sumPercentAdd = 0;
@@ -98,6 +104,7 @@ public partial struct ApplyModifyJob : IJobEntity
 
             }
 
+
             Debug.Log("Applycomplete");
             ecbp.SetComponent<CheckNeedCalculate>(ciqi, ent, new CheckNeedCalculate { dirty = false });
             ecbp.SetComponent<CharacterStat>(ciqi, ent, new CharacterStat
@@ -113,4 +120,16 @@ public partial struct ApplyModifyJob : IJobEntity
         }
     }
 }
-
+public struct CompareModifierOrder : IComparer<StatModify>
+{
+    public int Compare(StatModify mod1, StatModify mod2)
+    {
+        if (mod1.order < mod2.order)
+            return -1;
+        else if (mod1.order > mod2.order)
+        {
+            return 1;
+        }
+        return 0;
+    }
+}
