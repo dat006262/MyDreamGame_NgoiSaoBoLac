@@ -153,6 +153,7 @@ public partial struct MovementJob : IJobEntity
         // teleport / hyperspace
         if (input.Teleport.keyVal)
         {
+
         }
     }
 

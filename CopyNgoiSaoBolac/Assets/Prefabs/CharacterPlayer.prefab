@@ -112,6 +112,7 @@ MonoBehaviour:
   PlusHealth: 49
   PlusMana: 50
   MultiHealth: 51
+  Calculate: 32
 --- !u!114 &5879439839694072232
 MonoBehaviour:
   m_ObjectHideFlags: 0

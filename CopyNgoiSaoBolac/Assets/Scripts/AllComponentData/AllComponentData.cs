@@ -82,9 +82,11 @@ public struct CharacterStat : IComponentData
 {
 
     public float BaseValueStrength;
+    public float _strengValue;
     public float BaseValueHealth;
+    public float _healthValue;
     public float BaseValueMana;
-    public float _value;
+    public float _manaValue;
 }
 public enum StatModType
 {
@@ -111,6 +113,12 @@ public struct HackInputComponent : IComponentData
     public InputPair PlusHealth;
     public InputPair PlusMana;
     public InputPair MultiHealth;
+    public InputPair Calculate
+        ;
     //public InputPair Boost;
 
+}
+public struct CheckNeedCalculate : IComponentData
+{
+    public bool dirty;//need?
 }

@@ -44,6 +44,11 @@ public partial class HackStatusSystem : SystemBase
                 {
                     keyCode = hackComp.MultiHealth.keyCode,
                     keyVal = Input.GetKeyDown(hackComp.MultiHealth.keyCode)
+                },
+                Calculate = new HackInputComponent.InputPair
+                {
+                    keyCode = hackComp.Calculate.keyCode,
+                    keyVal = Input.GetKeyDown(hackComp.Calculate.keyCode)
                 }
             });
         }).Run();
@@ -60,6 +65,7 @@ public partial struct HackSystem : ISystem
         // at least one player in the scene
         state.RequireForUpdate<PlayerComponent>();
         state.RequireForUpdate<HackInputComponent>();
+        state.RequireForUpdate<CheckNeedCalculate>();
         state.RequireForUpdate<HackSystemEnable>();
 
         m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
@@ -86,6 +92,8 @@ public partial struct HackSystem : ISystem
             ecbp = ecb.AsParallelWriter()
         }.ScheduleParallel(m_playersEQG, state.Dependency);
         state.Dependency.Complete();
+
+
     }
 }
 
@@ -98,7 +106,7 @@ public partial struct HackJob : IJobEntity
     //[ReadOnly] public BufferLookup<StatModify> statModify;
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in PlayerComponent plComp, in Entity ent,
-                        in HackInputComponent input,
+                        in HackInputComponent input, in CheckNeedCalculate check,
                         in LocalTransform ltrans, in WorldTransform wtrans)
     {
 
@@ -109,8 +117,8 @@ public partial struct HackJob : IJobEntity
         {
             StatModify newModifi = new StatModify
             {
-                Value = 1,
-                statModType = StatModType.PercentAdd,
+                Value = 100,
+                statModType = StatModType.Flat,
                 statType = StatType.Health,
                 order = 300,
                 Source = Entity.Null
@@ -123,9 +131,9 @@ public partial struct HackJob : IJobEntity
         {
             StatModify newModifi = new StatModify
             {
-                Value = 1,
+                Value = 0.1f,
                 statModType = StatModType.PercentAdd,
-                statType = StatType.Mana,
+                statType = StatType.Health,
                 order = 300,
                 Source = Entity.Null
             };
@@ -137,13 +145,17 @@ public partial struct HackJob : IJobEntity
         {
             StatModify newModifi = new StatModify
             {
-                Value = 1,
+                Value = 0.1f,
                 statModType = StatModType.PercentMulti,
                 statType = StatType.Health,
                 order = 300,
                 Source = Entity.Null
             };
             ecbp.AppendToBuffer<StatModify>(ciqi, ent, newModifi);
+        }
+        if (input.Calculate.keyVal)
+        {
+            ecbp.SetComponent<CheckNeedCalculate>(ciqi, ent, new CheckNeedCalculate { dirty = true });
         }
 
     }

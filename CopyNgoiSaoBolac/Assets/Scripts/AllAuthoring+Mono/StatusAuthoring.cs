@@ -13,10 +13,13 @@ public class StatusAuthoring : MonoBehaviour
             AddComponent<CharacterStat>(new CharacterStat
             {
                 BaseValueHealth = 100,
+                _healthValue = 0,
                 BaseValueStrength = 100,
+                _strengValue = 0,
                 BaseValueMana = 100,
-                _value = 0
+                _manaValue = 0
             });
+            AddComponent<CheckNeedCalculate>(new CheckNeedCalculate { dirty = true });
             AddBuffer<StatModify>();
 
         }

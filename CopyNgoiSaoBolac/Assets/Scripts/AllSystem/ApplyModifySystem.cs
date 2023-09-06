@@ -12,7 +12,7 @@ using UnityEngine;
 
 
 [BurstCompile]
-[UpdateAfter(typeof(HackJob))]
+[UpdateAfter(typeof(HackStatusSystem))]
 public partial struct ApplyModifySystem : ISystem
 {
     private EntityQuery m_applyStatus;
@@ -22,6 +22,7 @@ public partial struct ApplyModifySystem : ISystem
 
         state.RequireForUpdate<StatModify>();
         state.RequireForUpdate<CharacterStat>();
+        state.RequireForUpdate<CheckNeedCalculate>();
         state.RequireForUpdate<ApplyModifySystemEnable>();
 
         m_applyStatus = state.GetEntityQuery(ComponentType.ReadOnly<CharacterStat>());
@@ -53,18 +54,63 @@ public partial struct ApplyModifyJob : IJobEntity
 {
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent,
-                        in HackInputComponent input, in CharacterStat stat, in DynamicBuffer<StatModify> dynamicBuffer
+                        in HackInputComponent input, in CharacterStat stat, in DynamicBuffer<StatModify> dynamicBuffer,
+                        in CheckNeedCalculate check
                         )
     {
 
-
-        for (int i = 0; i < dynamicBuffer.Length; i++)
+        if (check.dirty)
         {
+            var finalValue = stat.BaseValueHealth;
+            //StartCalcucalte
+            for (int i = 0; i < dynamicBuffer.Length; i++)
+            {
+                var modify = dynamicBuffer[i];
 
-            Debug.Log(i);
+                if (modify.statType == StatType.Health)
+                {
+
+                    float sumPercentAdd = 0;
+                    if (modify.statModType == StatModType.Flat)
+                    {
+                        finalValue += modify.Value;
+                    }
+
+                    else if (modify.statModType == StatModType.PercentAdd)
+                    {
+                        sumPercentAdd += modify.Value;
+                        if (i + 1 >= dynamicBuffer.Length /*|| dynamicBuffer.ElementAt(i+1).statModType != StatModType.PercentAdd*/)
+                        {
+                            finalValue *= 1 + sumPercentAdd;
+                            sumPercentAdd = 0;
+                        }
+                    }
+
+                    else if (modify.statModType == StatModType.PercentMulti)
+                    {
+                        finalValue *= 1 + modify.Value;
+                    }
+
+
+                }
+
+                //End
+
+            }
+
+            Debug.Log("Applycomplete");
+            ecbp.SetComponent<CheckNeedCalculate>(ciqi, ent, new CheckNeedCalculate { dirty = false });
+            ecbp.SetComponent<CharacterStat>(ciqi, ent, new CharacterStat
+            {
+                BaseValueHealth = stat.BaseValueHealth,
+                BaseValueMana = stat.BaseValueMana,
+                BaseValueStrength = stat.BaseValueStrength,
+                _healthValue = finalValue,
+                _manaValue = stat._manaValue,
+                _strengValue = stat._strengValue
+
+            });
         }
-
-
     }
 }
 
