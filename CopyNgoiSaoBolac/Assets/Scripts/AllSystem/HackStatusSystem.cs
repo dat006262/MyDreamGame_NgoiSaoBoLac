@@ -55,6 +55,11 @@ public partial class HackStatusSystem : SystemBase
                     keyCode = hackComp.EquipItem.keyCode,
                     keyVal = Input.GetKeyDown(hackComp.EquipItem.keyCode)
                 },
+                UseSkill = new HackInputComponent.InputPair
+                {
+                    keyCode = hackComp.UseSkill.keyCode,
+                    keyVal = Input.GetKeyDown(hackComp.UseSkill.keyCode)
+                },
             });
         }).Run();
     }
@@ -64,6 +69,7 @@ public partial struct HackSystem : ISystem
 {
     // private BufferLookup<StatModify> statModify;
     private EntityQuery m_playersEQG;
+    private EntityQuery m_SkillEQG;
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
@@ -74,6 +80,7 @@ public partial struct HackSystem : ISystem
         state.RequireForUpdate<HackSystemEnable>();
 
         m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
+        m_SkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillComponent>());
         //  statModify = state.GetBufferLookup<StatModify>(true);
     }
 
@@ -88,20 +95,29 @@ public partial struct HackSystem : ISystem
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
-        //GetItem   
+        //GetItem   \
+        #region GetItem
         Entity item;
-        // EntityQuery x = state.GetEntityQuery(ComponentType.ReadOnly<ItemComponent>());
 
-        item = SystemAPI.GetSingletonEntity<ItemComponent>();// 11
+        item = SystemAPI.GetSingletonEntity<ItemComponent>();
         DynamicBuffer<StatModify> itemMod = state.EntityManager.GetBuffer<StatModify>(item, true);
         var x = itemMod.AsNativeArray();
         NativeArray<StatModify> copyBuffer = new NativeArray<StatModify>(x.Length, Allocator.TempJob);
         x.CopyTo(copyBuffer);
-        //tam thoi
         EquipByPlayerComponent EquipByPlayerComponent = state.EntityManager.GetComponentData<EquipByPlayerComponent>(item);
+        #endregion
+
+        #region GetSkill
+        Entity Skill;
+        Skill = SystemAPI.GetSingletonEntity<SkillComponent>();
+        SkillCoolDownComponent skillCoolDownComponent = state.EntityManager.GetComponentData<SkillCoolDownComponent>(Skill);
+
+        #endregion
         state.Dependency = new HackJob
         {
             Item = item,
+            Skill = Skill,
+            skillCoolDownComponent = skillCoolDownComponent,
             EquipByPlayerComponent = EquipByPlayerComponent,
             itemMods = copyBuffer,
             deltaTime = Time.deltaTime,
@@ -110,7 +126,6 @@ public partial struct HackSystem : ISystem
 
         }.ScheduleParallel(m_playersEQG, state.Dependency);
         state.Dependency.Complete();
-
 
     }
 }
@@ -122,6 +137,10 @@ public partial struct HackJob : IJobEntity
     public Entity Item;
     public NativeArray<StatModify> itemMods;
     public EquipByPlayerComponent EquipByPlayerComponent;
+
+    public Entity Skill;
+    public SkillCoolDownComponent skillCoolDownComponent;
+
     [ReadOnly]
     public float deltaTime;
     //[ReadOnly] public BufferLookup<StatModify> statModify;
@@ -225,6 +244,15 @@ public partial struct HackJob : IJobEntity
                 #endregion
             }
         }
+
+        if (input.UseSkill.keyVal)
+        {
+            if (skillCoolDownComponent.canUse)
+                ecbp.SetComponent<SkillCoolDownComponent>(ciqi, Skill, new SkillCoolDownComponent { coolDown = skillCoolDownComponent.coolDown, remain = skillCoolDownComponent.coolDown });
+        }
     }
 }
+
+
+
 

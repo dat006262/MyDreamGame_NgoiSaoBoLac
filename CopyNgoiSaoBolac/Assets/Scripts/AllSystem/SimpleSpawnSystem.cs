@@ -21,8 +21,6 @@ public partial struct SimpleSpawnSystem : ISystem
 
         spawnerEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
            .WithAll<SimpleSpawnerComponent>()
-           // .WithAll<PrefabAndParentBufferComponent>()
-           // .WithAbsent<PlayerSpawnerTag>()
            );
     }
 

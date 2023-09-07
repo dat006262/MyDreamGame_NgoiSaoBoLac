@@ -116,7 +116,8 @@ public struct HackInputComponent : IComponentData
     public InputPair Calculate;
 
     public InputPair EquipItem;
-    //public InputPair Boost;
+
+    public InputPair UseSkill;
 
 }
 public struct CheckNeedCalculate : IComponentData
@@ -140,3 +141,42 @@ public struct EquipByPlayerComponent : IComponentData
     public bool equip;
 }
 
+//------------SkillSystem-----------------------
+public enum SkillType
+{
+    HitEffect = 100,
+    Buff = 200,
+    Teleport = 300,
+    Fire = 400
+
+}
+public enum SkillTarget
+{
+    OneTarget,
+    MultiTarget
+}
+public enum SkillShapeType
+{
+    Line,
+    Round,
+    Other
+}
+public enum SkillDame
+{
+    OneTime,
+    TimeByTime
+}
+public struct SkillComponent : IComponentData
+{
+}
+public struct SkillCoolDownComponent : IComponentData
+{
+    public float coolDown;
+    public float remain;
+    public bool canUse => remain <= 0f;
+}
+public struct SkillInforComponent : IComponentData
+{
+
+    public float damage;
+}
