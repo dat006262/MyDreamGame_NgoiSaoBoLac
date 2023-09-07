@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -122,3 +122,14 @@ public struct CheckNeedCalculate : IComponentData
 {
     public bool dirty;//need?
 }
+
+public struct ItemComponent : IComponentData
+{
+
+
+}
+//[Serializable]
+//public struct ItemInforComponent : IComponentData
+//{
+//    public System.String name;
+//}

@@ -17,6 +17,7 @@ public class EnemyAuthoring : MonoBehaviour
 
         public override void Bake(EnemyAuthoring authoring)
         {
+
             AddComponent<EnemyComponent>(/*entity, */new EnemyComponent
             {
                 moveSpeed = authoring.moveSpeed,
