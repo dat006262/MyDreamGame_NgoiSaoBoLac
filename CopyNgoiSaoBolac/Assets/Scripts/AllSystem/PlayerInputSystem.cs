@@ -106,10 +106,10 @@ public partial struct PlayerMovementSystem : ISystem
 
         float3 targetAreaBL = float3.zero;
         float3 targetAreaTR = float3.zero;
-
+        float delta = SystemAPI.Time.DeltaTime;
         state.Dependency = new MovementJob
         {
-            deltaTime = Time.deltaTime,
+            deltaTime = delta,
             ecbp = ecb.AsParallelWriter(),
             targetAreaBL = targetAreaBL,
             targetAreaTR = targetAreaTR
@@ -131,24 +131,26 @@ public partial struct MovementJob : IJobEntity
     public void Execute([ChunkIndexInQuery] int ciqi, in PlayerComponent plComp,
                         ref PhysicsVelocity velocity, in Entity ent,
                         in PlayerInputComponent input, in PhysicsMass mass,
-                        in LocalTransform ltrans, in WorldTransform wtrans)
+                        ref LocalTransform ltrans, in WorldTransform wtrans)
     {
         float rotateSpeed = plComp.rotateSpeed;
         float moveSpeed = plComp.moveSpeed;
         // rotate
         if (input.Left.keyVal)
-            // velocity.ApplyAngularImpulse(mass, new float3(0, 0, +rotateSpeed * deltaTime));
             velocity.ApplyImpulse(mass, ltrans.Position, ltrans.Rotation, -ltrans.Right() * moveSpeed * deltaTime, wtrans.Position);
+        //   ltrans.Position += new float3(-1, 0, 0) * moveSpeed * deltaTime;
 
         if (input.Right.keyVal)
-            //velocity.ApplyAngularImpulse(mass, new float3(0, 0, -rotateSpeed * deltaTime));
             velocity.ApplyImpulse(mass, ltrans.Position, ltrans.Rotation, ltrans.Right() * moveSpeed * deltaTime, wtrans.Position);
+        //  ltrans.Position += new float3(1, 0, 0) * moveSpeed * deltaTime;
         // move
         if (input.Up.keyVal)
             velocity.ApplyImpulse(mass, ltrans.Position, ltrans.Rotation, ltrans.Up() * moveSpeed * deltaTime, wtrans.Position);
+        //  ltrans.Position += new float3(0, 1, 0) * moveSpeed * deltaTime;
 
         if (input.Down.keyVal)
             velocity.ApplyImpulse(mass, ltrans.Position, ltrans.Rotation, -ltrans.Up() * moveSpeed * deltaTime, wtrans.Position);
+        //   ltrans.Position += new float3(0, -1, 0) * moveSpeed * deltaTime;
 
         // teleport / hyperspace
         if (input.Teleport.keyVal)

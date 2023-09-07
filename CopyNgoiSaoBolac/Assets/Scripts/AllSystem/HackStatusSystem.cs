@@ -128,7 +128,7 @@ public partial struct HackJob : IJobEntity
 
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in PlayerComponent plComp, in Entity ent,
-                        in HackInputComponent input, in CheckNeedCalculate check, in DynamicBuffer<StatModify> dynamicBuffer,
+                        in HackInputComponent input, in CheckNeedCalculate check, ref DynamicBuffer<StatModify> dynamicBuffer,
                         in LocalTransform ltrans, in WorldTransform wtrans)
     {
 
@@ -197,21 +197,32 @@ public partial struct HackJob : IJobEntity
             }
             else
             {
-                var x = dynamicBuffer.AsNativeArray();
-                NativeArray<StatModify> copyBuffer = new NativeArray<StatModify>(x.Length, Allocator.Temp);
-                x.CopyTo(copyBuffer);
-                ecbp.SetBuffer<StatModify>(ciqi, ent);
-                for (int i = copyBuffer.Length - 1; i >= 0; i--)
+                #region Cach1 : dung in DynamicBuffer<StatModify> dynamicBuffer(chi doc)
+                //var x = dynamicBuffer.AsNativeArray();
+                //NativeArray<StatModify> copyBuffer = new NativeArray<StatModify>(x.Length, Allocator.Temp);
+                //x.CopyTo(copyBuffer);
+                //ecbp.SetBuffer<StatModify>(ciqi, ent);
+                //for (int i = copyBuffer.Length - 1; i >= 0; i--)
+                //{
+                //    if (copyBuffer[i].Source != Item)
+                //    {
+                //        ecbp.AppendToBuffer<StatModify>(ciqi, ent, copyBuffer[i]);
+                //    }
+                //}
+                //ecbp.SetComponent<EquipByPlayerComponent>(ciqi, Item, new EquipByPlayerComponent { equip = false });
+
+                #endregion
+                //-------------------Test 2
+                #region Cach2 : dung ref DynamicBuffer<StatModify> dynamicBuffer(doc va ghi)
+                for (int i = dynamicBuffer.Length - 1; i >= 0; i--)
                 {
-                    if (copyBuffer[i].Source != Item)
+                    if (dynamicBuffer[i].Source == Item)
                     {
-                        ecbp.AppendToBuffer<StatModify>(ciqi, ent, copyBuffer[i]);
+                        dynamicBuffer.RemoveAt(i);
                     }
                 }
                 ecbp.SetComponent<EquipByPlayerComponent>(ciqi, Item, new EquipByPlayerComponent { equip = false });
-
-                //UnEuip
-
+                #endregion
             }
         }
     }

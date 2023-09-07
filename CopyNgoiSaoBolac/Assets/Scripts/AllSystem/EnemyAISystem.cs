@@ -42,7 +42,7 @@ public partial struct EnemyAISystem : ISystem
 
         state.Dependency = new EnemyChaseJob
         {
-            deltaTime = Time.deltaTime,
+            deltaTime = SystemAPI.Time.DeltaTime,
             ecbp = ecb.AsParallelWriter(),
             playerPosArr = playerPosArr,
             physWorld = physWorld
