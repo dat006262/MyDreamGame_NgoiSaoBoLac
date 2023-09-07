@@ -113,8 +113,9 @@ public struct HackInputComponent : IComponentData
     public InputPair PlusHealth;
     public InputPair PlusMana;
     public InputPair MultiHealth;
-    public InputPair Calculate
-        ;
+    public InputPair Calculate;
+
+    public InputPair EquipItem;
     //public InputPair Boost;
 
 }
@@ -128,8 +129,14 @@ public struct ItemComponent : IComponentData
 
 
 }
-//[Serializable]
-//public struct ItemInforComponent : IComponentData
-//{
-//    public System.String name;
-//}
+//---------------------EquipSystem------------------------
+public struct OwnerByPlayerComponent : IComponentData
+{
+    public bool owner;
+
+}
+public struct EquipByPlayerComponent : IComponentData
+{
+    public bool equip;
+}
+

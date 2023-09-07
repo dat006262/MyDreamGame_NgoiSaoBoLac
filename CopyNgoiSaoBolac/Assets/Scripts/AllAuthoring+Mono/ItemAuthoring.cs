@@ -39,7 +39,6 @@ public class ItemBaker : Baker<ItemAuthoring>
         var ent = GetEntity(authoring);
         ////How to Equip //UnEquip //
         AddComponent<ItemComponent>();
-        // AddComponent<ItemInforComponent>(new ItemInforComponent { });
 
         DynamicBuffer<StatModify> modifies = AddBuffer<StatModify>();
         foreach (Modify modify in authoring.Modifies)
@@ -54,6 +53,9 @@ public class ItemBaker : Baker<ItemAuthoring>
 
             });
         }
+        //--------EuipOwner------------
+        AddComponent<EquipByPlayerComponent>(new EquipByPlayerComponent { equip = false });
+        AddComponent<OwnerByPlayerComponent>(new OwnerByPlayerComponent { owner = false });
     }
 }
 

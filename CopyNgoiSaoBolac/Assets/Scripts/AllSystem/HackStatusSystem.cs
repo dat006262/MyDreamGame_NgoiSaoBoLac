@@ -49,7 +49,12 @@ public partial class HackStatusSystem : SystemBase
                 {
                     keyCode = hackComp.Calculate.keyCode,
                     keyVal = Input.GetKeyDown(hackComp.Calculate.keyCode)
-                }
+                },
+                EquipItem = new HackInputComponent.InputPair
+                {
+                    keyCode = hackComp.EquipItem.keyCode,
+                    keyVal = Input.GetKeyDown(hackComp.EquipItem.keyCode)
+                },
             });
         }).Run();
     }
@@ -83,13 +88,26 @@ public partial struct HackSystem : ISystem
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
+        //GetItem   
+        Entity item;
+        // EntityQuery x = state.GetEntityQuery(ComponentType.ReadOnly<ItemComponent>());
 
-
+        item = SystemAPI.GetSingletonEntity<ItemComponent>();// 11
+        DynamicBuffer<StatModify> itemMod = state.EntityManager.GetBuffer<StatModify>(item, true);
+        var x = itemMod.AsNativeArray();
+        NativeArray<StatModify> copyBuffer = new NativeArray<StatModify>(x.Length, Allocator.TempJob);
+        x.CopyTo(copyBuffer);
+        //tam thoi
+        EquipByPlayerComponent EquipByPlayerComponent = state.EntityManager.GetComponentData<EquipByPlayerComponent>(item);
         state.Dependency = new HackJob
         {
+            Item = item,
+            EquipByPlayerComponent = EquipByPlayerComponent,
+            itemMods = copyBuffer,
             deltaTime = Time.deltaTime,
             //  statModify = statModify,
             ecbp = ecb.AsParallelWriter()
+
         }.ScheduleParallel(m_playersEQG, state.Dependency);
         state.Dependency.Complete();
 
@@ -101,12 +119,16 @@ public partial struct HackSystem : ISystem
 [BurstCompile]
 public partial struct HackJob : IJobEntity
 {
+    public Entity Item;
+    public NativeArray<StatModify> itemMods;
+    public EquipByPlayerComponent EquipByPlayerComponent;
     [ReadOnly]
     public float deltaTime;
     //[ReadOnly] public BufferLookup<StatModify> statModify;
+
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in PlayerComponent plComp, in Entity ent,
-                        in HackInputComponent input, in CheckNeedCalculate check,
+                        in HackInputComponent input, in CheckNeedCalculate check, in DynamicBuffer<StatModify> dynamicBuffer,
                         in LocalTransform ltrans, in WorldTransform wtrans)
     {
 
@@ -158,7 +180,40 @@ public partial struct HackJob : IJobEntity
         {
             ecbp.SetComponent<CheckNeedCalculate>(ciqi, ent, new CheckNeedCalculate { dirty = true });
         }
+        if (input.EquipItem.keyVal)
+        {
 
+
+
+            if (!EquipByPlayerComponent.equip)//false
+            {
+                foreach (StatModify statModify in itemMods)
+                {
+                    ecbp.AppendToBuffer<StatModify>(ciqi, ent, statModify);
+                }
+
+
+                ecbp.SetComponent<EquipByPlayerComponent>(ciqi, Item, new EquipByPlayerComponent { equip = true });
+            }
+            else
+            {
+                var x = dynamicBuffer.AsNativeArray();
+                NativeArray<StatModify> copyBuffer = new NativeArray<StatModify>(x.Length, Allocator.Temp);
+                x.CopyTo(copyBuffer);
+                ecbp.SetBuffer<StatModify>(ciqi, ent);
+                for (int i = copyBuffer.Length - 1; i >= 0; i--)
+                {
+                    if (copyBuffer[i].Source != Item)
+                    {
+                        ecbp.AppendToBuffer<StatModify>(ciqi, ent, copyBuffer[i]);
+                    }
+                }
+                ecbp.SetComponent<EquipByPlayerComponent>(ciqi, Item, new EquipByPlayerComponent { equip = false });
+
+                //UnEuip
+
+            }
+        }
     }
 }
 

@@ -17,6 +17,7 @@ public class PlayerInputAuthoring : MonoBehaviour
     public KeyCode PlusMana;
     public KeyCode MultiHealth;
     public KeyCode Calculate;
+    public KeyCode EquipItem;
     public class PlayerBaker : Baker<PlayerInputAuthoring>
     {
         public override void Bake(PlayerInputAuthoring authoring)
@@ -36,7 +37,8 @@ public class PlayerInputAuthoring : MonoBehaviour
                 PlusHealth = new HackInputComponent.InputPair { keyCode = authoring.PlusHealth },
                 PlusMana = new HackInputComponent.InputPair { keyCode = authoring.PlusMana },
                 MultiHealth = new HackInputComponent.InputPair { keyCode = authoring.MultiHealth },
-                Calculate = new HackInputComponent.InputPair { keyCode = authoring.Calculate }
+                Calculate = new HackInputComponent.InputPair { keyCode = authoring.Calculate },
+                EquipItem = new HackInputComponent.InputPair { keyCode = authoring.EquipItem },
             });
         }
     }
