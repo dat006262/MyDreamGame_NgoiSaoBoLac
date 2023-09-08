@@ -19,6 +19,8 @@ public class PlayerAuthoring : MonoBehaviour
                 rotateSpeed = authoring.rotateSpeed
             });
 
+            AddComponent<ChosseItemComponent>(new ChosseItemComponent { ID = 0, item = Entity.Null });
+
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Input;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -97,6 +98,8 @@ public enum StatModType
 [InternalBufferCapacity(8)]
 public struct StatModify : IBufferElementData
 {
+
+
     public float Value;
     public StatType statType;
     public StatModType statModType;
@@ -116,6 +119,8 @@ public struct HackInputComponent : IComponentData
     public InputPair Calculate;
 
     public InputPair EquipItem;
+    public InputPair ChosseItem;
+    public InputPair EquipMiniItem;
 
     public InputPair UseSkill;
 
@@ -127,7 +132,8 @@ public struct CheckNeedCalculate : IComponentData
 
 public struct ItemComponent : IComponentData
 {
-
+    public int ID;
+    public Entity prefab;
 
 }
 //---------------------EquipSystem------------------------
@@ -180,3 +186,16 @@ public struct SkillInforComponent : IComponentData
 
     public float damage;
 }
+//--------------Inventory---------------
+public struct InventoryComponent : IComponentData
+{
+
+
+}
+//-----------------Chosse-------------//
+public struct ChosseItemComponent : IComponentData
+{
+    public int ID;
+    public Entity item;
+}
+

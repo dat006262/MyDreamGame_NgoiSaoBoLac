@@ -9,6 +9,7 @@ using UnityEngine;
 public class ItemAuthoring : MonoBehaviour
 {
     public string name = "BaseSheild";
+    public int ID = 1000;
     public Modify[] Modifies;
     public NativeArray<StatModify> arrayMod;
 
@@ -38,7 +39,7 @@ public class ItemBaker : Baker<ItemAuthoring>
     {
         var ent = GetEntity(authoring);
         ////How to Equip //UnEquip //
-        AddComponent<ItemComponent>();
+        AddComponent<ItemComponent>(new ItemComponent { prefab = Entity.Null, ID = authoring.ID });
 
         DynamicBuffer<StatModify> modifies = AddBuffer<StatModify>();
         foreach (Modify modify in authoring.Modifies)

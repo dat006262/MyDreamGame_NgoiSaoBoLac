@@ -1,6 +1,7 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Authoring;
@@ -9,10 +10,12 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 
 public partial class HackStatusSystem : SystemBase
 {
+
     protected override void OnCreate()
     {
         RequireForUpdate<HackStatusSystemEnable>();
@@ -60,6 +63,16 @@ public partial class HackStatusSystem : SystemBase
                     keyCode = hackComp.UseSkill.keyCode,
                     keyVal = Input.GetKeyDown(hackComp.UseSkill.keyCode)
                 },
+                ChosseItem = new HackInputComponent.InputPair
+                {
+                    keyCode = hackComp.ChosseItem.keyCode,
+                    keyVal = Input.GetKeyDown(hackComp.ChosseItem.keyCode)
+                },
+                EquipMiniItem = new HackInputComponent.InputPair
+                {
+                    keyCode = hackComp.EquipMiniItem.keyCode,
+                    keyVal = Input.GetKeyDown(hackComp.EquipMiniItem.keyCode)
+                },
             });
         }).Run();
     }
@@ -67,12 +80,16 @@ public partial class HackStatusSystem : SystemBase
 [BurstCompile]
 public partial struct HackSystem : ISystem
 {
+    Entity Skill;
+    Entity chosseItem;
     // private BufferLookup<StatModify> statModify;
+    private EntityQuery m_ItemEQG;
     private EntityQuery m_playersEQG;
     private EntityQuery m_SkillEQG;
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
+
         // at least one player in the scene
         state.RequireForUpdate<PlayerComponent>();
         state.RequireForUpdate<HackInputComponent>();
@@ -81,6 +98,7 @@ public partial struct HackSystem : ISystem
 
         m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
         m_SkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillComponent>());
+        m_ItemEQG = state.GetEntityQuery(ComponentType.ReadOnly<ItemComponent>());
         //  statModify = state.GetBufferLookup<StatModify>(true);
     }
 
@@ -92,36 +110,60 @@ public partial struct HackSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
+        Skill = Entity.Null;
+        int numbercheck = 1001;
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
+        //GetAllDataIn Item
+        NativeArray<int> itemArray = new NativeArray<int>(m_ItemEQG.CalculateEntityCount(), Allocator.TempJob);
+        int i = 0;
+        foreach (var (ID, ent) in SystemAPI.Query<RefRO<ItemComponent>>().WithEntityAccess())
+        {
 
-        //GetItem   \
-        #region GetItem
-        Entity item;
+            itemArray[i] = ID.ValueRO.ID;
+            i++;
+            if (ID.ValueRO.ID == numbercheck)
+            {
+                chosseItem = ent;
+                //  int newID= chosseItem.Index;
+            }
+        }
 
-        item = SystemAPI.GetSingletonEntity<ItemComponent>();
-        DynamicBuffer<StatModify> itemMod = state.EntityManager.GetBuffer<StatModify>(item, true);
+        //GetItem   
+
+        // item = SystemAPI.GetSingletonEntity<ItemComponent>();
+        DynamicBuffer<StatModify> itemMod = state.EntityManager.GetBuffer<StatModify>(chosseItem, true);
         var x = itemMod.AsNativeArray();
         NativeArray<StatModify> copyBuffer = new NativeArray<StatModify>(x.Length, Allocator.TempJob);
         x.CopyTo(copyBuffer);
-        EquipByPlayerComponent EquipByPlayerComponent = state.EntityManager.GetComponentData<EquipByPlayerComponent>(item);
-        #endregion
+        EquipByPlayerComponent EquipByPlayerComponent = state.EntityManager.GetComponentData<EquipByPlayerComponent>(chosseItem);
+
 
         #region GetSkill
-        Entity Skill;
-        Skill = SystemAPI.GetSingletonEntity<SkillComponent>();
+        NativeArray<float> skillArray = new NativeArray<float>(m_SkillEQG.CalculateEntityCount(), Allocator.TempJob);
+
+        foreach (var (ID, ent) in SystemAPI.Query<RefRO<SkillCoolDownComponent>>().WithEntityAccess())
+        {
+            //tam thoi
+            if (ent.Index == 86)
+                Skill = ent;
+        }
         SkillCoolDownComponent skillCoolDownComponent = state.EntityManager.GetComponentData<SkillCoolDownComponent>(Skill);
 
         #endregion
+
+
         state.Dependency = new HackJob
         {
-            Item = item,
+            numbercheck = numbercheck,
+            itemArray = itemArray,
+
+            Item = chosseItem,
             Skill = Skill,
             skillCoolDownComponent = skillCoolDownComponent,
             EquipByPlayerComponent = EquipByPlayerComponent,
             itemMods = copyBuffer,
             deltaTime = Time.deltaTime,
-            //  statModify = statModify,
             ecbp = ecb.AsParallelWriter()
 
         }.ScheduleParallel(m_playersEQG, state.Dependency);
@@ -134,6 +176,9 @@ public partial struct HackSystem : ISystem
 [BurstCompile]
 public partial struct HackJob : IJobEntity
 {
+    public int numbercheck;
+    public NativeArray<int> itemArray;
+
     public Entity Item;
     public NativeArray<StatModify> itemMods;
     public EquipByPlayerComponent EquipByPlayerComponent;
@@ -146,8 +191,8 @@ public partial struct HackJob : IJobEntity
     //[ReadOnly] public BufferLookup<StatModify> statModify;
 
     public EntityCommandBuffer.ParallelWriter ecbp;
-    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerComponent plComp, in Entity ent,
-                        in HackInputComponent input, in CheckNeedCalculate check, ref DynamicBuffer<StatModify> dynamicBuffer,
+    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerComponent plComp, in Entity ent, /*ref DynamicBuffer<MiniItemComponent> miniItem,*/
+                        in HackInputComponent input, in CheckNeedCalculate check, ref DynamicBuffer<StatModify> dynamicBuffer, ref ChosseItemComponent chosse,
                         in LocalTransform ltrans, in WorldTransform wtrans)
     {
 
@@ -249,6 +294,26 @@ public partial struct HackJob : IJobEntity
         {
             if (skillCoolDownComponent.canUse)
                 ecbp.SetComponent<SkillCoolDownComponent>(ciqi, Skill, new SkillCoolDownComponent { coolDown = skillCoolDownComponent.coolDown, remain = skillCoolDownComponent.coolDown });
+        }
+        if (input.ChosseItem.keyVal)
+        {
+            int j = 0;
+            foreach (int id in itemArray)
+            {
+                if (id == numbercheck)
+                {
+                    Debug.Log("Founded!!!!!!!!!!");
+                    chosse.ID = id;
+
+
+                    break;
+                }
+                j++;
+            }
+        }
+        if (input.EquipMiniItem.keyVal)
+        {
+
         }
     }
 }

@@ -115,6 +115,8 @@ MonoBehaviour:
   Calculate: 32
   EquipItem: 101
   UseSkill: 114
+  ChosseItem: 99
+  EquipMiniItem: 103
 --- !u!114 &5879439839694072232
 MonoBehaviour:
   m_ObjectHideFlags: 0
