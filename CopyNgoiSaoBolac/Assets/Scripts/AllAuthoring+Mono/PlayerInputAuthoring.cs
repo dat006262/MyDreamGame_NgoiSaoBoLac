@@ -21,7 +21,7 @@ public class PlayerInputAuthoring : MonoBehaviour
     public KeyCode UseSkill;
 
     public KeyCode ChosseItem;
-    public KeyCode EquipMiniItem;
+    public KeyCode DealDamage;
     public class PlayerBaker : Baker<PlayerInputAuthoring>
     {
         public override void Bake(PlayerInputAuthoring authoring)
@@ -45,7 +45,7 @@ public class PlayerInputAuthoring : MonoBehaviour
                 EquipItem = new HackInputComponent.InputPair { keyCode = authoring.EquipItem },
                 UseSkill = new HackInputComponent.InputPair { keyCode = authoring.UseSkill },
                 ChosseItem = new HackInputComponent.InputPair { keyCode = authoring.ChosseItem },
-                EquipMiniItem = new HackInputComponent.InputPair { keyCode = authoring.EquipMiniItem },
+                DealDamage = new HackInputComponent.InputPair { keyCode = authoring.DealDamage },
             });
         }
     }

@@ -117,12 +117,12 @@ public struct HackInputComponent : IComponentData
     public InputPair PlusMana;
     public InputPair MultiHealth;
     public InputPair Calculate;
-
+    public InputPair UseSkill;
     public InputPair EquipItem;
     public InputPair ChosseItem;
-    public InputPair EquipMiniItem;
+    public InputPair DealDamage;
 
-    public InputPair UseSkill;
+
 
 }
 public struct CheckNeedCalculate : IComponentData
@@ -198,4 +198,26 @@ public struct ChosseItemComponent : IComponentData
     public int ID;
     public Entity item;
 }
+//------------------DamageUI----------------------
 
+
+public struct CharacterAttackStrength : IComponentData
+{
+    public int Value;
+}
+
+public struct CharacterExperiencePoints : IComponentData
+{
+    public int Value;
+}
+
+public struct CharacterHitPoints : IComponentData
+{
+    public int Value;
+}
+
+public struct DamageToCharacter : IComponentData
+{
+    public int Value;
+    public Entity OriginCharacter;
+}

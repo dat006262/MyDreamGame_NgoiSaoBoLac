@@ -68,10 +68,10 @@ public partial class HackStatusSystem : SystemBase
                     keyCode = hackComp.ChosseItem.keyCode,
                     keyVal = Input.GetKeyDown(hackComp.ChosseItem.keyCode)
                 },
-                EquipMiniItem = new HackInputComponent.InputPair
+                DealDamage = new HackInputComponent.InputPair
                 {
-                    keyCode = hackComp.EquipMiniItem.keyCode,
-                    keyVal = Input.GetKeyDown(hackComp.EquipMiniItem.keyCode)
+                    keyCode = hackComp.DealDamage.keyCode,
+                    keyVal = Input.GetKeyDown(hackComp.DealDamage.keyCode)
                 },
             });
         }).Run();
@@ -80,8 +80,10 @@ public partial class HackStatusSystem : SystemBase
 [BurstCompile]
 public partial struct HackSystem : ISystem
 {
+    Entity Enemy;
     Entity Skill;
     Entity chosseItem;
+    int testDamage;
     // private BufferLookup<StatModify> statModify;
     private EntityQuery m_ItemEQG;
     private EntityQuery m_playersEQG;
@@ -89,7 +91,7 @@ public partial struct HackSystem : ISystem
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-
+        testDamage = 0;
         // at least one player in the scene
         state.RequireForUpdate<PlayerComponent>();
         state.RequireForUpdate<HackInputComponent>();
@@ -145,19 +147,30 @@ public partial struct HackSystem : ISystem
         foreach (var (ID, ent) in SystemAPI.Query<RefRO<SkillCoolDownComponent>>().WithEntityAccess())
         {
             //tam thoi
-            if (ent.Index == 86)
-                Skill = ent;
+
+            Skill = ent;
         }
         SkillCoolDownComponent skillCoolDownComponent = state.EntityManager.GetComponentData<SkillCoolDownComponent>(Skill);
 
         #endregion
+        #region GetEnemy
+        NativeArray<float> enemyArray = new NativeArray<float>(m_SkillEQG.CalculateEntityCount(), Allocator.TempJob);
 
+        foreach (var (ID, ent) in SystemAPI.Query<RefRO<EnemyComponent>>().WithEntityAccess())
+        {
+            //tam thoi
+
+            Enemy = ent;
+        }
+
+        #endregion
 
         state.Dependency = new HackJob
         {
+            TestDamage = testDamage,
             numbercheck = numbercheck,
             itemArray = itemArray,
-
+            Enemy = Enemy,
             Item = chosseItem,
             Skill = Skill,
             skillCoolDownComponent = skillCoolDownComponent,
@@ -176,6 +189,8 @@ public partial struct HackSystem : ISystem
 [BurstCompile]
 public partial struct HackJob : IJobEntity
 {
+    public int TestDamage;
+    public Entity Enemy;
     public int numbercheck;
     public NativeArray<int> itemArray;
 
@@ -193,7 +208,7 @@ public partial struct HackJob : IJobEntity
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in PlayerComponent plComp, in Entity ent, /*ref DynamicBuffer<MiniItemComponent> miniItem,*/
                         in HackInputComponent input, in CheckNeedCalculate check, ref DynamicBuffer<StatModify> dynamicBuffer, ref ChosseItemComponent chosse,
-                        in LocalTransform ltrans, in WorldTransform wtrans)
+                        in LocalTransform ltrans, in WorldTransform wtrans, ref CharacterAttackStrength damage)
     {
 
 
@@ -311,9 +326,11 @@ public partial struct HackJob : IJobEntity
                 j++;
             }
         }
-        if (input.EquipMiniItem.keyVal)
-        {
 
+        if (input.DealDamage.keyVal)
+        {
+            damage.Value++;
+            ecbp.AddComponent<DamageToCharacter>(ciqi, Enemy, new DamageToCharacter { Value = damage.Value, OriginCharacter = ent });
         }
     }
 }

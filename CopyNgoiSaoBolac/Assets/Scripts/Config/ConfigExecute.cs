@@ -14,7 +14,7 @@ public class ConfigExecute : MonoBehaviour
     public bool HackSystemEnable;
     public bool ApplyModifySystemEnable;
     public bool SkillCoolDownSystemEnable;
-    public bool PositionalWarpingSystemEnable;
+    public bool DealDamageSystemEnable;
     public bool DamageSystemEnable;
     public bool HealthSystemEnable;
     public bool PickupEquippingSystemEnable;
@@ -39,7 +39,8 @@ public class ConfigExecute : MonoBehaviour
             if (authoring.HackSystemEnable) AddComponent<HackSystemEnable>(entity);
             if (authoring.ApplyModifySystemEnable) AddComponent<ApplyModifySystemEnable>(entity);
             if (authoring.SkillCoolDownSystemEnable) AddComponent<SkillCoolDownSystemEnable>(entity);
-            if (authoring.PositionalWarpingSystemEnable) AddComponent<PositionalWarpingSystemEnable>(entity);
+
+            if (authoring.DealDamageSystemEnable) AddComponent<DealDamageSystemEnable>(entity);
             if (authoring.DamageSystemEnable) AddComponent<DamageSystemEnable>(entity);
             if (authoring.HealthSystemEnable) AddComponent<HealthSystemEnable>(entity);
             if (authoring.PickupEquippingSystemEnable) AddComponent<PickupEquippingSystemEnable>(entity);
@@ -94,5 +95,9 @@ public struct NPCSpawnerSystemEnable : IComponentData
 {
 }
 public struct SkillCoolDownSystemEnable : IComponentData
+{
+}
+
+public struct DealDamageSystemEnable : IComponentData
 {
 }
