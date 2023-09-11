@@ -10,7 +10,6 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 
 public partial class HackStatusSystem : SystemBase

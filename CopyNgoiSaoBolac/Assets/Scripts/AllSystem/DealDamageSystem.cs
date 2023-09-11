@@ -39,6 +39,7 @@ public partial class DealDamageSystem : SystemBase
                     hitPoints.ValueRW.Value -= damageToCharacter.ValueRW.Value;
                     OnDealDamage?.Invoke(damageToCharacter.ValueRW.Value, transform.Position);
                     ecb.RemoveComponent<SkillEffectComponent>(entity);
+                    ecb.RemoveComponent<DamageToCharacter>(entity);
                 }
             }
             else

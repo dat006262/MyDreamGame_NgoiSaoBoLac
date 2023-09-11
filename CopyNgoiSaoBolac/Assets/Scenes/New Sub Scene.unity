@@ -605,6 +605,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SkillRound
       objectReference: {fileID: 0}
+    - target: {fileID: 4596337816831689136, guid: e938ca17baec71b47abba216a22f6704, type: 3}
+      propertyPath: effectFrequenc
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4965763274146238198, guid: e938ca17baec71b47abba216a22f6704, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
