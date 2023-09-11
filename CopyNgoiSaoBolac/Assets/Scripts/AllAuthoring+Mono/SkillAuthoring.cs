@@ -5,17 +5,8 @@ using UnityEngine;
 
 public class SkillAuthoring : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    public float SkillDamage;
+    public float effectFrequenc = 1f;
     public class SkillBaker : Baker<SkillAuthoring>
     {
 
@@ -33,7 +24,8 @@ public class SkillAuthoring : MonoBehaviour
             AddComponent<SkillInforComponent>(
                 new SkillInforComponent
                 {
-                    damage = 10
+                    damage = authoring.SkillDamage,
+                    effectFrequenc = authoring.effectFrequenc
                 }
                 );
 

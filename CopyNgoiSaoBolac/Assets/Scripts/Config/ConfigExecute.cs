@@ -16,10 +16,7 @@ public class ConfigExecute : MonoBehaviour
     public bool SkillCoolDownSystemEnable;
     public bool DealDamageSystemEnable;
     public bool DamageSystemEnable;
-    public bool HealthSystemEnable;
-    public bool PickupEquippingSystemEnable;
-    public bool PickupsSpawnerSystemEnable;
-    public bool NPCSpawnerSystemEnable;
+    public bool DeadDestroySystemEnable;
 
     private void Start()
     {
@@ -42,11 +39,7 @@ public class ConfigExecute : MonoBehaviour
 
             if (authoring.DealDamageSystemEnable) AddComponent<DealDamageSystemEnable>(entity);
             if (authoring.DamageSystemEnable) AddComponent<DamageSystemEnable>(entity);
-            if (authoring.HealthSystemEnable) AddComponent<HealthSystemEnable>(entity);
-            if (authoring.PickupEquippingSystemEnable) AddComponent<PickupEquippingSystemEnable>(entity);
-            if (authoring.PickupsSpawnerSystemEnable) AddComponent<PickupsSpawnerSystemEnable>(entity);
-            if (authoring.NPCSpawnerSystemEnable) AddComponent<NPCSpawnerSystemEnable>(entity);
-
+            if (authoring.DeadDestroySystemEnable) AddComponent<DeadDestroySystemEnable>(entity);
         }
     }
 }
@@ -72,26 +65,10 @@ public struct HackSystemEnable : IComponentData
 public struct ApplyModifySystemEnable : IComponentData
 {
 }
-public struct PlayerProjectileSystemEnable : IComponentData
-{
-}
-
-public struct PositionalWarpingSystemEnable : IComponentData
-{
-}
 public struct DamageSystemEnable : IComponentData
 {
 }
-public struct HealthSystemEnable : IComponentData
-{
-}
-public struct PickupEquippingSystemEnable : IComponentData
-{
-}
-public struct PickupsSpawnerSystemEnable : IComponentData
-{
-}
-public struct NPCSpawnerSystemEnable : IComponentData
+public struct DeadDestroySystemEnable : IComponentData
 {
 }
 public struct SkillCoolDownSystemEnable : IComponentData

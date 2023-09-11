@@ -8,6 +8,7 @@ using UnityEngine;
 public partial struct SkillCoolDownSystem : ISystem
 {
     private EntityQuery SkillEQG;
+    private EntityQuery SkillEffectEQG;
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
@@ -16,7 +17,7 @@ public partial struct SkillCoolDownSystem : ISystem
         state.RequireForUpdate<SkillCoolDownComponent>();
         SkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillComponent>());
 
-
+        SkillEffectEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillEffectComponent>());
     }
 
     [BurstCompile]
@@ -39,6 +40,14 @@ public partial struct SkillCoolDownSystem : ISystem
         }.ScheduleParallel(SkillEQG, state.Dependency);
         state.Dependency.Complete();
 
+
+        //state.Dependency = new SkillEffectDownJob
+        //{
+        //    deltaTime = SystemAPI.Time.DeltaTime,
+        //    ecbp = ecb.AsParallelWriter()
+
+        //}.ScheduleParallel(SkillEffectEQG, state.Dependency);
+        //state.Dependency.Complete();
 
     }
 
@@ -66,3 +75,23 @@ public partial struct SkillCoolDownJob : IJobEntity
     }
 }
 
+[BurstCompile]
+public partial struct SkillEffectDownJob : IJobEntity
+{
+    [ReadOnly]
+    public float deltaTime;
+    //[ReadOnly] public BufferLookup<StatModify> statModify;
+
+    public EntityCommandBuffer.ParallelWriter ecbp;
+    public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent,
+                        ref SkillEffectComponent skillEffect
+                       )
+    {
+        if (skillEffect.canDamage) return;
+        skillEffect.effectCountDown -= deltaTime;
+        if (!skillEffect.canDamage) return;
+
+
+
+    }
+}

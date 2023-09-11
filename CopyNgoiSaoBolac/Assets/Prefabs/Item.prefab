@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: BaseSheild
+  ID: 1001
   Modifies:
   - Value: 100
     statType: 2

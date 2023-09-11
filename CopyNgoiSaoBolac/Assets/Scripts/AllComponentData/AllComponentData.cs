@@ -185,6 +185,12 @@ public struct SkillInforComponent : IComponentData
 {
 
     public float damage;
+    public float effectFrequenc;
+}
+public struct SkillEffectComponent : IComponentData
+{
+    public float effectCountDown;
+    public bool canDamage => effectCountDown <= 0f;
 }
 //--------------Inventory---------------
 public struct InventoryComponent : IComponentData
@@ -201,23 +207,31 @@ public struct ChosseItemComponent : IComponentData
 //------------------DamageUI----------------------
 
 
-public struct CharacterAttackStrength : IComponentData
+public struct CharacterAttackStrength : IComponentData//Strength
 {
-    public int Value;
+    public float Value;
 }
 
-public struct CharacterExperiencePoints : IComponentData
+public struct CharacterExperiencePoints : IComponentData//EXP
 {
-    public int Value;
+    public float Value;
 }
 
-public struct CharacterHitPoints : IComponentData
+public struct CharacterHitPoints : IComponentData//Health
 {
-    public int Value;
+    public float Value;
 }
 
-public struct DamageToCharacter : IComponentData
+public struct DamageToCharacter : IComponentData//DamageFrom?
 {
-    public int Value;
+    public float Value;
     public Entity OriginCharacter;
+    public float effectFrequenc;
+    public float effectCount;
+    public bool CandealDamage => effectCount <= 0;
+}
+//-----------------------------DeadDestroyTag----------------------
+public struct DeadDestroyTag : IComponentData//Health
+{
+
 }
