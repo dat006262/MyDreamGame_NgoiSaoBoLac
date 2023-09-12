@@ -30,7 +30,7 @@ public partial struct EnemyAISystem : ISystem
 
         int i = 0;
         NativeArray<float3> playerPosArr = new NativeArray<float3>(m_playersEQG.CalculateEntityCount(), Allocator.TempJob);
-        foreach (var lToW in SystemAPI.Query<RefRO<LocalToWorld>>().WithAll<PlayerComponent>())
+        foreach (var lToW in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<PlayerComponent>())
         {
             playerPosArr[i] = lToW.ValueRO.Position;
             i++;
@@ -65,36 +65,36 @@ public partial struct EnemyChaseJob : IJobEntity
     enum layer
     {
         // TODO: but really would be nice to actually access the Layers defined in settings.
-        WorldBounds = (1 << 9),
-        UFOs = (1 << 15)
+        WorldBounds = (0 << 2),
+        UFOs = (2 << 4)
     };
 
     [BurstCompile]
-    private void Execute([ChunkIndexInQuery] int ciqi, in LocalToWorld ufoLtoW, in LocalTransform ufoLtrans, in EnemyComponent ufoC, in Entity ufoEnt)
+    private void Execute([ChunkIndexInQuery] int ciqi, in LocalTransform localTrEnemy, in EnemyComponent ufoC, in Entity ufoEnt)
     {
-        float least_sqDistEucliOrPortal = float.MaxValue;
-        float3 target_forLeastDist = ufoLtrans.Position;
+        float sq_MinLengPath = float.MaxValue;
+        float3 target_Pos = localTrEnemy.Position;
         bool playersExist = false;
         // for now we don't care about any further knowledge than just, closest distance one or another.
         foreach (float3 playerPos in playerPosArr)
         {
             playersExist = true;
-            float sqDistEuclid = math.distancesq(playerPos, ufoLtoW.Position);
-            if (least_sqDistEucliOrPortal > sqDistEuclid)
+            float sq_leng = math.distancesq(playerPos, localTrEnemy.Position);
+            if (sq_MinLengPath > sq_leng)
             {
-                least_sqDistEucliOrPortal = sqDistEuclid;
-                target_forLeastDist = playerPos;
+                sq_MinLengPath = sq_leng;
+                target_Pos = playerPos;
             }
 
-            if (sqDistEuclid > ufoC.minChaseDist)
+            if (sq_leng > ufoC.minChaseDist)
             {
                 // alsocheck through walls
                 float sqDistPortal = float.MaxValue;
-                float3 dirToPlayer = math.normalize(playerPos - ufoLtoW.Position);
+                float3 dirToPlayer = math.normalize(playerPos - localTrEnemy.Position);
                 RaycastInput raycastInput = new RaycastInput()
                 {
-                    Start = ufoLtoW.Position,
-                    End = -dirToPlayer * 100,
+                    Start = localTrEnemy.Position,
+                    End = localTrEnemy.Position - dirToPlayer * 10,//gan dung
                     Filter = new CollisionFilter
                     {
                         BelongsTo = (uint)layer.UFOs,
@@ -104,53 +104,40 @@ public partial struct EnemyChaseJob : IJobEntity
                 };
 
 #if UNITY_EDITOR
-                Debug.DrawLine(raycastInput.Start, raycastInput.End, Color.red, 0.25f);
-                Debug.DrawLine(raycastInput.Start, dirToPlayer * 100, Color.green, 0.25f);
+                Debug.DrawLine(raycastInput.Start, raycastInput.End, Color.red, 0);
+                Debug.DrawLine(raycastInput.Start, raycastInput.Start + dirToPlayer * 10, Color.green, 0);
 #endif
 
-                if (physWorld.CastRay(raycastInput, out Unity.Physics.RaycastHit hit))
-                {
-                    float3 posOnBound = hit.Position;
-                    //Debug.Log($"bounds hit={posOnBound}");
-                    float sqDistToBound = math.distancesq(posOnBound, ufoLtoW.Position);
-                    float sqDistBoundToPlayer = math.distancesq(-posOnBound, playerPos);
-                    sqDistPortal = sqDistToBound + sqDistBoundToPlayer;
-                    if (least_sqDistEucliOrPortal > sqDistPortal)
-                    {
-                        least_sqDistEucliOrPortal = sqDistPortal;
-                        // we heading to bound not to player
-                        target_forLeastDist = posOnBound;
-                    }
-                }
+
             }
         }
 
-        // move towards player or patrol
+        // GetMinComplete
+
+        float totalDist = math.sqrt(sq_MinLengPath);
+        if (playersExist && totalDist <= ufoC.maxChaseDist && totalDist >= ufoC.minChaseDist)
         {
-            float totalDist = math.sqrt(least_sqDistEucliOrPortal);
-            if (playersExist && totalDist <= ufoC.maxChaseDist && totalDist >= ufoC.minChaseDist)
+            var newLtrans = new LocalTransform
             {
-                var newLtrans = new LocalTransform
-                {
-                    Position = ufoLtrans.Position,
-                    Rotation = ufoLtrans.Rotation,
-                    Scale = ufoLtrans.Scale
-                };
-                if ((target_forLeastDist - ufoLtoW.Position).x != 0)
-                    newLtrans.Position += deltaTime * ufoC.moveSpeed * math.normalize(target_forLeastDist - ufoLtoW.Position);
-                ecbp.SetComponent<LocalTransform>(ciqi, ufoEnt, newLtrans);
-            }
-            else
-            {// "patrol state"
-                var newLtrans = new LocalTransform
-                {
-                    Position = ufoLtrans.Position,
-                    Rotation = ufoLtrans.Rotation,
-                    Scale = ufoLtrans.Scale
-                };
-                newLtrans.Position += deltaTime * ufoC.moveSpeed * newLtrans.Right();
-                ecbp.SetComponent<LocalTransform>(ciqi, ufoEnt, newLtrans);
-            }
+                Position = localTrEnemy.Position,
+                Rotation = localTrEnemy.Rotation,
+                Scale = localTrEnemy.Scale
+            };
+            if ((target_Pos - localTrEnemy.Position).x != 0)
+                newLtrans.Position += deltaTime * ufoC.moveSpeed * math.normalize(target_Pos - localTrEnemy.Position);
+            ecbp.SetComponent<LocalTransform>(ciqi, ufoEnt, newLtrans);
         }
+        else
+        {// "patrol state"
+            var newLtrans = new LocalTransform
+            {
+                Position = localTrEnemy.Position,
+                Rotation = localTrEnemy.Rotation,
+                Scale = localTrEnemy.Scale
+            };
+            newLtrans.Position += deltaTime * ufoC.moveSpeed * newLtrans.Right();
+            ecbp.SetComponent<LocalTransform>(ciqi, ufoEnt, newLtrans);
+        }
+
     }
 }

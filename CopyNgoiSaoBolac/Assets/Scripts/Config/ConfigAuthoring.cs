@@ -1,10 +1,10 @@
 
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ConfigAuthoring : MonoBehaviour
 {
-    //chua cac thong tin game
     class Baker : Baker<ConfigAuthoring>
     {
         public override void Bake(ConfigAuthoring authoring)
@@ -12,13 +12,13 @@ public class ConfigAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.None);
             AddComponent(entity, new Config
             {
-                a = 5
+                //isFireClick = authoring.isFireClick
             });
         }
     }
 }
 public struct Config : IComponentData//Chua tat ca thong tin game
 {
-    public float a;
+    public bool isFireClick;
 
 }

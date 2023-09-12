@@ -235,3 +235,30 @@ public struct DeadDestroyTag : IComponentData//Health
 {
 
 }
+//------------------------------Fire----------------------------
+public struct EquippedProjectileDataComponent : IComponentData, IEnableableComponent
+{
+    public bool active;
+    public Entity owner;
+    public Entity activeVisual;
+    public Entity prefab;
+    public double timeToLive;
+    public float speed;
+    public float scale;
+    public double pickupTime;
+    public double pickupTimeToLive;
+    public bool isCollisionInvulnerable;
+}
+
+public struct PickupProjectileDataComponent : IComponentData
+{
+    public bool active;
+    public Entity activeVisual;
+    public Entity prefab;
+    public float timeToLive;
+    public float speed;
+    public float scale;
+    //public double pickupTime;
+    public double pickupTimeToLive;
+    public bool isCollisionInvulnerable;
+}

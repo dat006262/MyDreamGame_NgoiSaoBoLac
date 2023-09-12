@@ -1,3 +1,4 @@
+using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -14,6 +15,7 @@ using UnityEngine;
 //[UpdateAfter(typeof(GameSystem))]
 public partial class PlayerInputSystem : SystemBase
 {
+    private Entity _playerEntity;
     protected override void OnCreate()
     {
         RequireForUpdate<PlayerInputSystemEnable>();
@@ -24,6 +26,7 @@ public partial class PlayerInputSystem : SystemBase
     protected override void OnDestroy()
     {
     }
+
     protected override void OnUpdate()//de cai dat cach nhan: VD di chuyen nhan giu dc con ban thì phai nhan
     {
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
@@ -56,8 +59,7 @@ public partial class PlayerInputSystem : SystemBase
                 Shoot = new PlayerInputComponent.InputPair
                 {
                     keyCode = plInpComp.Shoot.keyCode,
-                    //  keyVal = Input.GetKeyUp(plInpComp.Shoot.keyCode)
-                    keyVal = Input.GetKey(plInpComp.Shoot.keyCode)
+                    keyVal = Input.GetKeyDown(plInpComp.Shoot.keyCode)
                 },
                 Teleport = new PlayerInputComponent.InputPair
                 {
@@ -153,7 +155,7 @@ public partial struct MovementJob : IJobEntity
         //   ltrans.Position += new float3(0, -1, 0) * moveSpeed * deltaTime;
 
         // teleport / hyperspace
-        if (input.Teleport.keyVal)
+        if (input.Shoot.keyVal)
         {
 
         }

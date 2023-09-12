@@ -17,7 +17,8 @@ public class ConfigExecute : MonoBehaviour
     public bool DealDamageSystemEnable;
     public bool DamageSystemEnable;
     public bool DeadDestroySystemEnable;
-
+    public bool PlayerProjectileSystemEnable;
+    public bool TargetToEnemySystemEnable;
     private void Start()
     {
         Application.targetFrameRate = 60;
@@ -40,6 +41,8 @@ public class ConfigExecute : MonoBehaviour
             if (authoring.DealDamageSystemEnable) AddComponent<DealDamageSystemEnable>(entity);
             if (authoring.DamageSystemEnable) AddComponent<DamageSystemEnable>(entity);
             if (authoring.DeadDestroySystemEnable) AddComponent<DeadDestroySystemEnable>(entity);
+            if (authoring.PlayerProjectileSystemEnable) AddComponent<PlayerProjectileSystemEnable>(entity);
+            if (authoring.TargetToEnemySystemEnable) AddComponent<TargetToEnemySystemEnable>(entity);
         }
     }
 }
@@ -76,5 +79,11 @@ public struct SkillCoolDownSystemEnable : IComponentData
 }
 
 public struct DealDamageSystemEnable : IComponentData
+{
+}
+public struct PlayerProjectileSystemEnable : IComponentData
+{
+}
+public struct TargetToEnemySystemEnable : IComponentData
 {
 }
