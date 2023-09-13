@@ -12,7 +12,7 @@ public class SimpleSpawnAuthoring : MonoBehaviour
         public override void Bake(SimpleSpawnAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.None);
-            AddComponent<SimpleSpawnerComponent>(entity, new SimpleSpawnerComponent
+            AddComponent<SimpleSpawner_OwnerComponent>(entity, new SimpleSpawner_OwnerComponent
             {
                 spawnNumber = authoring.spawnNumber
             });

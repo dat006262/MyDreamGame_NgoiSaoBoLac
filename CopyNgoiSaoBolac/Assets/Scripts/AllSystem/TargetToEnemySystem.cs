@@ -19,10 +19,10 @@ public partial struct TargetToEnemySystem : ISystem
     {
         state.RequireForUpdate<Config>();
         state.RequireForUpdate<TargetToEnemySystemEnable>();
-        state.RequireForUpdate<EnemyComponent>();
-        state.RequireForUpdate<PlayerComponent>();
-        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerInputComponent>());
-        m_EnemysEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyComponent>());
+        state.RequireForUpdate<EnemyAI_OwnerComponent>();
+        state.RequireForUpdate<PlayerMove_OwnerSystem>();
+        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerInput_OwnerComponent>());
+        m_EnemysEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyAI_OwnerComponent>());
     }
     public void OnDestroy(ref SystemState state)
     {
@@ -34,7 +34,7 @@ public partial struct TargetToEnemySystem : ISystem
 
         int i = 0;
         NativeArray<float3> enemyPosArr = new NativeArray<float3>(m_EnemysEQG.CalculateEntityCount(), Allocator.TempJob);
-        foreach (var lToW in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<EnemyComponent>())
+        foreach (var lToW in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<EnemyAI_OwnerComponent>())
         {
             enemyPosArr[i] = lToW.ValueRO.Position;
             i++;
@@ -74,7 +74,7 @@ public partial struct TurnHeadToTarget : IJobEntity
     };
 
     [BurstCompile]
-    private void Execute([ChunkIndexInQuery] int ciqi, ref LocalTransform playerTras, in PlayerInputComponent playerC, in Entity playerEnt)
+    private void Execute([ChunkIndexInQuery] int ciqi, ref LocalTransform playerTras, in PlayerInput_OwnerComponent playerC, in Entity playerEnt)
     {
         float nearestDis = float.MaxValue;
         float3 targetPos_forLeastDist = playerTras.Position;

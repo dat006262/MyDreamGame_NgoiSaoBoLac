@@ -14,12 +14,12 @@ public class PrefabAndParentAuthoring : MonoBehaviour
         public override void Bake(PrefabAndParentAuthoring authoring)
         {
             //var entity = GetEntity(TransformUsageFlags.None);
-            var buffer = AddBuffer<PrefabAndParentBufferComponent>(/*entity*/);
+            var buffer = AddBuffer<SimpleSpawner_PrefabAndParentBufferComponent>(/*entity*/);
             for (int i = 0; i < authoring.prefabs.Length; i++)
             {
                 DependsOn(authoring.prefabs[i]);
 
-                buffer.Add(new PrefabAndParentBufferComponent
+                buffer.Add(new SimpleSpawner_PrefabAndParentBufferComponent
                 {
                     prefab = GetEntity(authoring.prefabs[i]/*, TransformUsageFlags.Dynamic*/),
                     parent = GetEntity(authoring.parents[i]/*, TransformUsageFlags.None*/)

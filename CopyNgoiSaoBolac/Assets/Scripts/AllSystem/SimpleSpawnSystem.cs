@@ -16,11 +16,11 @@ public partial struct SimpleSpawnSystem : ISystem
     {
         state.RequireForUpdate<Config>();
         state.RequireForUpdate<SpawnSimpleSystemEnable>();
-        state.RequireForUpdate<SimpleSpawnerComponent>();
-        state.RequireForUpdate<PrefabAndParentBufferComponent>();
+        state.RequireForUpdate<SimpleSpawner_OwnerComponent>();
+        state.RequireForUpdate<SimpleSpawner_PrefabAndParentBufferComponent>();
 
         spawnerEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
-           .WithAll<SimpleSpawnerComponent>()
+           .WithAll<SimpleSpawner_OwnerComponent>()
            );
     }
 
@@ -56,7 +56,7 @@ public partial struct SpawnerJob : IJobEntity
 {
     public EntityCommandBuffer.ParallelWriter ecbp;
     [BurstCompile]
-    private void Execute([ChunkIndexInQuery] int ciqi, in DynamicBuffer<PrefabAndParentBufferComponent> prefabsAndParents, in SimpleSpawnerComponent spawnerComp)
+    private void Execute([ChunkIndexInQuery] int ciqi, in DynamicBuffer<SimpleSpawner_PrefabAndParentBufferComponent> prefabsAndParents, in SimpleSpawner_OwnerComponent spawnerComp)
     {
         for (uint i = 0; i < spawnerComp.spawnNumber; i++)
         {

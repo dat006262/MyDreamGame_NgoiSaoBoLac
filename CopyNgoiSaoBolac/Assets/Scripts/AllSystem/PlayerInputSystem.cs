@@ -19,7 +19,7 @@ public partial class PlayerInputSystem : SystemBase
     protected override void OnCreate()
     {
         RequireForUpdate<PlayerInputSystemEnable>();
-        RequireForUpdate<PlayerInputComponent>();
+        RequireForUpdate<PlayerInput_OwnerComponent>();
     }
 
 
@@ -31,37 +31,37 @@ public partial class PlayerInputSystem : SystemBase
     {
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(World.Unmanaged);
-        Entities.ForEach((in PlayerComponent plComp, in Entity ent) =>
+        Entities.ForEach((in PlayerMove_OwnerSystem plComp, in Entity ent) =>
         {
-            var plInpComp = SystemAPI.GetComponent<PlayerInputComponent>(ent);
-            ecb.SetComponent<PlayerInputComponent>(ent, new PlayerInputComponent
+            var plInpComp = SystemAPI.GetComponent<PlayerInput_OwnerComponent>(ent);
+            ecb.SetComponent<PlayerInput_OwnerComponent>(ent, new PlayerInput_OwnerComponent
             {
-                Up = new PlayerInputComponent.InputPair
+                Up = new PlayerInput_OwnerComponent.InputPair
                 {
                     keyCode = plInpComp.Up.keyCode,
                     keyVal = Input.GetKey(plInpComp.Up.keyCode)
                 },
-                Down = new PlayerInputComponent.InputPair
+                Down = new PlayerInput_OwnerComponent.InputPair
                 {
                     keyCode = plInpComp.Down.keyCode,
                     keyVal = Input.GetKey(plInpComp.Down.keyCode)
                 },
-                Left = new PlayerInputComponent.InputPair
+                Left = new PlayerInput_OwnerComponent.InputPair
                 {
                     keyCode = plInpComp.Left.keyCode,
                     keyVal = Input.GetKey(plInpComp.Left.keyCode)
                 },
-                Right = new PlayerInputComponent.InputPair
+                Right = new PlayerInput_OwnerComponent.InputPair
                 {
                     keyCode = plInpComp.Right.keyCode,
                     keyVal = Input.GetKey(plInpComp.Right.keyCode)
                 },
-                Shoot = new PlayerInputComponent.InputPair
+                Shoot = new PlayerInput_OwnerComponent.InputPair
                 {
                     keyCode = plInpComp.Shoot.keyCode,
                     keyVal = Input.GetKeyDown(plInpComp.Shoot.keyCode)
                 },
-                Teleport = new PlayerInputComponent.InputPair
+                Teleport = new PlayerInput_OwnerComponent.InputPair
                 {
                     keyCode = plInpComp.Teleport.keyCode,
                     keyVal = Input.GetKeyUp(plInpComp.Teleport.keyCode)
@@ -86,11 +86,11 @@ public partial struct PlayerMovementSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         // at least one player in the scene
-        state.RequireForUpdate<PlayerComponent>();
-        state.RequireForUpdate<PlayerInputComponent>();
+        state.RequireForUpdate<PlayerMove_OwnerSystem>();
+        state.RequireForUpdate<PlayerInput_OwnerComponent>();
         state.RequireForUpdate<PlayerMovementSystemEnable>();
 
-        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
+        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerMove_OwnerSystem>());
     }
 
     [BurstCompile]
@@ -130,9 +130,9 @@ public partial struct MovementJob : IJobEntity
     public float3 targetAreaBL;
     [ReadOnly]
     public float3 targetAreaTR;
-    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerComponent plComp,
+    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerMove_OwnerSystem plComp,
                         ref PhysicsVelocity velocity, in Entity ent,
-                        in PlayerInputComponent input, in PhysicsMass mass,
+                        in PlayerInput_OwnerComponent input, in PhysicsMass mass,
                         ref LocalTransform ltrans, in WorldTransform wtrans)
     {
         float rotateSpeed = plComp.rotateSpeed;

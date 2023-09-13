@@ -21,7 +21,7 @@ public partial struct PlayerProjectileSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<PlayerProjectileSystemEnable>();
-        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
+        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerMove_OwnerSystem>());
     }
 
     [BurstCompile]
@@ -59,9 +59,9 @@ public partial struct FireProjectileJob : IJobEntity
     public float deltaTime;
     public EntityCommandBuffer.ParallelWriter ecbp;
 
-    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerComponent plComp,
+    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerMove_OwnerSystem plComp,
                         in EquippedProjectileDataComponent equippedProj,
-                        in Entity ent, ref PlayerInputComponent input,
+                        in Entity ent, ref PlayerInput_OwnerComponent input,
                         in LocalTransform ltrans, in WorldTransform wtrans,
                         in PickupProjectileDataComponent defaultProjectileData)
     {

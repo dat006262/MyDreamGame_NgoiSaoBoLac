@@ -27,7 +27,7 @@ public partial class HackStatusSystem : SystemBase
     {
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(World.Unmanaged);
-        Entities.ForEach((in PlayerComponent plComp, in Entity ent) =>
+        Entities.ForEach((in PlayerMove_OwnerSystem plComp, in Entity ent) =>
         {
             var hackComp = SystemAPI.GetComponent<HackInputComponent>(ent);
             ecb.SetComponent<HackInputComponent>(ent, new HackInputComponent
@@ -92,12 +92,12 @@ public partial struct HackSystem : ISystem
     {
         testDamage = 0;
         // at least one player in the scene
-        state.RequireForUpdate<PlayerComponent>();
+        state.RequireForUpdate<PlayerMove_OwnerSystem>();
         state.RequireForUpdate<HackInputComponent>();
         state.RequireForUpdate<CheckNeedCalculate>();
         state.RequireForUpdate<HackSystemEnable>();
 
-        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
+        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerMove_OwnerSystem>());
         m_SkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillComponent>());
         m_ItemEQG = state.GetEntityQuery(ComponentType.ReadOnly<ItemComponent>());
         //  statModify = state.GetBufferLookup<StatModify>(true);
@@ -155,7 +155,7 @@ public partial struct HackSystem : ISystem
         #region GetEnemy
         NativeArray<float> enemyArray = new NativeArray<float>(m_SkillEQG.CalculateEntityCount(), Allocator.TempJob);
 
-        foreach (var (ID, ent) in SystemAPI.Query<RefRO<EnemyComponent>>().WithEntityAccess())
+        foreach (var (ID, ent) in SystemAPI.Query<RefRO<EnemyAI_OwnerComponent>>().WithEntityAccess())
         {
             //tam thoi
 
@@ -205,7 +205,7 @@ public partial struct HackJob : IJobEntity
     //[ReadOnly] public BufferLookup<StatModify> statModify;
 
     public EntityCommandBuffer.ParallelWriter ecbp;
-    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerComponent plComp, in Entity ent, /*ref DynamicBuffer<MiniItemComponent> miniItem,*/
+    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerMove_OwnerSystem plComp, in Entity ent, /*ref DynamicBuffer<MiniItemComponent> miniItem,*/
                         in HackInputComponent input, in CheckNeedCalculate check, ref DynamicBuffer<StatModify> dynamicBuffer, ref ChosseItemComponent chosse,
                         in LocalTransform ltrans, in WorldTransform wtrans, ref CharacterAttackStrength damage)
     {

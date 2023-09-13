@@ -8,23 +8,23 @@ public class AllComponentData
 {
 
 }
-public struct SimpleSpawnerComponent : IComponentData
+//-------------------------------------------------------------------
+#region SimpleSpawner
+public struct SimpleSpawner_OwnerComponent : IComponentData
 {
     // these could be made into an array or something, to spawn multiple types of prefabs
     // keep this pretty generic
     public uint spawnNumber;
 }
-public struct PrefabAndParentBufferComponent : IBufferElementData
+public struct SimpleSpawner_PrefabAndParentBufferComponent : IBufferElementData
 {
     public Entity prefab;
     public Entity parent;
 }
-
-#region Player
-public struct PlayerSpawnerTag : IComponentData
-{
-}
-public struct PlayerInputComponent : IComponentData
+#endregion
+//----------------------------------------------------------------------------
+#region PlayerInputSys
+public struct PlayerInput_OwnerComponent : IComponentData
 {
     public struct InputPair
     {
@@ -40,18 +40,19 @@ public struct PlayerInputComponent : IComponentData
     //public InputPair Boost;
 
 }
-public struct PlayerComponent : IComponentData
+
+#endregion
+//------------------------------------------------------------------
+#region PlayerMoveSys
+public struct PlayerMove_OwnerSystem : IComponentData
 {
     public float moveSpeed;
     public float rotateSpeed;
 }
 #endregion
-#region Enemy
-public struct EnemySpawnerTag : IComponentData
-{
-}
-
-public struct EnemyComponent : IComponentData
+//---------------------------------------------------
+#region EnemyAISys
+public struct EnemyAI_OwnerComponent : IComponentData
 {
     public float moveSpeed;
     public float rotateSpeed;

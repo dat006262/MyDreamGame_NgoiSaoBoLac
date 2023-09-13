@@ -15,7 +15,7 @@ public class PlayerAuthoring : MonoBehaviour
         public override void Bake(PlayerAuthoring authoring)
         {
             // var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent<PlayerComponent>(/*entity, */new PlayerComponent
+            AddComponent<PlayerMove_OwnerSystem>(/*entity, */new PlayerMove_OwnerSystem
             {
                 moveSpeed = authoring.moveSpeed,
                 rotateSpeed = authoring.rotateSpeed

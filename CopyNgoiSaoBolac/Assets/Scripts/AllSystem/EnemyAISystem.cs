@@ -14,10 +14,10 @@ public partial struct EnemyAISystem : ISystem
     {
         state.RequireForUpdate<EnemyAISystemEnable>();
         //state.RequireForUpdate<PlayerComponent>();
-        state.RequireForUpdate<EnemyComponent>();
+        state.RequireForUpdate<EnemyAI_OwnerComponent>();
 
-        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
-        m_UFOsEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyComponent>());
+        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerMove_OwnerSystem>());
+        m_UFOsEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyAI_OwnerComponent>());
         //m_boundsGroup = state.GetEntityQuery(ComponentType.ReadOnly<BoundsTagComponent>());
     }
     public void OnDestroy(ref SystemState state)
@@ -30,7 +30,7 @@ public partial struct EnemyAISystem : ISystem
 
         int i = 0;
         NativeArray<float3> playerPosArr = new NativeArray<float3>(m_playersEQG.CalculateEntityCount(), Allocator.TempJob);
-        foreach (var lToW in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<PlayerComponent>())
+        foreach (var lToW in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<PlayerMove_OwnerSystem>())
         {
             playerPosArr[i] = lToW.ValueRO.Position;
             i++;
@@ -70,7 +70,7 @@ public partial struct EnemyChaseJob : IJobEntity
     };
 
     [BurstCompile]
-    private void Execute([ChunkIndexInQuery] int ciqi, in LocalTransform localTrEnemy, in EnemyComponent ufoC, in Entity ufoEnt)
+    private void Execute([ChunkIndexInQuery] int ciqi, in LocalTransform localTrEnemy, in EnemyAI_OwnerComponent ufoC, in Entity ufoEnt)
     {
         float sq_MinLengPath = float.MaxValue;
         float3 target_Pos = localTrEnemy.Position;

@@ -22,7 +22,7 @@ public class EnemyAuthoring : MonoBehaviour
         public override void Bake(EnemyAuthoring authoring)
         {
             var entity = GetEntity();
-            AddComponent<EnemyComponent>(/*entity, */new EnemyComponent
+            AddComponent<EnemyAI_OwnerComponent>(/*entity, */new EnemyAI_OwnerComponent
             {
                 moveSpeed = authoring.moveSpeed,
                 rotateSpeed = authoring.rotateSpeed,
