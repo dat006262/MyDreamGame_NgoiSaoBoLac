@@ -14,10 +14,10 @@ public partial struct SkillCoolDownSystem : ISystem
     {
         state.RequireForUpdate<Config>();
         state.RequireForUpdate<SkillCoolDownSystemEnable>();
-        state.RequireForUpdate<SkillCoolDownComponent>();
+        state.RequireForUpdate<SkillCoolDownSys_OwnerComponent>();
         SkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillComponent>());
 
-        SkillEffectEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillEffectComponent>());
+        SkillEffectEQG = state.GetEntityQuery(ComponentType.ReadOnly<DealDamageSys_EffectCountDownComponent>());
     }
 
     [BurstCompile]
@@ -63,7 +63,7 @@ public partial struct SkillCoolDownJob : IJobEntity
 
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent,
-                        ref SkillCoolDownComponent coldow
+                        ref SkillCoolDownSys_OwnerComponent coldow
                        )
     {
         if (coldow.canUse) return;
@@ -84,7 +84,7 @@ public partial struct SkillEffectDownJob : IJobEntity
 
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent,
-                        ref SkillEffectComponent skillEffect
+                        ref DealDamageSys_EffectCountDownComponent skillEffect
                        )
     {
         if (skillEffect.canDamage) return;

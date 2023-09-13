@@ -22,7 +22,7 @@ public class PlayerAuthoring : MonoBehaviour
             });
 
             AddComponent<ChosseItemComponent>(new ChosseItemComponent { ID = 0, item = Entity.Null });
-            AddComponent(new CharacterExperiencePoints { Value = authoring.ExperiencePoints });
+            AddComponent(new DealDamageSys_EXPComponent { Value = authoring.ExperiencePoints });
             AddComponent(new CharacterAttackStrength { Value = authoring.AttackStrength });
 
         }

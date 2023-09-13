@@ -143,13 +143,13 @@ public partial struct HackSystem : ISystem
         #region GetSkill
         NativeArray<float> skillArray = new NativeArray<float>(m_SkillEQG.CalculateEntityCount(), Allocator.TempJob);
 
-        foreach (var (ID, ent) in SystemAPI.Query<RefRO<SkillCoolDownComponent>>().WithEntityAccess())
+        foreach (var (ID, ent) in SystemAPI.Query<RefRO<SkillCoolDownSys_OwnerComponent>>().WithEntityAccess())
         {
             //tam thoi
 
             Skill = ent;
         }
-        SkillCoolDownComponent skillCoolDownComponent = state.EntityManager.GetComponentData<SkillCoolDownComponent>(Skill);
+        SkillCoolDownSys_OwnerComponent skillCoolDownComponent = state.EntityManager.GetComponentData<SkillCoolDownSys_OwnerComponent>(Skill);
 
         #endregion
         #region GetEnemy
@@ -198,7 +198,7 @@ public partial struct HackJob : IJobEntity
     public EquipByPlayerComponent EquipByPlayerComponent;
 
     public Entity Skill;
-    public SkillCoolDownComponent skillCoolDownComponent;
+    public SkillCoolDownSys_OwnerComponent skillCoolDownComponent;
 
     [ReadOnly]
     public float deltaTime;
@@ -307,7 +307,7 @@ public partial struct HackJob : IJobEntity
         if (input.UseSkill.keyVal)
         {
             if (skillCoolDownComponent.canUse)
-                ecbp.SetComponent<SkillCoolDownComponent>(ciqi, Skill, new SkillCoolDownComponent { coolDown = skillCoolDownComponent.coolDown, remain = skillCoolDownComponent.coolDown });
+                ecbp.SetComponent<SkillCoolDownSys_OwnerComponent>(ciqi, Skill, new SkillCoolDownSys_OwnerComponent { coolDown = skillCoolDownComponent.coolDown, remain = skillCoolDownComponent.coolDown });
         }
         if (input.ChosseItem.keyVal)
         {
@@ -329,7 +329,7 @@ public partial struct HackJob : IJobEntity
         if (input.DealDamage.keyVal)
         {
             damage.Value++;
-            ecbp.AddComponent<DamageToCharacter>(ciqi, Enemy, new DamageToCharacter { Value = damage.Value, OriginCharacter = ent });
+            ecbp.AddComponent<DealDamageSys_OwnerComponent>(ciqi, Enemy, new DealDamageSys_OwnerComponent { Value = damage.Value, OriginCharacter = ent });
         }
     }
 }

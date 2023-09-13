@@ -74,6 +74,7 @@ public struct EnemyStateComponent : IComponentData
 }
 #endregion
 //---------------------------------Status--------------------------------------
+#region Status
 public enum StatType
 {
     Strength = 1,
@@ -107,6 +108,9 @@ public struct StatModify : IBufferElementData
     public int order;
     public Entity Source;
 }
+#endregion
+//-------------------------------------------------------------------------------
+#region HackSYS
 public struct HackInputComponent : IComponentData
 {
     public struct InputPair
@@ -147,8 +151,9 @@ public struct EquipByPlayerComponent : IComponentData
 {
     public bool equip;
 }
-
+#endregion
 //------------SkillCo-----------------------
+#region SkillInfor (Van chua xai bao h)
 public enum SkillType
 {
     HitEffect = 100,
@@ -176,28 +181,34 @@ public enum SkillDame
 public struct SkillComponent : IComponentData
 {
 }
-public struct SkillCoolDownComponent : IComponentData
+#endregion
+//-----------------------------------------
+#region SkillCoolDownSys
+public struct SkillCoolDownSys_OwnerComponent : IComponentData
 {
     public float coolDown;
     public float remain;
     public bool canUse => remain <= 0f;
 }
-public struct SkillInforComponent : IComponentData
+#endregion
+public struct DamageSys_OwnerComponent : IComponentData
 {
 
     public float damage;
     public float effectFrequenc;
 }
-public struct SkillEffectComponent : IComponentData
+public struct DealDamageSys_EffectCountDownComponent : IComponentData
 {
     public float effectCountDown;
     public bool canDamage => effectCountDown <= 0f;
 }
-//--------------Inventory---------------
-public struct InventoryComponent : IComponentData
+public struct DealDamageSys_OwnerComponent : IComponentData//DamageFrom?
 {
-
-
+    public float Value;
+    public Entity OriginCharacter;
+    public float effectFrequenc;
+    public float effectCount;
+    public bool CandealDamage => effectCount <= 0;
 }
 //-----------------Chosse-------------//
 public struct ChosseItemComponent : IComponentData
@@ -213,24 +224,17 @@ public struct CharacterAttackStrength : IComponentData//Strength
     public float Value;
 }
 
-public struct CharacterExperiencePoints : IComponentData//EXP
+public struct DealDamageSys_EXPComponent : IComponentData//EXP
 {
     public float Value;
 }
 
-public struct CharacterHitPoints : IComponentData//Health
+public struct DamageSys_HealthComponent : IComponentData//Health
 {
     public float Value;
 }
 
-public struct DamageToCharacter : IComponentData//DamageFrom?
-{
-    public float Value;
-    public Entity OriginCharacter;
-    public float effectFrequenc;
-    public float effectCount;
-    public bool CandealDamage => effectCount <= 0;
-}
+
 //-----------------------------DeadDestroyTag----------------------
 public struct DeadDestroyTag : IComponentData//Health
 {

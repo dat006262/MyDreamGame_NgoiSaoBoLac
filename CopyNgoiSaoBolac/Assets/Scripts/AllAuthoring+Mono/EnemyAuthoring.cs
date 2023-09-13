@@ -32,10 +32,10 @@ public class EnemyAuthoring : MonoBehaviour
             });
 
 
-            AddComponent(new CharacterHitPoints { Value = authoring.StartingHitPoints });
-            AddComponent(new CharacterExperiencePoints { Value = authoring.ExperiencePointsValue });
+            AddComponent(new DamageSys_HealthComponent { Value = authoring.StartingHitPoints });
+            AddComponent(new DealDamageSys_EXPComponent { Value = authoring.ExperiencePointsValue });
 
-            AddComponent(new DamageToCharacter
+            AddComponent(new DealDamageSys_OwnerComponent
             {
                 Value = 0,
                 OriginCharacter = entity

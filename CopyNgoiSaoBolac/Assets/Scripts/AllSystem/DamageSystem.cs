@@ -14,18 +14,18 @@ using UnityEngine;
 [BurstCompile]
 public partial struct DamageSystem : ISystem
 {
-    ComponentLookup<SkillInforComponent> m_damageCompsTCL;
-    ComponentLookup<CharacterHitPoints> m_healthCompsTCL;
+    ComponentLookup<DamageSys_OwnerComponent> m_damageCompsTCL;
+    ComponentLookup<DamageSys_HealthComponent> m_healthCompsTCL;
 
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<DamageSystemEnable>();
-        state.RequireForUpdate<SkillInforComponent>();
-        state.RequireForUpdate<CharacterHitPoints>();
+        state.RequireForUpdate<DamageSys_OwnerComponent>();
+        state.RequireForUpdate<DamageSys_HealthComponent>();
 
-        m_damageCompsTCL = state.GetComponentLookup<SkillInforComponent>(true);
-        m_healthCompsTCL = state.GetComponentLookup<CharacterHitPoints>(true);
+        m_damageCompsTCL = state.GetComponentLookup<DamageSys_OwnerComponent>(true);
+        m_healthCompsTCL = state.GetComponentLookup<DamageSys_HealthComponent>(true);
 
     }
 
@@ -60,9 +60,9 @@ public partial struct SetCollisionDamageJob : ITriggerEventsJob
     public float deltaTime;
     public EntityCommandBuffer ecb;
     [ReadOnly]
-    public ComponentLookup<SkillInforComponent> damageCompsTCL;
+    public ComponentLookup<DamageSys_OwnerComponent> damageCompsTCL;
     [ReadOnly]
-    public ComponentLookup<CharacterHitPoints> healthCompsTCL;
+    public ComponentLookup<DamageSys_HealthComponent> healthCompsTCL;
     public void Execute(TriggerEvent triggerEvent)
     {
         Entity entA = triggerEvent.EntityA;
@@ -79,9 +79,9 @@ public partial struct SetCollisionDamageJob : ITriggerEventsJob
         {
 
 
-            SkillInforComponent damageComp;
+            DamageSys_OwnerComponent damageComp;
             damageCompsTCL.TryGetComponent(entA, out damageComp);
-            CharacterHitPoints healthComp;
+            DamageSys_HealthComponent healthComp;
             healthCompsTCL.TryGetComponent(entB, out healthComp);
 
 
@@ -93,7 +93,7 @@ public partial struct SetCollisionDamageJob : ITriggerEventsJob
             }
             else
             {
-                ecb.AddComponent<DamageToCharacter>(entB, new DamageToCharacter
+                ecb.AddComponent<DealDamageSys_OwnerComponent>(entB, new DealDamageSys_OwnerComponent
                 { Value = damageComp.damage, OriginCharacter = Entity.Null, effectFrequenc = damageComp.effectFrequenc, effectCount = damageComp.effectFrequenc });
             }
             return;
@@ -102,9 +102,9 @@ public partial struct SetCollisionDamageJob : ITriggerEventsJob
         if (isDamagerB && isHealthA)
         {
 
-            SkillInforComponent damageComp;
+            DamageSys_OwnerComponent damageComp;
             damageCompsTCL.TryGetComponent(entB, out damageComp);
-            CharacterHitPoints healthComp;
+            DamageSys_HealthComponent healthComp;
             healthCompsTCL.TryGetComponent(entA, out healthComp);
 
 
@@ -114,7 +114,7 @@ public partial struct SetCollisionDamageJob : ITriggerEventsJob
             }
             else
             {
-                ecb.AddComponent<DamageToCharacter>(entA, new DamageToCharacter
+                ecb.AddComponent<DealDamageSys_OwnerComponent>(entA, new DealDamageSys_OwnerComponent
                 { Value = damageComp.damage, OriginCharacter = Entity.Null, effectFrequenc = damageComp.effectFrequenc, effectCount = damageComp.effectFrequenc });
             }
 

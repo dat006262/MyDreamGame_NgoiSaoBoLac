@@ -15,14 +15,14 @@ public class SkillAuthoring : MonoBehaviour
             var ent = GetEntity(authoring);
             ////How to Equip //UnEquip //
             AddComponent<SkillComponent>();
-            AddComponent<SkillCoolDownComponent>(new SkillCoolDownComponent
+            AddComponent<SkillCoolDownSys_OwnerComponent>(new SkillCoolDownSys_OwnerComponent
 
             {
                 coolDown = 10,
                 remain = 0
             });
-            AddComponent<SkillInforComponent>(
-                new SkillInforComponent
+            AddComponent<DamageSys_OwnerComponent>(
+                new DamageSys_OwnerComponent
                 {
                     damage = authoring.SkillDamage,
                     effectFrequenc = authoring.effectFrequenc
