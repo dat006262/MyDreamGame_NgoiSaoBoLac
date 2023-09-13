@@ -73,7 +73,7 @@ public struct EnemyStateComponent : IComponentData
     public State state;
 }
 #endregion
-//---------------------------------Status--------------------------------------
+//-----------------------------------------------------------------------
 #region Status
 public enum StatType
 {
@@ -110,7 +110,7 @@ public struct StatModify : IBufferElementData
 }
 #endregion
 //-------------------------------------------------------------------------------
-#region HackSYS
+#region HackSYS +CalculateStat
 public struct HackInputComponent : IComponentData
 {
     public struct InputPair
@@ -141,6 +141,17 @@ public struct ItemComponent : IComponentData
     public Entity prefab;
 
 }
+public struct CharacterAttackStrength : IComponentData//Strength
+{
+    public float Value;
+}
+public struct ChosseItemComponent : IComponentData
+{
+    public int ID;
+    public Entity item;
+}
+
+
 
 public struct OwnerByPlayerComponent : IComponentData
 {
@@ -191,16 +202,27 @@ public struct SkillCoolDownSys_OwnerComponent : IComponentData
     public bool canUse => remain <= 0f;
 }
 #endregion
+#region DamageSys
 public struct DamageSys_OwnerComponent : IComponentData
 {
 
     public float damage;
     public float effectFrequenc;
 }
+public struct DamageSys_HealthComponent : IComponentData//Health
+{
+    public float Value;
+}
+#endregion
+#region DealDamageSys
 public struct DealDamageSys_EffectCountDownComponent : IComponentData
 {
     public float effectCountDown;
     public bool canDamage => effectCountDown <= 0f;
+}
+public struct DealDamageSys_EXPComponent : IComponentData//EXP
+{
+    public float Value;
 }
 public struct DealDamageSys_OwnerComponent : IComponentData//DamageFrom?
 {
@@ -210,37 +232,18 @@ public struct DealDamageSys_OwnerComponent : IComponentData//DamageFrom?
     public float effectCount;
     public bool CandealDamage => effectCount <= 0;
 }
-//-----------------Chosse-------------//
-public struct ChosseItemComponent : IComponentData
-{
-    public int ID;
-    public Entity item;
-}
-//------------------DamageUI----------------------
+#endregion
 
-
-public struct CharacterAttackStrength : IComponentData//Strength
-{
-    public float Value;
-}
-
-public struct DealDamageSys_EXPComponent : IComponentData//EXP
-{
-    public float Value;
-}
-
-public struct DamageSys_HealthComponent : IComponentData//Health
-{
-    public float Value;
-}
-
-
-//-----------------------------DeadDestroyTag----------------------
+//---------------------------------------------------
+#region DeadSys
 public struct DeadDestroyTag : IComponentData//Health
 {
 
 }
-//------------------------------Fire----------------------------
+#endregion
+//----------------------------------------------------------
+
+#region PlayerProjecTileSys
 public struct EquippedProjectileDataComponent : IComponentData, IEnableableComponent
 {
     public bool active;
@@ -267,3 +270,4 @@ public struct PickupProjectileDataComponent : IComponentData
     public double pickupTimeToLive;
     public bool isCollisionInvulnerable;
 }
+#endregion
