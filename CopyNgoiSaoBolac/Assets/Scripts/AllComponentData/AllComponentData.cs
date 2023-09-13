@@ -72,6 +72,8 @@ public struct EnemyStateComponent : IComponentData
     }
     public State state;
 }
+
+public struct EnemyAISys_TargetComponent : IComponentData { }
 #endregion
 //-----------------------------------------------------------------------
 #region Status

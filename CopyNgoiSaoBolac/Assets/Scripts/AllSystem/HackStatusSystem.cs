@@ -206,7 +206,8 @@ public partial struct HackJob : IJobEntity
 
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in PlayerMove_OwnerSystem plComp, in Entity ent, /*ref DynamicBuffer<MiniItemComponent> miniItem,*/
-                        in HackInputComponent input, in CheckNeedCalculate check, ref DynamicBuffer<StatModify> dynamicBuffer, ref ChosseItemComponent chosse,
+                        in HackInputComponent input, in CheckNeedCalculate check, ref DynamicBuffer<StatModify> dynamicBuffer,
+                        ref ChosseItemComponent chosse,
                         in LocalTransform ltrans, in WorldTransform wtrans, ref CharacterAttackStrength damage)
     {
 

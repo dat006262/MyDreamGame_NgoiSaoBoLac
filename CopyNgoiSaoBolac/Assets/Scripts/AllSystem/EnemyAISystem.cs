@@ -13,10 +13,10 @@ public partial struct EnemyAISystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<EnemyAISystemEnable>();
-        //state.RequireForUpdate<PlayerComponent>();
+        state.RequireForUpdate<EnemyAISys_TargetComponent>();
         state.RequireForUpdate<EnemyAI_OwnerComponent>();
 
-        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerMove_OwnerSystem>());
+        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyAISys_TargetComponent>());
         m_UFOsEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyAI_OwnerComponent>());
         //m_boundsGroup = state.GetEntityQuery(ComponentType.ReadOnly<BoundsTagComponent>());
     }
@@ -30,7 +30,7 @@ public partial struct EnemyAISystem : ISystem
 
         int i = 0;
         NativeArray<float3> playerPosArr = new NativeArray<float3>(m_playersEQG.CalculateEntityCount(), Allocator.TempJob);
-        foreach (var lToW in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<PlayerMove_OwnerSystem>())
+        foreach (var lToW in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<EnemyAISys_TargetComponent>())
         {
             playerPosArr[i] = lToW.ValueRO.Position;
             i++;
