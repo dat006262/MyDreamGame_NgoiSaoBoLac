@@ -137,7 +137,7 @@ public struct ItemComponent : IComponentData
     public Entity prefab;
 
 }
-//---------------------EquipSystem------------------------
+
 public struct OwnerByPlayerComponent : IComponentData
 {
     public bool owner;
@@ -148,7 +148,7 @@ public struct EquipByPlayerComponent : IComponentData
     public bool equip;
 }
 
-//------------SkillSystem-----------------------
+//------------SkillCo-----------------------
 public enum SkillType
 {
     HitEffect = 100,
