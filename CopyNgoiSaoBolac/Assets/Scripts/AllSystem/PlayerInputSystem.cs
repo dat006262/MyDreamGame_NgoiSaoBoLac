@@ -139,19 +139,19 @@ public partial struct MovementJob : IJobEntity
         float moveSpeed = plComp.moveSpeed;
         // rotate
         if (input.Left.keyVal)
-            velocity.ApplyImpulse(mass, ltrans.Position, ltrans.Rotation, -ltrans.Right() * moveSpeed * deltaTime, wtrans.Position);
+            velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, -new float3(1, 0, 0) * moveSpeed * deltaTime, wtrans.Position);
         //   ltrans.Position += new float3(-1, 0, 0) * moveSpeed * deltaTime;
 
         if (input.Right.keyVal)
-            velocity.ApplyImpulse(mass, ltrans.Position, ltrans.Rotation, ltrans.Right() * moveSpeed * deltaTime, wtrans.Position);
+            velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, new float3(1, 0, 0) * moveSpeed * deltaTime, wtrans.Position);
         //  ltrans.Position += new float3(1, 0, 0) * moveSpeed * deltaTime;
         // move
         if (input.Up.keyVal)
-            velocity.ApplyImpulse(mass, ltrans.Position, ltrans.Rotation, ltrans.Up() * moveSpeed * deltaTime, wtrans.Position);
+            velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, new float3(0, 1, 0) * moveSpeed * deltaTime, wtrans.Position);
         //  ltrans.Position += new float3(0, 1, 0) * moveSpeed * deltaTime;
 
         if (input.Down.keyVal)
-            velocity.ApplyImpulse(mass, ltrans.Position, ltrans.Rotation, -ltrans.Up() * moveSpeed * deltaTime, wtrans.Position);
+            velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, -new float3(0, 1, 0) * moveSpeed * deltaTime, wtrans.Position);
         //   ltrans.Position += new float3(0, -1, 0) * moveSpeed * deltaTime;
 
         // teleport / hyperspace

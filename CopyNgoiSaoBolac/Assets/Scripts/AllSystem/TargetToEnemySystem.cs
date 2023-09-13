@@ -7,21 +7,22 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 
 public partial struct TargetToEnemySystem : ISystem
 {
     private EntityQuery m_playersEQG;
-    private EntityQuery m_UFOsEQG;
-    [BurstCompile]
+    private EntityQuery m_EnemysEQG;
+
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<Config>();
         state.RequireForUpdate<TargetToEnemySystemEnable>();
         state.RequireForUpdate<EnemyComponent>();
         state.RequireForUpdate<PlayerComponent>();
-        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerComponent>());
-        m_UFOsEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyComponent>());
+        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerInputComponent>());
+        m_EnemysEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyComponent>());
     }
     public void OnDestroy(ref SystemState state)
     {
@@ -32,8 +33,8 @@ public partial struct TargetToEnemySystem : ISystem
     {
 
         int i = 0;
-        NativeArray<float3> enemyPosArr = new NativeArray<float3>(m_UFOsEQG.CalculateEntityCount(), Allocator.TempJob);
-        foreach (var lToW in SystemAPI.Query<RefRO<LocalToWorld>>().WithAll<PlayerComponent>())
+        NativeArray<float3> enemyPosArr = new NativeArray<float3>(m_EnemysEQG.CalculateEntityCount(), Allocator.TempJob);
+        foreach (var lToW in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<EnemyComponent>())
         {
             enemyPosArr[i] = lToW.ValueRO.Position;
             i++;
@@ -43,7 +44,14 @@ public partial struct TargetToEnemySystem : ISystem
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
         PhysicsWorld physWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorld;
-
+        state.Dependency = new TurnHeadToTarget
+        {
+            deltaTime = SystemAPI.Time.DeltaTime,
+            ecbp = ecb.AsParallelWriter(),
+            EnemyPosArr = enemyPosArr,
+            physWorld = physWorld
+        }.ScheduleParallel(m_playersEQG, state.Dependency);
+        state.Dependency.Complete();
     }
 }
 
@@ -61,25 +69,25 @@ public partial struct TurnHeadToTarget : IJobEntity
     enum layer
     {
         // TODO: but really would be nice to actually access the Layers defined in settings.
-        WorldBounds = (1 << 9),
-        UFOs = (1 << 15)
+        WorldBounds = (0 << 2),
+        UFOs = (2 << 4)
     };
 
     [BurstCompile]
-    private void Execute([ChunkIndexInQuery] int ciqi, in LocalToWorld playerLtoW, in LocalTransform playerTras, in PlayerComponent playerC, in Entity playerEnt)
+    private void Execute([ChunkIndexInQuery] int ciqi, ref LocalTransform playerTras, in PlayerInputComponent playerC, in Entity playerEnt)
     {
         float nearestDis = float.MaxValue;
-        float3 target_forLeastDist = playerTras.Position;
+        float3 targetPos_forLeastDist = playerTras.Position;
         bool playersExist = false;
         // for now we don't care about any further knowledge than just, closest distance one or another.
         foreach (float3 enemyPos in EnemyPosArr)
         {
             playersExist = true;
-            float sqDistEuclid = math.distancesq(enemyPos, playerLtoW.Position);
+            float sqDistEuclid = math.distancesq(enemyPos, playerTras.Position);
             if (nearestDis > sqDistEuclid)
             {
                 nearestDis = sqDistEuclid;
-                target_forLeastDist = enemyPos;
+                targetPos_forLeastDist = enemyPos;
             }
             //update 1 near hon
 
@@ -87,11 +95,11 @@ public partial struct TurnHeadToTarget : IJobEntity
             {
                 // alsocheck through walls
                 float sqDistPortal = float.MaxValue;
-                float3 dirToPlayer = math.normalize(enemyPos - playerLtoW.Position);
+                float3 dirToPlayer = math.normalize(enemyPos - playerTras.Position);
                 RaycastInput raycastInput = new RaycastInput()
                 {
-                    Start = playerLtoW.Position,
-                    End = -dirToPlayer * 10,//lengofRayCast
+                    Start = playerTras.Position,
+                    End = playerTras.Position - dirToPlayer * 10,//lengofRayCast
                     Filter = new CollisionFilter
                     {
                         BelongsTo = (uint)layer.UFOs,
@@ -102,39 +110,30 @@ public partial struct TurnHeadToTarget : IJobEntity
 
 #if UNITY_EDITOR
                 Debug.DrawLine(raycastInput.Start, raycastInput.End, Color.red, 0.25f);
-                Debug.DrawLine(raycastInput.Start, dirToPlayer * 100, Color.green, 0.25f);
+                Debug.DrawLine(raycastInput.Start, raycastInput.Start + dirToPlayer * 10, Color.green, 0.25f);
 #endif
 
 
             }
         }
+        //GetMinComplete
 
-        // move towards player or patrol
+        Quaternion lookRotation = Quaternion.LookRotation(playerTras.Position - targetPos_forLeastDist, new float3(0, 0, 1));
+
+        for (int k = 0; k < 10  /*speed*/; k++)
         {
-            float totalDist = math.sqrt(nearestDis);
-            if (playersExist && totalDist <= 10 && totalDist >= 1)
-            {
-                var newLtrans = new LocalTransform
-                {
-                    Position = playerTras.Position,
-                    Rotation = playerTras.Rotation,
-                    Scale = playerTras.Scale
-                };
-                if ((target_forLeastDist - playerLtoW.Position).x != 0)
-                    newLtrans.Position += deltaTime * playerC.moveSpeed * math.normalize(target_forLeastDist - playerLtoW.Position);
-                ecbp.SetComponent<LocalTransform>(ciqi, playerEnt, newLtrans);
-            }
-            else
-            {// "patrol state"
-                var newLtrans = new LocalTransform
-                {
-                    Position = playerTras.Position,
-                    Rotation = playerTras.Rotation,
-                    Scale = playerTras.Scale
-                };
-                newLtrans.Position += deltaTime * playerC.moveSpeed * newLtrans.Right();
-                ecbp.SetComponent<LocalTransform>(ciqi, playerEnt, newLtrans);
-            }
+            float3 rotation = Quaternion.Lerp(playerTras.Rotation, lookRotation, 0.01f).eulerAngles;//do chinh xac
+            playerTras.Rotation = (Quaternion.Euler(0, 0, rotation.z));
         }
+
+    }
+}
+public static class MathHelpers
+{
+    public static float GetHeading(float3 objectPosition, float3 targetPosition)
+    {
+        var x = objectPosition.x - targetPosition.x;
+        var y = objectPosition.z - targetPosition.z;
+        return math.atan2(x, y) + math.PI;
     }
 }

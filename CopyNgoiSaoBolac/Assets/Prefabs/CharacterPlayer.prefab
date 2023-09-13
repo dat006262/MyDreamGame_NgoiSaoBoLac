@@ -390,7 +390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8776022457917225319, guid: 53ae2e466b9675f47ada45a3bb92585b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -19.54
       objectReference: {fileID: 0}
     - target: {fileID: 8776022457917225319, guid: 53ae2e466b9675f47ada45a3bb92585b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -426,6 +426,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8776022457917225319, guid: 53ae2e466b9675f47ada45a3bb92585b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8897912743253880518, guid: 53ae2e466b9675f47ada45a3bb92585b, type: 3}
+      propertyPath: LockAngularAxes.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -531,7 +535,7 @@ MonoBehaviour:
   activeVisual: {fileID: 0}
   prefab: {fileID: 2485758048250580795, guid: 5b775230cee227c4d936f940d4bbd03e, type: 3}
   timeToLive: 1
-  speed: 600
+  speed: 10000
   scale: 0.5
   pickupTimeToLive: 1
   isCollisionInvulnerable: 0

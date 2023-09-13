@@ -12,10 +12,10 @@ public class ScreenSpaceUIController : MonoBehaviour
     EntityManager _entityManager;
     Entity configEntity;
     public Btn_Fire btnFire;
-    private void Start()
+    IEnumerator Start()
     {
         _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-
+        yield return new WaitForSeconds(0.5f);
         configEntity = _entityManager.CreateEntityQuery(typeof(Config)).GetSingletonEntity();
         //    Debug.Log($"Player: {_playerEntity.ToString()}");
     }
