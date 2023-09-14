@@ -447,6 +447,9 @@ PrefabInstance:
       addedObject: {fileID: 5879439839694072232}
     - targetCorrespondingSourceObject: {fileID: 1956861115838911383, guid: 53ae2e466b9675f47ada45a3bb92585b, type: 3}
       insertIndex: -1
+      addedObject: {fileID: -156704804650720852}
+    - targetCorrespondingSourceObject: {fileID: 1956861115838911383, guid: 53ae2e466b9675f47ada45a3bb92585b, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 4200344999855778856}
     - targetCorrespondingSourceObject: {fileID: 1956861115838911383, guid: 53ae2e466b9675f47ada45a3bb92585b, type: 3}
       insertIndex: -1
@@ -510,6 +513,19 @@ MonoBehaviour:
   AttackStrength: 0
   moveSpeed: 125
   rotateSpeed: 0
+--- !u!114 &-156704804650720852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6924826226586469840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43fbcff08f26bc948855e558d6ae21dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnSpeed: 10
 --- !u!114 &4200344999855778856
 MonoBehaviour:
   m_ObjectHideFlags: 0

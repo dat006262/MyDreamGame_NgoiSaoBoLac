@@ -203,7 +203,8 @@ public struct SkillCoolDownSys_OwnerComponent : IComponentData
     public float remain;
     public bool canUse => remain <= 0f;
 }
-#endregion
+#endregion 
+//----------------------------------
 #region DamageSys
 public struct DamageSys_OwnerComponent : IComponentData
 {
@@ -216,6 +217,7 @@ public struct DamageSys_HealthComponent : IComponentData//Health
     public float Value;
 }
 #endregion
+//-------------------------------------------
 #region DealDamageSys
 public struct DealDamageSys_EffectCountDownComponent : IComponentData
 {
@@ -272,4 +274,13 @@ public struct PickupProjectileDataComponent : IComponentData
     public double pickupTimeToLive;
     public bool isCollisionInvulnerable;
 }
+#endregion
+//================================================
+#region TargetToEnemySystem
+public struct TargetToEnemySy_OwnerComponent : IComponentData
+{
+    public float turnSpeed;
+
+}
+public struct TargetToEnemySy_TargetComponent : IComponentData { }
 #endregion
