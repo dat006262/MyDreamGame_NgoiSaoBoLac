@@ -248,6 +248,10 @@ public struct DeadDestroyTag : IComponentData//Health
 //----------------------------------------------------------
 
 #region PlayerProjecTileSys
+public struct PlayerProjecTileSys_OwnerComponent : IComponentData
+{
+
+}
 public struct EquippedProjectileDataComponent : IComponentData, IEnableableComponent
 {
     public bool active;

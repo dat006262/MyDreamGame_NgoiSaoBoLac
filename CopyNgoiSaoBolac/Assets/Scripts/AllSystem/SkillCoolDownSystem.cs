@@ -12,7 +12,7 @@ public partial struct SkillCoolDownSystem : ISystem
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-        state.RequireForUpdate<Config>();
+        state.RequireForUpdate<ConfigComponent>();
         state.RequireForUpdate<SkillCoolDownSystemEnable>();
         state.RequireForUpdate<SkillCoolDownSys_OwnerComponent>();
         SkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillComponent>());

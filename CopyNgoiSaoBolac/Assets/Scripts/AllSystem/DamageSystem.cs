@@ -119,9 +119,5 @@ public partial struct SetCollisionDamageJob : ITriggerEventsJob
             }
 
         }
-        if (!isDamagerA && !isHealthB)
-        {
-            Debug.Log("DamageError");
-        }
     }
 }

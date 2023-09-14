@@ -35,7 +35,7 @@ public class WorldSpaceUIController : MonoBehaviour
     {
         var directionToCamera = (Vector3)startPosition - _mainCameraTransform.position;
         var rotationToCamera = Quaternion.LookRotation(directionToCamera, Vector3.up);
-        var newIcon = Instantiate(_damageIconPrefab, startPosition, /*rotationToCamera*/ Quaternion.identity, transform);
+        var newIcon = Instantiate(_damageIconPrefab, startPosition, rotationToCamera, transform);
         var newIconText = newIcon.GetComponent<TextMeshProUGUI>();
         newIconText.text = $"<color=red>-{damageAmount.ToString()}</color>";
     }

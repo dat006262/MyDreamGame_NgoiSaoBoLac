@@ -10,15 +10,14 @@ public class ConfigAuthoring : MonoBehaviour
         public override void Bake(ConfigAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.None);
-            AddComponent(entity, new Config
+            AddComponent(entity, new ConfigComponent
             {
-                //isFireClick = authoring.isFireClick
             });
         }
     }
 }
-public struct Config : IComponentData//Chua tat ca thong tin game
+public struct ConfigComponent : IComponentData//Chua tat ca thong tin game
 {
     public bool isFireClick;
-
+    public bool isAutoHitClick;
 }

@@ -21,7 +21,7 @@ public partial struct PlayerProjectileSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<PlayerProjectileSystemEnable>();
-        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerMove_OwnerSystem>());
+        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerProjecTileSys_OwnerComponent>());
     }
 
     [BurstCompile]
@@ -32,13 +32,13 @@ public partial struct PlayerProjectileSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        var config = SystemAPI.GetSingleton<Config>();
+        var config = SystemAPI.GetSingleton<ConfigComponent>();
         var ecbSingleton = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
         state.Dependency = new FireProjectileJob
         {
-            configEntity = SystemAPI.GetSingletonEntity<Config>(),
+            configEntity = SystemAPI.GetSingletonEntity<ConfigComponent>(),
             Config = config,
             currentTime = Time.timeAsDouble,
             deltaTime = Time.deltaTime,
@@ -52,14 +52,14 @@ public partial struct PlayerProjectileSystem : ISystem
 public partial struct FireProjectileJob : IJobEntity
 {
     public Entity configEntity;
-    public Config Config;
+    public ConfigComponent Config;
     [ReadOnly]
     public double currentTime;
     [ReadOnly]
     public float deltaTime;
     public EntityCommandBuffer.ParallelWriter ecbp;
 
-    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerMove_OwnerSystem plComp,
+    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerProjecTileSys_OwnerComponent plComp,
                         in EquippedProjectileDataComponent equippedProj,
                         in Entity ent, ref PlayerInput_OwnerComponent input,
                         in LocalTransform ltrans, in WorldTransform wtrans,
@@ -69,7 +69,6 @@ public partial struct FireProjectileJob : IJobEntity
         // check if projectile equipment slot is expired
         if (equippedProjectile.prefab == Entity.Null ||
             equippedProjectile.pickupTimeToLive > -1
-        //   &&  currentTime >= equippedProjectile.pickupTime + equippedProjectile.pickupTimeToLive
         )
         {
             EquippedProjectileDataComponent newEquipped = new EquippedProjectileDataComponent
@@ -93,10 +92,10 @@ public partial struct FireProjectileJob : IJobEntity
         }
         else
         // shoot
-        if (/*input.Shoot.keyVal*/Config.isFireClick && equippedProjectile.active && equippedProjectile.prefab != Entity.Null)
+        if (Config.isFireClick && equippedProjectile.active && equippedProjectile.prefab != Entity.Null)
         {
 
-            ecbp.AddComponent<Config>(ciqi, configEntity, new Config { isFireClick = false });
+            ecbp.AddComponent<ConfigComponent>(ciqi, configEntity, new ConfigComponent { isFireClick = false });
             Entity spawnedProj = ecbp.Instantiate(ciqi, equippedProjectile.prefab);
             float3 spawnPos = ltrans.Position + ltrans.Up() * 0.5f * ltrans.Scale;
 

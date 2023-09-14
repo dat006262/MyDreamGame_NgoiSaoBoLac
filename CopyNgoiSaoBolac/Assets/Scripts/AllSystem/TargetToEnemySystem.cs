@@ -17,7 +17,7 @@ public partial struct TargetToEnemySystem : ISystem
 
     public void OnCreate(ref SystemState state)
     {
-        state.RequireForUpdate<Config>();
+        state.RequireForUpdate<ConfigComponent>();
         state.RequireForUpdate<TargetToEnemySystemEnable>();
         state.RequireForUpdate<TargetToEnemySy_TargetComponent>();
         state.RequireForUpdate<TargetToEnemySy_OwnerComponent>();
