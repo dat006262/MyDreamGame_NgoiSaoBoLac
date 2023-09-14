@@ -403,7 +403,7 @@ MonoBehaviour:
   PlayerInputSystemEnable: 1
   PlayerMovementSystemEnable: 1
   EnemyAISystemEnable: 1
-  HackStatusSystemEnable: 1
+  HackInputSystemEnable: 1
   HackSystemEnable: 1
   ApplyModifySystemEnable: 1
   SkillCoolDownSystemEnable: 1

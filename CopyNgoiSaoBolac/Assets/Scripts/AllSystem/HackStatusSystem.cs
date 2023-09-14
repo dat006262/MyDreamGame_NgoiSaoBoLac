@@ -11,13 +11,13 @@ using Unity.Transforms;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
-public partial class HackStatusSystem : SystemBase
+#region Update InputSystemByFarme
+public partial class HackInputSystem : SystemBase
 {
 
     protected override void OnCreate()
     {
-        RequireForUpdate<HackStatusSystemEnable>();
+        RequireForUpdate<HackInputSystemEnable>();
         RequireForUpdate<HackInputComponent>();
     }
     protected override void OnDestroy()
@@ -76,6 +76,7 @@ public partial class HackStatusSystem : SystemBase
         }).Run();
     }
 }
+#endregion
 [BurstCompile]
 public partial struct HackSystem : ISystem
 {
@@ -214,6 +215,7 @@ public partial struct HackJob : IJobEntity
 
         // DynamicBuffer<StatModify> getBuffer = statModify[ent];
         // rotate
+        #region Test CalculateStatModify
         if (input.PlusHealth.keyVal)
         {
             StatModify newModifi = new StatModify
@@ -259,6 +261,8 @@ public partial struct HackJob : IJobEntity
         {
             ecbp.SetComponent<CheckNeedCalculate>(ciqi, ent, new CheckNeedCalculate { dirty = true });
         }
+        #endregion
+        #region TestEquip/UnEquip Item
         if (input.EquipItem.keyVal)
         {
 
@@ -304,12 +308,15 @@ public partial struct HackJob : IJobEntity
                 #endregion
             }
         }
-
+        #endregion
+        #region Test SkillCooldown
         if (input.UseSkill.keyVal)
         {
             if (skillCoolDownComponent.canUse)
                 ecbp.SetComponent<SkillCoolDownSys_OwnerComponent>(ciqi, Skill, new SkillCoolDownSys_OwnerComponent { coolDown = skillCoolDownComponent.coolDown, remain = skillCoolDownComponent.coolDown });
         }
+        #endregion
+        #region TestFound Item ByID
         if (input.ChosseItem.keyVal)
         {
             int j = 0;
@@ -326,12 +333,14 @@ public partial struct HackJob : IJobEntity
                 j++;
             }
         }
-
+        #endregion
+        #region TestDealDamage
         if (input.DealDamage.keyVal)
         {
             damage.Value++;
             ecbp.AddComponent<DealDamageSys_OwnerComponent>(ciqi, Enemy, new DealDamageSys_OwnerComponent { Value = damage.Value, OriginCharacter = ent });
         }
+        #endregion
     }
 }
 

@@ -10,7 +10,7 @@ public class ConfigExecute : MonoBehaviour
     public bool PlayerInputSystemEnable;
     public bool PlayerMovementSystemEnable;
     public bool EnemyAISystemEnable;
-    public bool HackStatusSystemEnable;
+    public bool HackInputSystemEnable;
     public bool HackSystemEnable;
     public bool ApplyModifySystemEnable;
     public bool SkillCoolDownSystemEnable;
@@ -33,7 +33,7 @@ public class ConfigExecute : MonoBehaviour
             if (authoring.PlayerInputSystemEnable) AddComponent<PlayerInputSystemEnable>(entity);
             if (authoring.PlayerMovementSystemEnable) AddComponent<PlayerMovementSystemEnable>(entity);
             if (authoring.EnemyAISystemEnable) AddComponent<EnemyAISystemEnable>(entity);
-            if (authoring.HackStatusSystemEnable) AddComponent<HackStatusSystemEnable>(entity);
+            if (authoring.HackInputSystemEnable) AddComponent<HackInputSystemEnable>(entity);
             if (authoring.HackSystemEnable) AddComponent<HackSystemEnable>(entity);
             if (authoring.ApplyModifySystemEnable) AddComponent<ApplyModifySystemEnable>(entity);
             if (authoring.SkillCoolDownSystemEnable) AddComponent<SkillCoolDownSystemEnable>(entity);
@@ -59,7 +59,7 @@ public struct EnemyAISystemEnable : IComponentData
 {
 }
 
-public struct HackStatusSystemEnable : IComponentData
+public struct HackInputSystemEnable : IComponentData
 {
 }
 public struct HackSystemEnable : IComponentData

@@ -13,7 +13,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [BurstCompile]
-[UpdateAfter(typeof(HackStatusSystem))]
+[UpdateAfter(typeof(HackInputSystem))]
 public partial struct ApplyModifySystem : ISystem
 {
     private EntityQuery m_applyStatus;
