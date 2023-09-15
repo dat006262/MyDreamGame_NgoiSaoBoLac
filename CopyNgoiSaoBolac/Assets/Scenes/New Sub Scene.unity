@@ -412,6 +412,7 @@ MonoBehaviour:
   DeadDestroySystemEnable: 1
   PlayerProjectileSystemEnable: 1
   TargetToEnemySystemEnable: 1
+  AutoHitSystemEnable: 1
 --- !u!4 &1566107427
 Transform:
   m_ObjectHideFlags: 0

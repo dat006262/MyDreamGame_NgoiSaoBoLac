@@ -80,6 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SkillDamage: 10
+  effectFrequenc: 1
 --- !u!54 &3530200946089333910
 Rigidbody:
   m_ObjectHideFlags: 0

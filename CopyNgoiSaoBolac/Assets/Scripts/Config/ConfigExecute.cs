@@ -19,6 +19,8 @@ public class ConfigExecute : MonoBehaviour
     public bool DeadDestroySystemEnable;
     public bool PlayerProjectileSystemEnable;
     public bool TargetToEnemySystemEnable;
+    public bool AutoHitSystemEnable;
+
     private void Start()
     {
         Application.targetFrameRate = 60;
@@ -43,6 +45,7 @@ public class ConfigExecute : MonoBehaviour
             if (authoring.DeadDestroySystemEnable) AddComponent<DeadDestroySystemEnable>(entity);
             if (authoring.PlayerProjectileSystemEnable) AddComponent<PlayerProjectileSystemEnable>(entity);
             if (authoring.TargetToEnemySystemEnable) AddComponent<TargetToEnemySystemEnable>(entity);
+            if (authoring.AutoHitSystemEnable) AddComponent<AutoHitSystemEnable>(entity);
         }
     }
 }
@@ -85,5 +88,8 @@ public struct PlayerProjectileSystemEnable : IComponentData
 {
 }
 public struct TargetToEnemySystemEnable : IComponentData
+{
+}
+public struct AutoHitSystemEnable : IComponentData
 {
 }

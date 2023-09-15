@@ -206,7 +206,7 @@ public struct SkillCoolDownSys_OwnerComponent : IComponentData
 #endregion 
 //----------------------------------
 #region DamageSys
-public struct DamageSys_OwnerComponent : IComponentData
+public struct DamageSys_OwnerComponent : IComponentData//gan len skill
 {
 
     public float damage;
@@ -287,4 +287,18 @@ public struct TargetToEnemySy_OwnerComponent : IComponentData
 
 }
 public struct TargetToEnemySy_TargetComponent : IComponentData { }
+#endregion
+#region AutoHitSys//SpawnAutoHit
+public struct AutoHitSys_PrefabComponent : IComponentData
+{
+
+
+}
+public struct AutoHitSys_OwnerComponent : IComponentData
+{
+    public bool active;
+    public Entity prefab;
+    public float timeToLive;
+
+}
 #endregion
