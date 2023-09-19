@@ -54,16 +54,7 @@ public partial class DealDamageSystem : SystemBase
             // If the damaged character is out of health... Add experience to the player
             if (hitPoints.ValueRO.Value <= 0)
             {
-                // ecb.DestroyEntity(entity);
-                ecb.AddComponent<DeadDestroyTag>(entity);
-                //var originCharacterExperience =
-                //    SystemAPI.GetComponent<CharacterExperiencePoints>(damageToCharacter.OriginCharacter);
-                //originCharacterExperience.Value += experiencePoints.Value;
-                //SystemAPI.SetComponent(damageToCharacter.OriginCharacter, originCharacterExperience);
-
-                //var originCharacterPosition =
-                //    SystemAPI.GetComponent<LocalTransform>(damageToCharacter.OriginCharacter).Position;
-                //OnGrantExperience?.Invoke(experiencePoints.Value, originCharacterPosition);
+                ecb.AddComponent<DeadDestroyTag>(entity, new DeadDestroyTag { DeadAfter = 0 });
             }
         }
 

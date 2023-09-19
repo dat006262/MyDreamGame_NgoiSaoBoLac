@@ -242,7 +242,7 @@ public struct DealDamageSys_OwnerComponent : IComponentData//DamageFrom?
 #region DeadSys
 public struct DeadDestroyTag : IComponentData//Health
 {
-
+    public float DeadAfter;
 }
 #endregion
 //----------------------------------------------------------

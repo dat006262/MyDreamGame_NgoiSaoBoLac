@@ -33,6 +33,7 @@ public partial struct DeadDestroySystem : ISystem
         var ecbEnd = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
         state.Dependency = new DeadDestroyJob
         {
+            deltaTime = SystemAPI.Time.DeltaTime,
             ecbp = ecbEnd.AsParallelWriter(),
         }.ScheduleParallel(m_DeadDestroyEQG, state.Dependency);
         state.Dependency.Complete();
@@ -41,20 +42,26 @@ public partial struct DeadDestroySystem : ISystem
     [BurstCompile]
     public partial struct DeadDestroyJob : IJobEntity
     {
+        [ReadOnly]
+        public float deltaTime;
         public EntityCommandBuffer.ParallelWriter ecbp;
 
         public void Execute([ChunkIndexInQuery] int ciqi,
-                            in DeadDestroyTag dedtag,
+                            ref DeadDestroyTag dedtag,
                             in Entity ent,
                             in DynamicBuffer<Child> children)
         {
-            foreach (var child in children)
-            {
-                ecbp.DestroyEntity(ciqi, child.Value);
-                Debug.Log("Destroy");
-            }
-            ecbp.DestroyEntity(ciqi, ent);
 
+            dedtag.DeadAfter -= deltaTime;
+            if (dedtag.DeadAfter <= 0)
+            {
+                foreach (var child in children)
+                {
+                    ecbp.DestroyEntity(ciqi, child.Value);
+                    Debug.Log("Destroy");
+                }
+                ecbp.DestroyEntity(ciqi, ent);
+            }
         }
     }
 }
