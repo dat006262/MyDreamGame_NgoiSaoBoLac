@@ -20,6 +20,9 @@ public class ConfigExecute : MonoBehaviour
     public bool PlayerProjectileSystemEnable;
     public bool TargetToEnemySystemEnable;
     public bool AutoHitSystemEnable;
+    public bool ExecuteTriggerSystemEnable;
+    public bool DealDamageSystem2Enable;
+    public bool E_MorganaSystemEnable;
 
     private void Start()
     {
@@ -46,6 +49,9 @@ public class ConfigExecute : MonoBehaviour
             if (authoring.PlayerProjectileSystemEnable) AddComponent<PlayerProjectileSystemEnable>(entity);
             if (authoring.TargetToEnemySystemEnable) AddComponent<TargetToEnemySystemEnable>(entity);
             if (authoring.AutoHitSystemEnable) AddComponent<AutoHitSystemEnable>(entity);
+            if (authoring.ExecuteTriggerSystemEnable) AddComponent<ExecuteTriggerSystemEnable>(entity);
+            if (authoring.DealDamageSystem2Enable) AddComponent<DealDamageSystem2Enable>(entity);
+            if (authoring.E_MorganaSystemEnable) AddComponent<E_MorganaSystemEnable>(entity);
         }
     }
 }
@@ -91,5 +97,14 @@ public struct TargetToEnemySystemEnable : IComponentData
 {
 }
 public struct AutoHitSystemEnable : IComponentData
+{
+}
+public struct ExecuteTriggerSystemEnable : IComponentData
+{
+}
+public struct DealDamageSystem2Enable : IComponentData
+{
+}
+public struct E_MorganaSystemEnable : IComponentData
 {
 }

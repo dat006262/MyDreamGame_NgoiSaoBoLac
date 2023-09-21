@@ -21,10 +21,7 @@ public partial struct ApplyModifySystem : ISystem
     public void OnCreate(ref SystemState state)
     {
 
-        state.RequireForUpdate<StatModify>();
-        state.RequireForUpdate<CharacterStat>();
-        state.RequireForUpdate<CheckNeedCalculate>();
-        state.RequireForUpdate<ApplyModifySystemEnable>();
+        state.RequireForUpdate<DealDamageSystem2Enable>();
 
         m_applyStatus = state.GetEntityQuery(ComponentType.ReadOnly<CharacterStat>());
 

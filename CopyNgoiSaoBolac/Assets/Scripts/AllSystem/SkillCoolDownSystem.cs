@@ -9,6 +9,8 @@ public partial struct SkillCoolDownSystem : ISystem
 {
     private EntityQuery SkillEQG;
     private EntityQuery SkillEffectEQG;
+    private EntityQuery DealDamage_EffectEQG;
+    private EntityQuery E_MorganaEffectEQG;
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
@@ -18,6 +20,8 @@ public partial struct SkillCoolDownSystem : ISystem
         SkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillComponent>());
 
         SkillEffectEQG = state.GetEntityQuery(ComponentType.ReadOnly<DealDamageSys_EffectCountDownComponent>());
+        DealDamage_EffectEQG = state.GetEntityQuery(ComponentType.ReadOnly<DealDamageSys2_OwnerComponent>());
+        E_MorganaEffectEQG = state.GetEntityQuery(ComponentType.ReadOnly<E_MorganaEffectTag>());
     }
 
     [BurstCompile]
@@ -49,11 +53,26 @@ public partial struct SkillCoolDownSystem : ISystem
         //}.ScheduleParallel(SkillEffectEQG, state.Dependency);
         //state.Dependency.Complete();
 
+        state.Dependency = new DealDame_EfectCountDown
+        {
+            deltaTime = SystemAPI.Time.DeltaTime,
+            ecbp = ecb.AsParallelWriter()
+
+        }.ScheduleParallel(DealDamage_EffectEQG, state.Dependency);
+        state.Dependency.Complete();
+        state.Dependency = new RemoveE_MorganaJob
+        {
+            deltaTime = SystemAPI.Time.DeltaTime,
+            ecbp = ecb.AsParallelWriter()
+
+        }.ScheduleParallel(E_MorganaEffectEQG, state.Dependency);
+        state.Dependency.Complete();
+
     }
 
 }
 
-
+//---------------------------------------------------
 [BurstCompile]
 public partial struct SkillCoolDownJob : IJobEntity
 {
@@ -74,6 +93,7 @@ public partial struct SkillCoolDownJob : IJobEntity
 
     }
 }
+//------------------------------------------------
 
 [BurstCompile]
 public partial struct SkillEffectDownJob : IJobEntity
@@ -92,6 +112,47 @@ public partial struct SkillEffectDownJob : IJobEntity
         if (!skillEffect.canDamage) return;
 
 
+
+    }
+}
+[BurstCompile]
+//-----------------------------------------
+public partial struct DealDame_EfectCountDown : IJobEntity
+{
+    [ReadOnly]
+    public float deltaTime;
+    //[ReadOnly] public BufferLookup<StatModify> statModify;
+
+    public EntityCommandBuffer.ParallelWriter ecbp;
+    public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent,
+                        ref DynamicBuffer<DealDamageSys2_OwnerComponent> dealDamageEffect
+                       )
+    {
+        for (int i = 0; i < dealDamageEffect.Length; i++)
+        {
+            if (dealDamageEffect.ElementAt(i).effectCount > 0)
+            {
+                dealDamageEffect.ElementAt(i).effectCount -= deltaTime;
+            }
+
+
+
+
+        }
+
+    }
+}
+public partial struct RemoveE_MorganaJob : IJobEntity
+{
+    [ReadOnly]
+    public float deltaTime;
+    //[ReadOnly] public BufferLookup<StatModify> statModify;
+
+    public EntityCommandBuffer.ParallelWriter ecbp;
+    public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent
+                       )
+    {
+        ecbp.RemoveComponent<E_MorganaEffectTag>(ciqi, ent);
 
     }
 }

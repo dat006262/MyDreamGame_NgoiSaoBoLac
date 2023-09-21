@@ -7,6 +7,7 @@ public class SkillAuthoring : MonoBehaviour
 {
     public float SkillDamage;
     public float effectFrequenc = 1f;
+    public SkillType type = SkillType.E_Morgana;
     public class SkillBaker : Baker<SkillAuthoring>
     {
 
@@ -28,6 +29,16 @@ public class SkillAuthoring : MonoBehaviour
                     effectFrequenc = authoring.effectFrequenc
                 }
                 );
+
+
+            AddComponent<ExecuteTriggerSys_OwnerComponent>(
+             new ExecuteTriggerSys_OwnerComponent
+             {
+                 type = authoring.type,
+                 damage = authoring.SkillDamage,
+                 effectFrequenc = authoring.effectFrequenc
+             }
+             );
 
         }
     }

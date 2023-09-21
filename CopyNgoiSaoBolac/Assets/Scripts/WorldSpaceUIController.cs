@@ -18,15 +18,16 @@ public class WorldSpaceUIController : MonoBehaviour
 
     private void OnEnable()
     {
-        var dealDamageSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<DealDamageSystem>();
+        var dealDamageSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<DealDamageSystem2>();
         dealDamageSystem.OnDealDamage += DisplayDamageIcon;
         dealDamageSystem.OnGrantExperience += DisplayExperienceIcon;
+
     }
 
     private void OnDisable()
     {
         if (World.DefaultGameObjectInjectionWorld == null) return;
-        var dealDamageSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<DealDamageSystem>();
+        var dealDamageSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<DealDamageSystem2>();
         dealDamageSystem.OnDealDamage -= DisplayDamageIcon;
         dealDamageSystem.OnGrantExperience -= DisplayExperienceIcon;
     }

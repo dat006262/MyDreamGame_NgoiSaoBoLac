@@ -41,6 +41,10 @@ public class EnemyAuthoring : MonoBehaviour
                 OriginCharacter = entity
             });
 
+
+            AddComponent(new ExecuteTriggerSys_HealthComponent { Value = authoring.StartingHitPoints });
+
+            AddBuffer<DealDamageSys2_OwnerComponent>();
         }
     }
 }

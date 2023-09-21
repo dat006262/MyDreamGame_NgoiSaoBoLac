@@ -51,7 +51,6 @@ public partial class DealDamageSystem : SystemBase
 
 
 
-            // If the damaged character is out of health... Add experience to the player
             if (hitPoints.ValueRO.Value <= 0)
             {
                 ecb.AddComponent<DeadDestroyTag>(entity, new DeadDestroyTag { DeadAfter = 0 });

@@ -665,6 +665,7 @@ GameObject:
   - component: {fileID: 3337695469418636372}
   - component: {fileID: 8838912556889743393}
   - component: {fileID: 428602739133959881}
+  - component: {fileID: 3425155640841260363}
   m_Layer: 0
   m_Name: AutoHit_Box
   m_TagString: Untagged
@@ -781,3 +782,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillDamage: 9
   effectFrequenc: 1
+  type: 3
+--- !u!114 &3425155640841260363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7298385891917534547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fe07fe4fc3c6be46bcbfed372457b7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

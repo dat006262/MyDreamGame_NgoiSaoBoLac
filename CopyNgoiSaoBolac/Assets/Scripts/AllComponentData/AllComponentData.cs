@@ -166,35 +166,11 @@ public struct EquipByPlayerComponent : IComponentData
 }
 #endregion
 //------------SkillCo-----------------------
-#region SkillInfor (Van chua xai bao h)
-public enum SkillType
-{
-    HitEffect = 100,
-    Buff = 200,
-    Teleport = 300,
-    Fire = 400
 
-}
-public enum SkillTarget
-{
-    OneTarget,
-    MultiTarget
-}
-public enum SkillShapeType
-{
-    Line,
-    Round,
-    Other
-}
-public enum SkillDame
-{
-    OneTime,
-    TimeByTime
-}
 public struct SkillComponent : IComponentData
 {
 }
-#endregion
+
 //-----------------------------------------
 #region SkillCoolDownSys
 public struct SkillCoolDownSys_OwnerComponent : IComponentData
@@ -302,3 +278,54 @@ public struct AutoHitSys_OwnerComponent : IComponentData
 
 }
 #endregion
+
+#region ExecuteTriggerSys
+public struct ExecuteTriggerSys_OwnerComponent : IComponentData//gan len skill
+{
+    public SkillType type;
+    public float damage;
+    public float effectFrequenc;
+}
+public struct ExecuteTriggerSys_HealthComponent : IComponentData//Health
+{
+    public float Value;
+}
+#endregion
+
+#region DealDamageSys2
+public struct DealDamageSys2_OwnerComponent : IBufferElementData//DamageFrom?
+{
+    public float effectCount;
+    public bool CandealDamage => effectCount <= 0;
+    public bool CanRemove => loopCount <= 0;
+
+    //-----
+    public bool isLoop; //co lap lai dame ko
+    public int loopCount;//so lan lap lai
+    public float Value;//damage
+    public Entity OriginCharacter;
+    public float effectFrequenc;//thoi gian lap lai
+    public SkillType type;
+
+
+}
+#endregion
+public enum SkillType
+{
+    Q_Temmo,
+    Q_Mundo,
+    Q_Zilein,
+    E_Morgana,
+    W_Camile
+}
+public struct E_MorganaEffectTag : IComponentData
+{
+}
+public struct E_MorganaComponent : IComponentData
+{
+    public float countdown;
+    public int loopCount;
+    public float BasicDamePerloop;
+    public Entity OriginCharacter;
+    public float effectFrequenc;
+}

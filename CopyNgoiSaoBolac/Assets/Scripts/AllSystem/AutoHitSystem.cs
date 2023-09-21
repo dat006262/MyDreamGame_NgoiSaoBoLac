@@ -62,7 +62,7 @@ public partial struct AutoHit_SpawnJob : IJobEntity
                         in Entity ent, ref PlayerInput_OwnerComponent input,
                         in LocalTransform ltrans, in WorldTransform wtrans)
     {
-        Debug.Log("Who");
+
         AutoHitSys_OwnerComponent autoHitSys_Owner = plComp;
         // check if projectile equipment slot is expired
         if (autoHitSys_Owner.prefab == Entity.Null)
@@ -76,7 +76,7 @@ public partial struct AutoHit_SpawnJob : IJobEntity
 
             ecbp.AddComponent<ConfigComponent>(ciqi, configEntity, new ConfigComponent { isAutoHitClick = false });
             Entity spawnedProj = ecbp.Instantiate(ciqi, autoHitSys_Owner.prefab);
-            ecbp.AddComponent<DeadDestroyTag>(ciqi, spawnedProj, new DeadDestroyTag { DeadAfter = 3 });
+            //  ecbp.AddComponent<DeadDestroyTag>(ciqi, spawnedProj, new DeadDestroyTag { DeadAfter = 3 });
             float3 spawnPos = ltrans.Position/* + ltrans.Up() * 0.5f * ltrans.Scale*/;
             float spawnScale = ltrans.Scale;
 
