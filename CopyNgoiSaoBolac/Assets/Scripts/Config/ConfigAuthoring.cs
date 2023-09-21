@@ -20,4 +20,5 @@ public struct ConfigComponent : IComponentData//Chua tat ca thong tin game
 {
     public bool isFireClick;
     public bool isAutoHitClick;
+    public bool isAutoTargetSkillClick;
 }

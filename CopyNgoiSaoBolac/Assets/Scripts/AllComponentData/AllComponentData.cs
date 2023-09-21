@@ -2,6 +2,7 @@ using System;
 using System.Windows.Input;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class AllComponentData
@@ -264,6 +265,7 @@ public struct TargetToEnemySy_OwnerComponent : IComponentData
 }
 public struct TargetToEnemySy_TargetComponent : IComponentData { }
 #endregion
+//--------------------------------------------------
 #region AutoHitSys//SpawnAutoHit
 public struct AutoHitSys_PrefabComponent : IComponentData
 {
@@ -278,7 +280,7 @@ public struct AutoHitSys_OwnerComponent : IComponentData
 
 }
 #endregion
-
+//----------------------------------------------
 #region ExecuteTriggerSys
 public struct ExecuteTriggerSys_OwnerComponent : IComponentData//gan len skill
 {
@@ -291,7 +293,7 @@ public struct ExecuteTriggerSys_HealthComponent : IComponentData//Health
     public float Value;
 }
 #endregion
-
+//------------------------------------------------
 #region DealDamageSys2
 public struct DealDamageSys2_OwnerComponent : IBufferElementData//DamageFrom?
 {
@@ -310,6 +312,21 @@ public struct DealDamageSys2_OwnerComponent : IBufferElementData//DamageFrom?
 
 }
 #endregion
+//===============================================
+#region SkillAutoTargetSys
+public struct SkillAutoTargetSys_OwnerComponent : IComponentData
+{
+    public bool active;
+    public Entity prefab;
+    public float RangeSkill;
+
+
+}
+public struct SkillAutoTargetSys_TargetComponent : IComponentData { }
+
+#endregion
+//------------------------
+#region SkillInfor
 public enum SkillType
 {
     Q_Temmo,
@@ -339,11 +356,18 @@ public struct W_CamileComponent : IComponentData
     public Entity OriginCharacter;
     public float DamageBasic;
 }
-public struct Q_TemmoEffectTag : IComponentData
+public struct Q_TemmoTargetComponent : IComponentData
 {
+    public Entity TargetTo;
+    public float3 TargetPos;
 }
 public struct Q_TemmoComponent : IComponentData
 {
+    public float DamageBasic;
+    public float flySpeed;
+    public Entity OriginCharacter;
+    public float distancesDealDamage;
+
 
 }
 public struct Q_MundoEffectTag : IComponentData
@@ -358,3 +382,4 @@ public struct Q_ZileinEffectTag : IComponentData
 public struct Q_ZileinComponent : IComponentData
 {
 }
+#endregion

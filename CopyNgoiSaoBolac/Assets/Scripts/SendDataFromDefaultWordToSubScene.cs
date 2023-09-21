@@ -13,11 +13,13 @@ public class SendDataFromDefaultWordToSubScene : MonoBehaviour
     Entity configEntity;
     public Btn_Fire btnFire;
     public Btn_AutoHit btn_AutoHit;
+    public btn_AutoTagetSkill btn_AutoTargetSkill;
     ConfigComponent gameConfig;
     private void OnValidate()
     {
         btnFire = GetComponentInChildren<Btn_Fire>();
         btn_AutoHit = GetComponentInChildren<Btn_AutoHit>();
+        btn_AutoTargetSkill = GetComponentInChildren<btn_AutoTagetSkill>();
     }
     IEnumerator Start()
     {
@@ -36,7 +38,9 @@ public class SendDataFromDefaultWordToSubScene : MonoBehaviour
                 new ConfigComponent
                 {
                     isFireClick = btnFire.isOnClick,
-                    isAutoHitClick = oldData.isAutoHitClick
+                    isAutoHitClick = oldData.isAutoHitClick,
+                    isAutoTargetSkillClick = oldData.isAutoTargetSkillClick
+
                 });
             btnFire.isOnClick = false;
         }
@@ -47,10 +51,24 @@ public class SendDataFromDefaultWordToSubScene : MonoBehaviour
                 new ConfigComponent
                 {
                     isFireClick = oldData.isFireClick,
-                    isAutoHitClick = btn_AutoHit.isOnClick
+                    isAutoHitClick = btn_AutoHit.isOnClick,
+                    isAutoTargetSkillClick = oldData.isAutoTargetSkillClick
                 });
             btn_AutoHit.isOnClick = false;
         }
-    }
+        if (btn_AutoTargetSkill.isOnClick)
+        {
+            ConfigComponent oldData = _entityManager.GetComponentData<ConfigComponent>(configEntity);
+            _entityManager.AddComponentData<ConfigComponent>(configEntity,
+                new ConfigComponent
+                {
+                    isFireClick = oldData.isFireClick,
+                    isAutoHitClick = oldData.isAutoHitClick,
+                    isAutoTargetSkillClick = btn_AutoTargetSkill.isOnClick
 
+                });
+            btn_AutoTargetSkill.isOnClick = false;
+        }
+
+    }
 }

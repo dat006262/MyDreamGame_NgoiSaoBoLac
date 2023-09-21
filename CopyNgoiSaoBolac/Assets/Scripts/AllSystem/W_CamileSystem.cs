@@ -74,7 +74,7 @@ public partial struct W_CamileWork : IJobEntity
                 ecbp.AppendToBuffer<DealDamageSys2_OwnerComponent>(ciqi, E_MorTagEnt, new DealDamageSys2_OwnerComponent
                 { effectCount = 0.1f, effectFrequenc = 1, isLoop = true, loopCount = 1, Value = w_Camile.DamageBasic, OriginCharacter = Entity.Null, type = SkillType.E_Morgana });
             }
-            w_Camile.damageAfter = 15;
+            w_Camile.damageAfter = 15;//ko dem nguoc nx , cho den khi destroy
             ecbp.AddComponent<DeadDestroyTag>(ciqi, ent);
 
         }

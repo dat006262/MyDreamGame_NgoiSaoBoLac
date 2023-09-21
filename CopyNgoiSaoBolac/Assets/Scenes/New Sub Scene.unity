@@ -402,7 +402,7 @@ MonoBehaviour:
   SpawnSimpleSystem: 1
   PlayerInputSystemEnable: 1
   PlayerMovementSystemEnable: 1
-  EnemyAISystemEnable: 1
+  EnemyAISystemEnable: 0
   HackInputSystemEnable: 1
   HackSystemEnable: 0
   ApplyModifySystemEnable: 1
@@ -413,10 +413,12 @@ MonoBehaviour:
   PlayerProjectileSystemEnable: 1
   TargetToEnemySystemEnable: 1
   AutoHitSystemEnable: 1
+  SkillAutoTargetSystemEnable: 1
   ExecuteTriggerSystemEnable: 1
   DealDamageSystem2Enable: 1
   E_MorganaSystemEnable: 1
   W_CamileSystemEnable: 1
+  Q_TemmoSystemEnable: 1
 --- !u!4 &1566107427
 Transform:
   m_ObjectHideFlags: 0
@@ -582,6 +584,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4755546308761855611, guid: 78ac130f3c5a6de4297dc6adb5327361, type: 3}
+      propertyPath: prefab
+      value: 
+      objectReference: {fileID: 2485758048250580795, guid: 78cf8352e2219ea40aadf522ada81060, type: 3}
     - target: {fileID: 6924826226586469840, guid: 78ac130f3c5a6de4297dc6adb5327361, type: 3}
       propertyPath: m_Name
       value: CharacterPlayer
@@ -722,6 +728,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 446077212552451662, guid: e938ca17baec71b47abba216a22f6704, type: 3}
+      propertyPath: m_SphereRadius
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 446077212552451662, guid: e938ca17baec71b47abba216a22f6704, type: 3}
+      propertyPath: m_Capsule.Radius
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 446077212552451662, guid: e938ca17baec71b47abba216a22f6704, type: 3}
+      propertyPath: m_Cylinder.Radius
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 446077212552451662, guid: e938ca17baec71b47abba216a22f6704, type: 3}
+      propertyPath: m_PrimitiveSize.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 446077212552451662, guid: e938ca17baec71b47abba216a22f6704, type: 3}
+      propertyPath: m_PrimitiveSize.y
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 4239887617934126895, guid: e938ca17baec71b47abba216a22f6704, type: 3}
       propertyPath: m_Name
       value: SkillRound
