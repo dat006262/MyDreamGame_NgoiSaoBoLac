@@ -329,3 +329,32 @@ public struct E_MorganaComponent : IComponentData
     public Entity OriginCharacter;
     public float effectFrequenc;
 }
+public struct W_CamileEffectTag : IComponentData
+{
+
+}
+public struct W_CamileComponent : IComponentData
+{
+    public float damageAfter;//2sneu con trong tam hoat dong
+    public Entity OriginCharacter;
+    public float DamageBasic;
+}
+public struct Q_TemmoEffectTag : IComponentData
+{
+}
+public struct Q_TemmoComponent : IComponentData
+{
+
+}
+public struct Q_MundoEffectTag : IComponentData
+{
+}
+public struct Q_MundoComponent : IComponentData
+{
+}
+public struct Q_ZileinEffectTag : IComponentData
+{
+}
+public struct Q_ZileinComponent : IComponentData
+{
+}

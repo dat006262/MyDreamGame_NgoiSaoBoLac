@@ -23,6 +23,8 @@ public class ConfigExecute : MonoBehaviour
     public bool ExecuteTriggerSystemEnable;
     public bool DealDamageSystem2Enable;
     public bool E_MorganaSystemEnable;
+    public bool W_CamileSystemEnable;
+
 
     private void Start()
     {
@@ -52,6 +54,7 @@ public class ConfigExecute : MonoBehaviour
             if (authoring.ExecuteTriggerSystemEnable) AddComponent<ExecuteTriggerSystemEnable>(entity);
             if (authoring.DealDamageSystem2Enable) AddComponent<DealDamageSystem2Enable>(entity);
             if (authoring.E_MorganaSystemEnable) AddComponent<E_MorganaSystemEnable>(entity);
+            if (authoring.W_CamileSystemEnable) AddComponent<W_CamileSystemEnable>(entity);
         }
     }
 }
@@ -106,5 +109,8 @@ public struct DealDamageSystem2Enable : IComponentData
 {
 }
 public struct E_MorganaSystemEnable : IComponentData
+{
+}
+public struct W_CamileSystemEnable : IComponentData
 {
 }

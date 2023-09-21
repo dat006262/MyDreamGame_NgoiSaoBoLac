@@ -623,5 +623,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   active: 1
-  prefab: {fileID: 7298385891917534547, guid: 4e9e370d97418d04f9309eccd9027267, type: 3}
-  timeToLive: 1
+  prefab: {fileID: 7298385891917534547, guid: 8d34c72156531c348b4d6bf13b8b3d48, type: 3}

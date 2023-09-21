@@ -20,11 +20,7 @@ public partial class DealDamageSystem2 : SystemBase
         var ecb = new EntityCommandBuffer(Allocator.Temp);
 
 
-        foreach (var (tag, ent) in
-           SystemAPI.Query<RefRW<E_MorganaEffectTag>>().WithEntityAccess())
-        {
-            ecb.RemoveComponent<E_MorganaEffectTag>(ent);
-        }
+
 
         foreach (var (health, damageBuffer, transform, entity) in
               SystemAPI.Query<RefRW<ExecuteTriggerSys_HealthComponent>, DynamicBuffer<DealDamageSys2_OwnerComponent>,

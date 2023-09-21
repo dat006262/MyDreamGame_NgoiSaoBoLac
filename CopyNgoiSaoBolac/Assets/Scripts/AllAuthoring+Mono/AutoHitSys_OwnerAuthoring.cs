@@ -7,7 +7,6 @@ public class AutoHitSys_OwnerAuthoring : MonoBehaviour
 {
     public bool active = true;
     public GameObject prefab;
-    public float timeToLive;
     public class AutoHitSys_OwnerBaker : Baker<AutoHitSys_OwnerAuthoring>
     {
 
@@ -17,7 +16,7 @@ public class AutoHitSys_OwnerAuthoring : MonoBehaviour
             {
                 active = authoring.active,
                 prefab = GetEntity(authoring.prefab),
-                timeToLive = authoring.timeToLive,
+                timeToLive = 0,
             }
             );
         }

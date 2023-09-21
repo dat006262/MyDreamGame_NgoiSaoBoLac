@@ -88,6 +88,11 @@ public partial struct SetTriggerDamageJob : ITriggerEventsJob
             {
                 ecb.AddComponent<E_MorganaEffectTag>(entB);
             }
+            else if (damageComp.type == SkillType.W_Camile)
+            {
+                ecb.AddComponent<W_CamileEffectTag>(entB);
+            }
+
 
             return;
         }
@@ -104,9 +109,11 @@ public partial struct SetTriggerDamageJob : ITriggerEventsJob
             {
                 ecb.AddComponent<E_MorganaEffectTag>(entA);
             }
+            else if (damageComp.type == SkillType.W_Camile)
+            {
+                ecb.AddComponent<W_CamileEffectTag>(entA);
+            }
 
-            //ecb.AddComponent<DealDamageSys_OwnerComponent>(entA, new DealDamageSys_OwnerComponent
-            //{ Value = damageComp.damage, OriginCharacter = Entity.Null, effectFrequenc = damageComp.effectFrequenc, effectCount = damageComp.effectFrequenc });
 
 
         }

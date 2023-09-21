@@ -11,6 +11,7 @@ public partial struct SkillCoolDownSystem : ISystem
     private EntityQuery SkillEffectEQG;
     private EntityQuery DealDamage_EffectEQG;
     private EntityQuery E_MorganaEffectEQG;
+    private EntityQuery W_CamileEffectEQG;
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
@@ -22,6 +23,7 @@ public partial struct SkillCoolDownSystem : ISystem
         SkillEffectEQG = state.GetEntityQuery(ComponentType.ReadOnly<DealDamageSys_EffectCountDownComponent>());
         DealDamage_EffectEQG = state.GetEntityQuery(ComponentType.ReadOnly<DealDamageSys2_OwnerComponent>());
         E_MorganaEffectEQG = state.GetEntityQuery(ComponentType.ReadOnly<E_MorganaEffectTag>());
+        W_CamileEffectEQG = state.GetEntityQuery(ComponentType.ReadOnly<W_CamileEffectTag>());
     }
 
     [BurstCompile]
@@ -60,6 +62,7 @@ public partial struct SkillCoolDownSystem : ISystem
 
         }.ScheduleParallel(DealDamage_EffectEQG, state.Dependency);
         state.Dependency.Complete();
+
         state.Dependency = new RemoveE_MorganaJob
         {
             deltaTime = SystemAPI.Time.DeltaTime,
@@ -68,6 +71,13 @@ public partial struct SkillCoolDownSystem : ISystem
         }.ScheduleParallel(E_MorganaEffectEQG, state.Dependency);
         state.Dependency.Complete();
 
+        state.Dependency = new RemoveW_CamileJob
+        {
+            deltaTime = SystemAPI.Time.DeltaTime,
+            ecbp = ecb.AsParallelWriter()
+
+        }.ScheduleParallel(W_CamileEffectEQG, state.Dependency);
+        state.Dependency.Complete();
     }
 
 }
@@ -153,6 +163,20 @@ public partial struct RemoveE_MorganaJob : IJobEntity
                        )
     {
         ecbp.RemoveComponent<E_MorganaEffectTag>(ciqi, ent);
+
+    }
+}
+public partial struct RemoveW_CamileJob : IJobEntity
+{
+    [ReadOnly]
+    public float deltaTime;
+    //[ReadOnly] public BufferLookup<StatModify> statModify;
+
+    public EntityCommandBuffer.ParallelWriter ecbp;
+    public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent
+                       )
+    {
+        ecbp.RemoveComponent<W_CamileEffectTag>(ciqi, ent);
 
     }
 }

@@ -416,6 +416,7 @@ MonoBehaviour:
   ExecuteTriggerSystemEnable: 1
   DealDamageSystem2Enable: 1
   E_MorganaSystemEnable: 1
+  W_CamileSystemEnable: 1
 --- !u!4 &1566107427
 Transform:
   m_ObjectHideFlags: 0

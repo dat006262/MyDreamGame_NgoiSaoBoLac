@@ -307,7 +307,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 0.9492165, b: 0, a: 1}
+  m_Color: {r: 0.013207495, g: 0.7608907, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -665,9 +665,9 @@ GameObject:
   - component: {fileID: 3337695469418636372}
   - component: {fileID: 8838912556889743393}
   - component: {fileID: 428602739133959881}
-  - component: {fileID: 3425155640841260363}
+  - component: {fileID: 7846841232223389698}
   m_Layer: 0
-  m_Name: AutoHit_Box
+  m_Name: W_Camile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -782,8 +782,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillDamage: 9
   effectFrequenc: 1
-  type: 3
---- !u!114 &3425155640841260363
+  type: 4
+--- !u!114 &7846841232223389698
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -792,6 +792,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 7298385891917534547}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9fe07fe4fc3c6be46bcbfed372457b7b, type: 3}
+  m_Script: {fileID: 11500000, guid: b552206bd0bb8894a96bfb76039f6444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageAfter: 2
+  damageBasic: 200
