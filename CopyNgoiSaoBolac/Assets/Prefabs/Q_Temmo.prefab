@@ -254,7 +254,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flySpeed: 20
   distancesDealDamage: 1
-  distanceToSpawmSkill: 15
 --- !u!1 &6992291621758053977
 GameObject:
   m_ObjectHideFlags: 0

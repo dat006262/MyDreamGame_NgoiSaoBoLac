@@ -587,7 +587,7 @@ PrefabInstance:
     - target: {fileID: 4755546308761855611, guid: 78ac130f3c5a6de4297dc6adb5327361, type: 3}
       propertyPath: prefab
       value: 
-      objectReference: {fileID: 2485758048250580795, guid: 78cf8352e2219ea40aadf522ada81060, type: 3}
+      objectReference: {fileID: 7298385891917534547, guid: 4e9e370d97418d04f9309eccd9027267, type: 3}
     - target: {fileID: 6924826226586469840, guid: 78ac130f3c5a6de4297dc6adb5327361, type: 3}
       propertyPath: m_Name
       value: CharacterPlayer
@@ -755,6 +755,10 @@ PrefabInstance:
     - target: {fileID: 4239887617934126895, guid: e938ca17baec71b47abba216a22f6704, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596337816831689136, guid: e938ca17baec71b47abba216a22f6704, type: 3}
+      propertyPath: type
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4596337816831689136, guid: e938ca17baec71b47abba216a22f6704, type: 3}
       propertyPath: effectFrequenc

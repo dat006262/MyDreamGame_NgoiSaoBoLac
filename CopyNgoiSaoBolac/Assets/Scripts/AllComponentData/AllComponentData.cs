@@ -76,6 +76,15 @@ public struct EnemyStateComponent : IComponentData
 
 public struct EnemyAISys_TargetComponent : IComponentData { }
 #endregion
+//-------------------------------------
+#region TargetToEnemySystem
+public struct TargetToEnemySy_OwnerComponent : IComponentData
+{
+    public float turnSpeed;
+
+}
+public struct TargetToEnemySy_TargetComponent : IComponentData { }
+#endregion
 //-----------------------------------------------------------------------
 #region Status
 public enum StatType
@@ -168,9 +177,7 @@ public struct EquipByPlayerComponent : IComponentData
 #endregion
 //------------SkillCo-----------------------
 
-public struct SkillComponent : IComponentData
-{
-}
+
 
 //-----------------------------------------
 #region SkillCoolDownSys
@@ -257,14 +264,7 @@ public struct PickupProjectileDataComponent : IComponentData
 }
 #endregion
 //================================================
-#region TargetToEnemySystem
-public struct TargetToEnemySy_OwnerComponent : IComponentData
-{
-    public float turnSpeed;
 
-}
-public struct TargetToEnemySy_TargetComponent : IComponentData { }
-#endregion
 //--------------------------------------------------
 #region AutoHitSys//SpawnAutoHit
 public struct AutoHitSys_PrefabComponent : IComponentData
@@ -279,6 +279,30 @@ public struct AutoHitSys_OwnerComponent : IComponentData
     public float timeToLive;
 
 }
+#endregion
+//-------------------------------------
+#region SkillAutoTargetSys
+public struct SkillAutoTargetSys_OwnerComponent : IComponentData
+{
+    public bool active;
+    public Entity prefab;
+    public float RangeSkill;
+
+
+}
+public struct SkillAutoTargetSys_TargetComponent : IComponentData { }
+
+#endregion
+
+//-----------------------------
+#region SpawnLineSkillSys
+public struct SpawnLineSkillSys_OwnerComponent : IComponentData
+{
+    public bool active;
+    public Entity prefab;
+    public float timeToLive;
+}
+
 #endregion
 //----------------------------------------------
 #region ExecuteTriggerSys
@@ -313,20 +337,12 @@ public struct DealDamageSys2_OwnerComponent : IBufferElementData//DamageFrom?
 }
 #endregion
 //===============================================
-#region SkillAutoTargetSys
-public struct SkillAutoTargetSys_OwnerComponent : IComponentData
-{
-    public bool active;
-    public Entity prefab;
-    public float RangeSkill;
 
-
-}
-public struct SkillAutoTargetSys_TargetComponent : IComponentData { }
-
-#endregion
 //------------------------
 #region SkillInfor
+public struct SkillComponent : IComponentData
+{
+}
 public enum SkillType
 {
     Q_Temmo,

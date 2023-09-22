@@ -4,6 +4,7 @@ using TMPro;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class WorldSpaceUIController : MonoBehaviour
 {
@@ -36,7 +37,7 @@ public class WorldSpaceUIController : MonoBehaviour
     {
         var directionToCamera = (Vector3)startPosition - _mainCameraTransform.position;
         var rotationToCamera = Quaternion.LookRotation(directionToCamera, Vector3.up);
-        var newIcon = Instantiate(_damageIconPrefab, startPosition, rotationToCamera, transform);
+        var newIcon = Instantiate(_damageIconPrefab, startPosition, Quaternion.identity, transform);
         var newIconText = newIcon.GetComponent<TextMeshProUGUI>();
         newIconText.text = $"<color=red>-{damageAmount.ToString()}</color>";
     }
@@ -45,7 +46,7 @@ public class WorldSpaceUIController : MonoBehaviour
     {
         var directionToCamera = (Vector3)startPosition - _mainCameraTransform.position;
         var rotationToCamera = Quaternion.LookRotation(directionToCamera, Vector3.up);
-        var newIcon = Instantiate(_damageIconPrefab, startPosition, rotationToCamera, transform);
+        var newIcon = Instantiate(_damageIconPrefab, startPosition, Quaternion.identity, transform);
         var newIconText = newIcon.GetComponent<TextMeshProUGUI>();
         newIconText.text = $"<color=yellow>+{experienceAmount.ToString()} EXP</color>";
     }
