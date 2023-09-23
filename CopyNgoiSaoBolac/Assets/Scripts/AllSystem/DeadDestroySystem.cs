@@ -58,7 +58,6 @@ public partial struct DeadDestroySystem : ISystem
                 foreach (var child in children)
                 {
                     ecbp.DestroyEntity(ciqi, child.Value);
-                    Debug.Log("Destroy");
                 }
                 ecbp.DestroyEntity(ciqi, ent);
             }

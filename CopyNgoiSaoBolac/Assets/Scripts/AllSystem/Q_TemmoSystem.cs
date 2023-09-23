@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
+[UpdateAfter(typeof(DeadDestroySystem))]
 public partial struct Q_TemmoSystem : ISystem
 {
 
@@ -17,7 +18,9 @@ public partial struct Q_TemmoSystem : ISystem
         state.RequireForUpdate<ConfigComponent>();
         state.RequireForUpdate<Q_TemmoSystemEnable>();
         state.RequireForUpdate<Q_TemmoComponent>();
-        Q_TemmoSkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<Q_TemmoComponent>());
+        // Q_TemmoSkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<Q_TemmoComponent>());
+        Q_TemmoSkillEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
+         .WithAll<Q_TemmoComponent>().WithNone<DeadDestroyTag>());
         //
     }
 
@@ -90,9 +93,10 @@ public partial struct Q_TemmoWork : IJobEntity
                 ecbp.SetComponent<LocalTransform>(ciqi, ent, newLtrans);
                 if (math.distancesq(q_TemmoTarget.TargetPos, Q_temmoTrans.Position) <= q_Temmo.distancesDealDamage)
                 {
+                    Debug.Log("AddBuffer");
                     ecbp.AppendToBuffer<DealDamageSys2_OwnerComponent>(ciqi, q_TemmoTarget.TargetTo, new DealDamageSys2_OwnerComponent
                     { effectCount = 0.1f, effectFrequenc = 1, isLoop = true, loopCount = 1, Value = q_Temmo.DamageBasic, OriginCharacter = Entity.Null, type = SkillType.E_Morgana });
-                    ecbp.AddComponent<DeadDestroyTag>(ciqi, ent);
+                    ecbp.AddComponent<DeadDestroyTag>(ciqi, ent, new DeadDestroyTag { DeadAfter = -1 });
                 }
             }
         }

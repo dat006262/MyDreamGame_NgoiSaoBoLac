@@ -10,7 +10,8 @@ using Unity.Transforms;
 using UnityEngine;
 
 [UpdateInGroup(typeof(SimulationSystemGroup))]
-[UpdateBefore(typeof(DealDamageSystem))]
+[UpdateBefore(typeof(DealDamageSystem2))]
+[UpdateAfter(typeof(DeadDestroySystem))]
 [BurstCompile]
 public partial struct ExecuteTriggerSystem : ISystem
 {
@@ -75,29 +76,37 @@ public partial struct SetTriggerDamageJob : ITriggerEventsJob
         bool isHealthB = healthCompsTCL.HasComponent(entB);
 
 
-        if (isDamagerA && isHealthB)
-        {
+        //if (isDamagerA && isHealthB)
+        //{
 
 
-            ExecuteTriggerSys_OwnerComponent damageComp;
-            damageCompsTCL.TryGetComponent(entA, out damageComp);
-            ExecuteTriggerSys_HealthComponent healthComp;
-            healthCompsTCL.TryGetComponent(entB, out healthComp);
+        //    ExecuteTriggerSys_OwnerComponent damageComp;
+        //    damageCompsTCL.TryGetComponent(entA, out damageComp);
+        //    ExecuteTriggerSys_HealthComponent healthComp;
+        //    healthCompsTCL.TryGetComponent(entB, out healthComp);
 
-            if (damageComp.type == SkillType.E_Morgana)
-            {
-                ecb.AddComponent<E_MorganaEffectTag>(entB);
-            }
-            else if (damageComp.type == SkillType.W_Camile)
-            {
-                ecb.AddComponent<W_CamileEffectTag>(entB);
-            }
+        //    if (damageComp.type == SkillType.E_Morgana)
+        //    {
+        //        ecb.AddComponent<E_MorganaEffectTag>(entB);
+        //    }
+        //    else if (damageComp.type == SkillType.W_Camile)
+        //    {
+        //        ecb.AddComponent<W_CamileEffectTag>(entB);
+        //    }
+        //    else if (damageComp.type == SkillType.Q_Mundo)
+        //    {
+        //        Debug.Log("DealDamageB");
+        //        ecb.AddComponent<Q_MundoEffectTag>(entB);
+        //        ecb.AddComponent<DeadDestroyTag>(entA, new DeadDestroyTag { DeadAfter = 0f });
+        //    }
 
 
-            return;
-        }
 
-        if (isDamagerB && isHealthA)
+        //}
+
+        /* else */
+
+        if (isDamagerB/* trigger */ && isHealthA)
         {
 
             ExecuteTriggerSys_OwnerComponent damageComp;
@@ -113,7 +122,13 @@ public partial struct SetTriggerDamageJob : ITriggerEventsJob
             {
                 ecb.AddComponent<W_CamileEffectTag>(entA);
             }
+            else if (damageComp.type == SkillType.Q_Mundo)
+            {
 
+                Debug.Log("DealDamageA");
+                ecb.AddComponent<Q_MundoEffectTag>(entA);
+                ecb.AddComponent<DeadDestroyTag>(entB, new DeadDestroyTag { DeadAfter = -1f });
+            }
 
 
         }

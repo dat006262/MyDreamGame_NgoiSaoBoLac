@@ -280,6 +280,7 @@ public struct AutoHitSys_OwnerComponent : IComponentData
 
 }
 #endregion
+//Chung ta can 1 Button; code cho button; Send Data to Config; SpawnSystem
 //-------------------------------------
 #region SkillAutoTargetSys
 public struct SkillAutoTargetSys_OwnerComponent : IComponentData
@@ -391,6 +392,9 @@ public struct Q_MundoEffectTag : IComponentData
 }
 public struct Q_MundoComponent : IComponentData
 {
+    public float flySpeed;
+    public Entity OriginCharacter;
+    public float DamageBasic;
 }
 public struct Q_ZileinEffectTag : IComponentData
 {

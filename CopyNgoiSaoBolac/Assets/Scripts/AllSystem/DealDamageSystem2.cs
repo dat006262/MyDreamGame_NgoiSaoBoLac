@@ -28,16 +28,18 @@ public partial class DealDamageSystem2 : SystemBase
         {
             for (var i = damageBuffer.Length - 1; i >= 0; i--)
             {
-                if (damageBuffer.ElementAt(i).CandealDamage)
+                if (damageBuffer.ElementAt(i).CandealDamage && !damageBuffer.ElementAt(i).CanRemove)
                 {
                     health.ValueRW.Value -= damageBuffer.ElementAt(i).Value;
                     OnDealDamage?.Invoke(damageBuffer.ElementAt(i).Value, transform.Position);
+                    Debug.Log($"DealDamage{damageBuffer.ElementAt(i).Value} ");
                     damageBuffer.ElementAt(i).loopCount--;
                     damageBuffer.ElementAt(i).effectCount = damageBuffer.ElementAt(i).effectFrequenc;
 
                 }
                 if (damageBuffer.ElementAt(i).CanRemove)
                 {
+                    Debug.Log($"Remove{i} ");
                     damageBuffer.RemoveAt(i);
                 }
             }

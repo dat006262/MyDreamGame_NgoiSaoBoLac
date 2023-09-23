@@ -14,12 +14,14 @@ public class SendDataFromDefaultWordToSubScene : MonoBehaviour
     public Btn_Fire btnFire;
     public Btn_AutoHit btn_AutoHit;
     public btn_AutoTagetSkill btn_AutoTargetSkill;
+    public BtnLineSkill btn_LineSkill;
     ConfigComponent gameConfig;
     private void OnValidate()
     {
         btnFire = GetComponentInChildren<Btn_Fire>();
         btn_AutoHit = GetComponentInChildren<Btn_AutoHit>();
         btn_AutoTargetSkill = GetComponentInChildren<btn_AutoTagetSkill>();
+        btn_LineSkill = GetComponentInChildren<BtnLineSkill>();
     }
     IEnumerator Start()
     {
@@ -39,7 +41,9 @@ public class SendDataFromDefaultWordToSubScene : MonoBehaviour
                 {
                     isFireClick = btnFire.isOnClick,
                     isAutoHitClick = oldData.isAutoHitClick,
-                    isAutoTargetSkillClick = oldData.isAutoTargetSkillClick
+                    isAutoTargetSkillClick = oldData.isAutoTargetSkillClick,
+                    islineSkillClick = oldData.islineSkillClick
+
 
                 });
             btnFire.isOnClick = false;
@@ -52,7 +56,8 @@ public class SendDataFromDefaultWordToSubScene : MonoBehaviour
                 {
                     isFireClick = oldData.isFireClick,
                     isAutoHitClick = btn_AutoHit.isOnClick,
-                    isAutoTargetSkillClick = oldData.isAutoTargetSkillClick
+                    isAutoTargetSkillClick = oldData.isAutoTargetSkillClick,
+                    islineSkillClick = oldData.islineSkillClick
                 });
             btn_AutoHit.isOnClick = false;
         }
@@ -64,11 +69,25 @@ public class SendDataFromDefaultWordToSubScene : MonoBehaviour
                 {
                     isFireClick = oldData.isFireClick,
                     isAutoHitClick = oldData.isAutoHitClick,
-                    isAutoTargetSkillClick = btn_AutoTargetSkill.isOnClick
+                    isAutoTargetSkillClick = btn_AutoTargetSkill.isOnClick,
+                    islineSkillClick = oldData.islineSkillClick
 
                 });
             btn_AutoTargetSkill.isOnClick = false;
         }
+        if (btn_LineSkill.isOnClick)
+        {
+            ConfigComponent oldData = _entityManager.GetComponentData<ConfigComponent>(configEntity);
+            _entityManager.AddComponentData<ConfigComponent>(configEntity,
+                new ConfigComponent
+                {
+                    isFireClick = oldData.isFireClick,
+                    isAutoHitClick = oldData.isAutoHitClick,
+                    isAutoTargetSkillClick = oldData.isAutoTargetSkillClick,
+                    islineSkillClick = btn_LineSkill.isOnClick
 
+                });
+            btn_LineSkill.isOnClick = false;
+        }
     }
 }

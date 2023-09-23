@@ -122,7 +122,7 @@ public partial struct SkillAutoTarget_SpawnJob : IJobEntity
             if (target)
             {
                 Entity spawnedProj = ecbp.Instantiate(ciqi, skillAutoTarget_Owner.prefab);
-
+                Debug.Log("SpawnQ_Temm");
                 float3 spawnPos = ltrans.Position + ltrans.Up() * 0.5f * ltrans.Scale;
                 float spawnScale = ltrans.Scale;
 
