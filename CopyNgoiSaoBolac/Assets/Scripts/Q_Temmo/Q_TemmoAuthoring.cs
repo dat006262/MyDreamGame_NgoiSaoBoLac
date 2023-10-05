@@ -15,12 +15,13 @@ public class Q_TemmoAuthoring : MonoBehaviour
             AddComponent<Q_TemmoComponent>(
                 new Q_TemmoComponent
                 {
+                    active = true,
                     flySpeed = authoring.flySpeed,
                     DamageBasic = 80,
                     OriginCharacter = Entity.Null,
                     distancesDealDamage = authoring.distancesDealDamage
                 });
-            AddComponent<Q_TemmoTargetComponent>();
+            AddComponent<Q_TemmoSaveTargetComponent>();
         }
     }
 }

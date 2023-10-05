@@ -12,7 +12,7 @@ using UnityEngine;
 
 [UpdateAfter(typeof(PlayerInputSystem))]
 [BurstCompile]
-public partial struct SpawnLineSkillSystem : ISystem
+public partial struct Q_MundoSpawnSystem : ISystem
 {
     private EntityQuery m_OwnerEQG;
     [BurstCompile]
@@ -74,6 +74,7 @@ public partial struct LineSkill_SpawnJob : IJobEntity
         {
 
             ecbp.AddComponent<ConfigComponent>(ciqi, configEntity, new ConfigComponent { islineSkillClick = false });
+            Debug.Log("SpawmQ_Mun");
             Entity spawnedProj = ecbp.Instantiate(ciqi, spawnLineSkilSys_Owner.prefab);
             ecbp.AddComponent<DeadDestroyTag>(ciqi, spawnedProj, new DeadDestroyTag { DeadAfter = 0.25f });
             float3 spawnPos = ltrans.Position/* + ltrans.Up() * 0.5f * ltrans.Scale*/;

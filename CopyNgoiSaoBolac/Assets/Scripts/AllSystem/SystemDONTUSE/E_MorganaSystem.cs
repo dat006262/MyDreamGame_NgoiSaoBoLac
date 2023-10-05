@@ -65,6 +65,7 @@ public partial struct E_MorganaWork : IJobEntity
                         ref E_MorganaComponent e_Morgana
                        )
     {
+        if (!e_Morgana.active) { return; }
         e_Morgana.countdown -= deltaTime;
         if (e_Morgana.countdown <= 0)
         {
@@ -80,6 +81,7 @@ public partial struct E_MorganaWork : IJobEntity
         }
         if (e_Morgana.loopCount <= 0)
         {
+            e_Morgana.active = false;
             ecbp.AddComponent<DeadDestroyTag>(ciqi, ent);
         }
 

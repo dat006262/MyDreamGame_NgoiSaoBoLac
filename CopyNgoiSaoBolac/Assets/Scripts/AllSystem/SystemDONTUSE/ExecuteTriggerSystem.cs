@@ -113,24 +113,27 @@ public partial struct SetTriggerDamageJob : ITriggerEventsJob
             damageCompsTCL.TryGetComponent(entB, out damageComp);
             ExecuteTriggerSys_HealthComponent healthComp;
             healthCompsTCL.TryGetComponent(entA, out healthComp);
-
-            if (damageComp.type == SkillType.E_Morgana)
+            if (damageComp.active)
             {
-                ecb.AddComponent<E_MorganaEffectTag>(entA);
-            }
-            else if (damageComp.type == SkillType.W_Camile)
-            {
-                ecb.AddComponent<W_CamileEffectTag>(entA);
-            }
-            else if (damageComp.type == SkillType.Q_Mundo)
-            {
+                if (damageComp.type == SkillType.E_Morgana)
+                {
+                    ecb.AddComponent<E_MorganaEffectTag>(entA);
+                }
+                else if (damageComp.type == SkillType.W_Camile)
+                {
+                    ecb.AddComponent<W_CamileEffectTag>(entA);
+                }
+                else if (damageComp.type == SkillType.Q_Mundo)
+                {
 
-                Debug.Log("DealDamageA");
-                ecb.AddComponent<Q_MundoEffectTag>(entA);
-                ecb.AddComponent<DeadDestroyTag>(entB, new DeadDestroyTag { DeadAfter = -1f });
+                    Debug.Log("Q_MunTrigger");
+                    ecb.AddComponent<Q_MundoEffectTag>(entA);
+
+                    damageComp.active = false;
+                    ecb.AddComponent<DeadDestroyTag>(entB, new DeadDestroyTag { DeadAfter = -1f });
+                }
+
             }
-
-
         }
     }
 }

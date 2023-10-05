@@ -19,14 +19,15 @@ public class ConfigExecute : MonoBehaviour
     public bool DeadDestroySystemEnable;
     public bool PlayerProjectileSystemEnable;
     public bool TargetToEnemySystemEnable;
-    public bool AutoHitSystemEnable;
-    public bool SkillAutoTargetSystemEnable;
+    public bool W_CamileSpawnSystemEnable;
+    public bool Q_MundoSpawnSystemEnble;
+    public bool Q_TemmoSpawnSystemEmable;
     public bool ExecuteTriggerSystemEnable;
     public bool DealDamageSystem2Enable;
     public bool E_MorganaSystemEnable;
     public bool W_CamileSystemEnable;
     public bool Q_TemmoSystemEnable;
-    public bool SpawnLineSkillSystemEnble;
+
     public bool Q_MundoSystemEnable;
 
     private void Start()
@@ -53,14 +54,14 @@ public class ConfigExecute : MonoBehaviour
             if (authoring.DeadDestroySystemEnable) AddComponent<DeadDestroySystemEnable>(entity);
             if (authoring.PlayerProjectileSystemEnable) AddComponent<PlayerProjectileSystemEnable>(entity);
             if (authoring.TargetToEnemySystemEnable) AddComponent<TargetToEnemySystemEnable>(entity);
-            if (authoring.AutoHitSystemEnable) AddComponent<AutoHitSystemEnable>(entity);
-            if (authoring.SkillAutoTargetSystemEnable) AddComponent<SkillAutoTargetSystemEnable>(entity);
+            if (authoring.W_CamileSpawnSystemEnable) AddComponent<AutoHitSystemEnable>(entity);
+            if (authoring.Q_TemmoSpawnSystemEmable) AddComponent<SkillAutoTargetSystemEnable>(entity);
             if (authoring.ExecuteTriggerSystemEnable) AddComponent<ExecuteTriggerSystemEnable>(entity);
             if (authoring.DealDamageSystem2Enable) AddComponent<DealDamageSystem2Enable>(entity);
             if (authoring.E_MorganaSystemEnable) AddComponent<E_MorganaSystemEnable>(entity);
             if (authoring.W_CamileSystemEnable) AddComponent<W_CamileSystemEnable>(entity);
             if (authoring.Q_TemmoSystemEnable) AddComponent<Q_TemmoSystemEnable>(entity);
-            if (authoring.SpawnLineSkillSystemEnble) AddComponent<SpawnLineSkillSystemEnble>(entity);
+            if (authoring.Q_MundoSpawnSystemEnble) AddComponent<SpawnLineSkillSystemEnble>(entity);
             if (authoring.Q_MundoSystemEnable) AddComponent<Q_MundoSystemEnable>(entity);
         }
     }

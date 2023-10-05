@@ -13,16 +13,17 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [BurstCompile]
-[UpdateAfter(typeof(HackInputSystem))]
-public partial struct ApplyModifySystem : ISystem
+
+public partial struct Status_CalculateMaxValueSystem : ISystem
 {
     private EntityQuery m_applyStatus;
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-
-        state.RequireForUpdate<DealDamageSystem2Enable>();
-
+        state.RequireForUpdate<CharacterStat>();
+        state.RequireForUpdate<CheckNeedCalculate>();
+        state.RequireForUpdate<StatModify>();
+        state.RequireForUpdate<CharacterStatValue>();
         m_applyStatus = state.GetEntityQuery(ComponentType.ReadOnly<CharacterStat>());
 
     }
@@ -53,19 +54,23 @@ public partial struct ApplyModifyJob : IJobEntity
 
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent,
-                        in HackInputComponent input, in CharacterStat stat, in DynamicBuffer<StatModify> dynamicBuffer,
-                        in CheckNeedCalculate check
+                       /* in HackInputComponent input, */in CharacterStat stat, in DynamicBuffer<StatModify> dynamicBuffer,
+                        in CheckNeedCalculate check, ref CharacterStatValue statValue
                         )
     {
 
         if (check.dirty)
         {
-            var finalValue = stat.BaseValueHealth;
-
             var x = dynamicBuffer.AsNativeArray();
             NativeArray<StatModify> copyBuffer = new NativeArray<StatModify>(x.Length, Allocator.Temp);
             x.CopyTo(copyBuffer);
             copyBuffer.Sort(new CompareModifierOrder());
+
+            var finalHealthValue = stat.BaseValueHealth;
+            var finalStrengthValue = stat.BaseValueHealth;
+            var finalManaValue = stat.BaseValueHealth;
+
+
             for (int i = 0; i < copyBuffer.Length; i++)
             {
                 var modify = copyBuffer[i];
@@ -76,44 +81,86 @@ public partial struct ApplyModifyJob : IJobEntity
                     float sumPercentAdd = 0;
                     if (modify.statModType == StatModType.Flat)
                     {
-                        finalValue += modify.Value;
+                        finalHealthValue += modify.Value;
                     }
-
                     else if (modify.statModType == StatModType.PercentAdd)
                     {
                         sumPercentAdd += modify.Value;
                         if (i + 1 >= copyBuffer.Length /*|| hits[i].statModType != StatModType.PercentAdd*/)
                         {
-                            finalValue *= 1 + sumPercentAdd;
+                            finalHealthValue *= 1 + sumPercentAdd;
                             sumPercentAdd = 0;
                         }
                     }
-
                     else if (modify.statModType == StatModType.PercentMulti)
                     {
-                        finalValue *= 1 + modify.Value;
+                        finalHealthValue *= 1 + modify.Value;
                     }
-
-
                 }
 
-                //End
+                if (modify.statType == StatType.Strength)
+                {
 
+                    float sumPercentAdd = 0;
+                    if (modify.statModType == StatModType.Flat)
+                    {
+                        finalStrengthValue += modify.Value;
+                    }
+                    else if (modify.statModType == StatModType.PercentAdd)
+                    {
+                        sumPercentAdd += modify.Value;
+                        if (i + 1 >= copyBuffer.Length /*|| hits[i].statModType != StatModType.PercentAdd*/)
+                        {
+                            finalStrengthValue *= 1 + sumPercentAdd;
+                            sumPercentAdd = 0;
+                        }
+                    }
+                    else if (modify.statModType == StatModType.PercentMulti)
+                    {
+                        finalStrengthValue *= 1 + modify.Value;
+                    }
+                }
+                if (modify.statType == StatType.Mana)
+                {
+
+                    float sumPercentAdd = 0;
+                    if (modify.statModType == StatModType.Flat)
+                    {
+                        finalManaValue += modify.Value;
+                    }
+                    else if (modify.statModType == StatModType.PercentAdd)
+                    {
+                        sumPercentAdd += modify.Value;
+                        if (i + 1 >= copyBuffer.Length /*|| hits[i].statModType != StatModType.PercentAdd*/)
+                        {
+                            finalManaValue *= 1 + sumPercentAdd;
+                            sumPercentAdd = 0;
+                        }
+                    }
+                    else if (modify.statModType == StatModType.PercentMulti)
+                    {
+                        finalManaValue *= 1 + modify.Value;
+                    }
+                }
             }
 
-
             Debug.Log("Applycomplete");
+
+            statValue.HealWhenMaxHealthChange(stat._healthMaxValue, finalHealthValue);
+            statValue.ManaWhenMaxManaChange(stat._manaMaxValue, finalManaValue);
+
             ecbp.SetComponent<CheckNeedCalculate>(ciqi, ent, new CheckNeedCalculate { dirty = false });
             ecbp.SetComponent<CharacterStat>(ciqi, ent, new CharacterStat
             {
                 BaseValueHealth = stat.BaseValueHealth,
                 BaseValueMana = stat.BaseValueMana,
                 BaseValueStrength = stat.BaseValueStrength,
-                _healthValue = finalValue,
-                _manaValue = stat._manaValue,
-                _strengValue = stat._strengValue
+                _healthMaxValue = finalHealthValue,
+                _manaMaxValue = finalStrengthValue,
+                _strengMaxValue = finalManaValue
 
             });
+
         }
     }
 }

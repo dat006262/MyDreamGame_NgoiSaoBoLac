@@ -15,6 +15,7 @@ public class Q_MundoAuthoring : MonoBehaviour
             AddComponent<Q_MundoComponent>(
                 new Q_MundoComponent
                 {
+                    active = true,
                     DamageBasic = authoring.DamageBasic,
                     flySpeed = authoring.flySpeed,
                     OriginCharacter = Entity.Null

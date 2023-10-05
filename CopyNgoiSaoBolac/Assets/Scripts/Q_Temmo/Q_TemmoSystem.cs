@@ -18,6 +18,7 @@ public partial struct Q_TemmoSystem : ISystem
         state.RequireForUpdate<ConfigComponent>();
         state.RequireForUpdate<Q_TemmoSystemEnable>();
         state.RequireForUpdate<Q_TemmoComponent>();
+        state.RequireForUpdate<Q_TemmoSaveTargetComponent>();
         // Q_TemmoSkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<Q_TemmoComponent>());
         Q_TemmoSkillEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
          .WithAll<Q_TemmoComponent>().WithNone<DeadDestroyTag>());
@@ -34,7 +35,7 @@ public partial struct Q_TemmoSystem : ISystem
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
         //Update TargetPos
-        foreach (var Q_temmoTarget in SystemAPI.Query<RefRW<Q_TemmoTargetComponent>>())
+        foreach (var Q_temmoTarget in SystemAPI.Query<RefRW<Q_TemmoSaveTargetComponent>>())
         {
             float3 targetPos;
             if (Q_temmoTarget.ValueRO.TargetTo != Entity.Null)
@@ -69,7 +70,7 @@ public partial struct Q_TemmoWork : IJobEntity
 
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent, ref LocalTransform Q_temmoTrans,
-                        ref Q_TemmoComponent q_Temmo, ref Q_TemmoTargetComponent q_TemmoTarget
+                        ref Q_TemmoComponent q_Temmo, ref Q_TemmoSaveTargetComponent q_TemmoTarget
                        )
     {
         if (q_TemmoTarget.TargetTo == Entity.Null)
@@ -93,9 +94,16 @@ public partial struct Q_TemmoWork : IJobEntity
                 ecbp.SetComponent<LocalTransform>(ciqi, ent, newLtrans);
                 if (math.distancesq(q_TemmoTarget.TargetPos, Q_temmoTrans.Position) <= q_Temmo.distancesDealDamage)
                 {
-                    Debug.Log("AddBuffer");
-                    ecbp.AppendToBuffer<DealDamageSys2_OwnerComponent>(ciqi, q_TemmoTarget.TargetTo, new DealDamageSys2_OwnerComponent
-                    { effectCount = 0.1f, effectFrequenc = 1, isLoop = true, loopCount = 1, Value = q_Temmo.DamageBasic, OriginCharacter = Entity.Null, type = SkillType.E_Morgana });
+                    if (q_Temmo.active)
+                    {
+                        ecbp.AppendToBuffer<StatValueModify>(ciqi, q_TemmoTarget.TargetTo, new StatValueModify
+                        {
+                            value = -q_Temmo.DamageBasic,
+                            statType = StatType.Health
+                        }
+                        );
+                        q_Temmo.active = false;
+                    }
                     ecbp.AddComponent<DeadDestroyTag>(ciqi, ent, new DeadDestroyTag { DeadAfter = -1 });
                 }
             }

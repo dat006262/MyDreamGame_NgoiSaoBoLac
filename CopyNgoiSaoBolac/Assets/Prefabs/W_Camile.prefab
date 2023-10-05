@@ -666,6 +666,7 @@ GameObject:
   - component: {fileID: 8838912556889743393}
   - component: {fileID: 428602739133959881}
   - component: {fileID: 7846841232223389698}
+  - component: {fileID: -1278056705099811430}
   m_Layer: 0
   m_Name: W_Camile
   m_TagString: Untagged
@@ -797,3 +798,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageAfter: 2
   damageBasic: 200
+--- !u!114 &-1278056705099811430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7298385891917534547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06fdb3f5423d2ba439cd87b7801ed4c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

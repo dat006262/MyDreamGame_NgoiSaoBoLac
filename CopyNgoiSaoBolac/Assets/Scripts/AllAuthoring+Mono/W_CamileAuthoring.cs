@@ -15,6 +15,7 @@ public class W_CamileAuthoring : MonoBehaviour
             AddComponent<W_CamileComponent>(
                 new W_CamileComponent
                 {
+                    active = true,
                     damageAfter = authoring.damageAfter,
                     DamageBasic = authoring.damageBasic,
                     OriginCharacter = Entity.Null

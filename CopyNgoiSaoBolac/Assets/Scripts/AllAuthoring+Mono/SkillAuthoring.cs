@@ -34,6 +34,7 @@ public class SkillAuthoring : MonoBehaviour
             AddComponent<ExecuteTriggerSys_OwnerComponent>(
              new ExecuteTriggerSys_OwnerComponent
              {
+                 active = true,
                  type = authoring.type,
                  damage = authoring.SkillDamage,
                  effectFrequenc = authoring.effectFrequenc

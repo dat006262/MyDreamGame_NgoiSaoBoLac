@@ -171,13 +171,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4755546308761855611, guid: 78ac130f3c5a6de4297dc6adb5327361, type: 3}
+      propertyPath: prefab
+      value: 
+      objectReference: {fileID: 7298385891917534547, guid: 8d34c72156531c348b4d6bf13b8b3d48, type: 3}
     - target: {fileID: 6924826226586469840, guid: 78ac130f3c5a6de4297dc6adb5327361, type: 3}
       propertyPath: m_Name
       value: CharacterPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 6924826226586469840, guid: 78ac130f3c5a6de4297dc6adb5327361, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -406,7 +410,7 @@ MonoBehaviour:
   SpawnSimpleSystem: 1
   PlayerInputSystemEnable: 1
   PlayerMovementSystemEnable: 1
-  EnemyAISystemEnable: 0
+  EnemyAISystemEnable: 1
   HackInputSystemEnable: 1
   HackSystemEnable: 0
   ApplyModifySystemEnable: 1
@@ -414,17 +418,17 @@ MonoBehaviour:
   DealDamageSystemEnable: 0
   DamageSystemEnable: 0
   DeadDestroySystemEnable: 1
-  PlayerProjectileSystemEnable: 1
+  PlayerProjectileSystemEnable: 0
   TargetToEnemySystemEnable: 1
-  AutoHitSystemEnable: 1
-  SkillAutoTargetSystemEnable: 1
-  ExecuteTriggerSystemEnable: 1
-  DealDamageSystem2Enable: 1
-  E_MorganaSystemEnable: 1
-  W_CamileSystemEnable: 1
+  W_CamileSpawnSystemEnable: 1
+  Q_MundoSpawnSystemEnble: 1
+  Q_TemmoSpawnSystemEmable: 1
+  ExecuteTriggerSystemEnable: 0
+  DealDamageSystem2Enable: 0
+  E_MorganaSystemEnable: 0
+  W_CamileSystemEnable: 0
   Q_TemmoSystemEnable: 1
-  SpawnLineSkillSystemEnble: 1
-  Q_MundoSystemEnable: 1
+  Q_MundoSystemEnable: 0
 --- !u!4 &1566107427
 Transform:
   m_ObjectHideFlags: 0
@@ -466,7 +470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4168455795063900049, guid: 120e66f02f1200b49990e719d770df72, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6574075995461528929, guid: 120e66f02f1200b49990e719d770df72, type: 3}
       propertyPath: m_LocalPosition.x

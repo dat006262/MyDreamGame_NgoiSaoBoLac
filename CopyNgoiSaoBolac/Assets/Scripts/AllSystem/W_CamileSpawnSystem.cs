@@ -12,7 +12,7 @@ using UnityEngine;
 
 [UpdateAfter(typeof(PlayerInputSystem))]
 [BurstCompile]
-public partial struct AutoHitSystem : ISystem
+public partial struct W_CamileSpawnSystem : ISystem
 {
     private EntityQuery m_OwnerEQG;
     [BurstCompile]

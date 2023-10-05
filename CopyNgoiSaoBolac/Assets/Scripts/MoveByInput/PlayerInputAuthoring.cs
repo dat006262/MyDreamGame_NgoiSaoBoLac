@@ -36,17 +36,17 @@ public class PlayerInputAuthoring : MonoBehaviour
                 Teleport = new PlayerInput_OwnerComponent.InputPair { keyCode = authoring.Teleport }
             });
 
-            AddComponent<HackInputComponent>(new HackInputComponent
-            {
-                PlusHealth = new HackInputComponent.InputPair { keyCode = authoring.PlusHealth },
-                PlusMana = new HackInputComponent.InputPair { keyCode = authoring.PlusMana },
-                MultiHealth = new HackInputComponent.InputPair { keyCode = authoring.MultiHealth },
-                Calculate = new HackInputComponent.InputPair { keyCode = authoring.Calculate },
-                EquipItem = new HackInputComponent.InputPair { keyCode = authoring.EquipItem },
-                UseSkill = new HackInputComponent.InputPair { keyCode = authoring.UseSkill },
-                ChosseItem = new HackInputComponent.InputPair { keyCode = authoring.ChosseItem },
-                DealDamage = new HackInputComponent.InputPair { keyCode = authoring.DealDamage },
-            });
+            //AddComponent<HackInputComponent>(new HackInputComponent
+            //{
+            //    PlusHealth = new HackInputComponent.InputPair { keyCode = authoring.PlusHealth },
+            //    PlusMana = new HackInputComponent.InputPair { keyCode = authoring.PlusMana },
+            //    MultiHealth = new HackInputComponent.InputPair { keyCode = authoring.MultiHealth },
+            //    Calculate = new HackInputComponent.InputPair { keyCode = authoring.Calculate },
+            //    EquipItem = new HackInputComponent.InputPair { keyCode = authoring.EquipItem },
+            //    UseSkill = new HackInputComponent.InputPair { keyCode = authoring.UseSkill },
+            //    ChosseItem = new HackInputComponent.InputPair { keyCode = authoring.ChosseItem },
+            //    DealDamage = new HackInputComponent.InputPair { keyCode = authoring.DealDamage },
+            //});
         }
     }
 }

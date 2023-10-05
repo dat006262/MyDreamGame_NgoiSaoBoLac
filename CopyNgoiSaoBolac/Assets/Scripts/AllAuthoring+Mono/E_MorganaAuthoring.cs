@@ -14,6 +14,7 @@ public class E_MorganaAuthoring : MonoBehaviour
             AddComponent<E_MorganaComponent>(
                 new E_MorganaComponent
                 {
+                    active = true,
                     BasicDamePerloop = 10,
                     countdown = 0.6f,
                     effectFrequenc = 0.6f,

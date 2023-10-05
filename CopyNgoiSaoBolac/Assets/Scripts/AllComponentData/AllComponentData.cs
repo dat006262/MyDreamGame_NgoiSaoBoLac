@@ -97,11 +97,11 @@ public struct CharacterStat : IComponentData
 {
 
     public float BaseValueStrength;
-    public float _strengValue;
+    public float _strengMaxValue;
     public float BaseValueHealth;
-    public float _healthValue;
+    public float _healthMaxValue;
     public float BaseValueMana;
-    public float _manaValue;
+    public float _manaMaxValue;
 }
 public enum StatModType
 {
@@ -309,6 +309,7 @@ public struct SpawnLineSkillSys_OwnerComponent : IComponentData
 #region ExecuteTriggerSys
 public struct ExecuteTriggerSys_OwnerComponent : IComponentData//gan len skill
 {
+    public bool active;
     public SkillType type;
     public float damage;
     public float effectFrequenc;
@@ -357,6 +358,7 @@ public struct E_MorganaEffectTag : IComponentData
 }
 public struct E_MorganaComponent : IComponentData
 {
+    public bool active;
     public float countdown;
     public int loopCount;
     public float BasicDamePerloop;
@@ -369,17 +371,19 @@ public struct W_CamileEffectTag : IComponentData
 }
 public struct W_CamileComponent : IComponentData
 {
+    public bool active;
     public float damageAfter;//2sneu con trong tam hoat dong
     public Entity OriginCharacter;
     public float DamageBasic;
 }
-public struct Q_TemmoTargetComponent : IComponentData
+public struct Q_TemmoSaveTargetComponent : IComponentData
 {
     public Entity TargetTo;
     public float3 TargetPos;
 }
 public struct Q_TemmoComponent : IComponentData
 {
+    public bool active;
     public float DamageBasic;
     public float flySpeed;
     public Entity OriginCharacter;
@@ -392,6 +396,7 @@ public struct Q_MundoEffectTag : IComponentData
 }
 public struct Q_MundoComponent : IComponentData
 {
+    public bool active;
     public float flySpeed;
     public Entity OriginCharacter;
     public float DamageBasic;

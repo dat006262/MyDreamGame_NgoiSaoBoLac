@@ -3,16 +3,16 @@ using Unity.Entities;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class PlayerAuthoring : MonoBehaviour
+public class PlayerMoveAuthoring : MonoBehaviour
 {
     public int ExperiencePoints;
-    public int AttackStrength;
+    // public int AttackStrength;
     public float moveSpeed = 1;
     public float rotateSpeed = 1;
 
-    public class PlayerBaker : Baker<PlayerAuthoring>
+    public class PlayerBaker : Baker<PlayerMoveAuthoring>
     {
-        public override void Bake(PlayerAuthoring authoring)
+        public override void Bake(PlayerMoveAuthoring authoring)
         {
             // var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent<PlayerMove_OwnerSystem>(/*entity, */new PlayerMove_OwnerSystem
@@ -21,9 +21,9 @@ public class PlayerAuthoring : MonoBehaviour
                 rotateSpeed = authoring.rotateSpeed
             });
 
-            AddComponent<ChosseItemComponent>(new ChosseItemComponent { ID = 0, item = Entity.Null });
-            AddComponent(new DealDamageSys_EXPComponent { Value = authoring.ExperiencePoints });
-            AddComponent(new CharacterAttackStrength { Value = authoring.AttackStrength });
+            //AddComponent<ChosseItemComponent>(new ChosseItemComponent { ID = 0, item = Entity.Null });
+            //AddComponent(new DealDamageSys_EXPComponent { Value = authoring.ExperiencePoints });
+            //AddComponent(new CharacterAttackStrength { Value = authoring.AttackStrength });
 
         }
     }

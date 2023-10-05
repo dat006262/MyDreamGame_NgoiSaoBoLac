@@ -57,6 +57,7 @@ public partial struct Q_MundoEffectWork : IJobEntity
                         in Q_MundoEffectTag q_Mundo
                        )
     {
+        Debug.Log("Q_MundoEffectWork");
         ecbp.RemoveComponent<Q_MundoEffectTag>(ciqi, ent);
 
         ecbp.AppendToBuffer<DealDamageSys2_OwnerComponent>(ciqi, ent, new DealDamageSys2_OwnerComponent

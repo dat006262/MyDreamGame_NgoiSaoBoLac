@@ -12,7 +12,7 @@ using UnityEngine;
 
 [UpdateAfter(typeof(PlayerInputSystem))]
 [BurstCompile]
-public partial struct SkillAutoTargetSystem : ISystem
+public partial struct Q_TemmoSpawnSystem : ISystem
 {
     private EntityQuery m_OwnerEQG;
     private EntityQuery EntityCanBeTargetEQG;
@@ -20,8 +20,9 @@ public partial struct SkillAutoTargetSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<SkillAutoTargetSystemEnable>();
+        state.RequireForUpdate<EnemyAI_OwnerComponent>();
         m_OwnerEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillAutoTargetSys_OwnerComponent>());
-        EntityCanBeTargetEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyAI_OwnerComponent>());
+        EntityCanBeTargetEQG = state.GetEntityQuery(ComponentType.ReadOnly</*EnemyAI_OwnerComponent*/CharacterStatValue>());
 
     }
     [BurstCompile]
@@ -40,7 +41,7 @@ public partial struct SkillAutoTargetSystem : ISystem
         NativeArray<Entity> EntityCanbeTargeted = new NativeArray<Entity>(EntityCanBeTargetEQG.CalculateEntityCount(), Allocator.TempJob);
         NativeArray<float3> EntityCanbeTargetedPos = new NativeArray<float3>(EntityCanBeTargetEQG.CalculateEntityCount(), Allocator.TempJob);
         int i = 0;
-        foreach (var (trans, ent) in SystemAPI.Query<RefRO<LocalTransform>>().WithAll<EnemyAI_OwnerComponent>().WithEntityAccess())
+        foreach (var (trans, ent) in SystemAPI.Query<RefRO<LocalTransform>>().WithAll</*EnemyAI_OwnerComponent*/CharacterStatValue>().WithEntityAccess())
         {
             EntityCanbeTargeted[i] = ent;
             EntityCanbeTargetedPos[i] = trans.ValueRO.Position;
@@ -100,7 +101,12 @@ public partial struct SkillAutoTarget_SpawnJob : IJobEntity
 
             for (int i = 0; i < EntityCanbeTargetPos.Length; i++)
             {
-                if (EntityCanbeTargetPos[i].x - ltrans.Position.x == 0 && EntityCanbeTargetPos[i].y - ltrans.Position.y == 0)
+                if (EntityCanbeTarget[i].Index == ent.Index)
+                {
+
+                    continue;
+                }
+                if (EntityCanbeTargetPos[i].x - ltrans.Position.x == 0 && EntityCanbeTargetPos[i].y - ltrans.Position.y == 0 || EntityCanbeTarget[i].Index == ent.Index)
                 {
                     entityNearest = EntityCanbeTarget[i];
                     break;
@@ -128,7 +134,7 @@ public partial struct SkillAutoTarget_SpawnJob : IJobEntity
 
 
 
-                ecbp.AddComponent<Q_TemmoTargetComponent>(ciqi, spawnedProj, new Q_TemmoTargetComponent { TargetTo = entityNearest });
+                ecbp.AddComponent<Q_TemmoSaveTargetComponent>(ciqi, spawnedProj, new Q_TemmoSaveTargetComponent { TargetTo = entityNearest });
 
 
                 ecbp.SetComponent<LocalTransform>(ciqi, spawnedProj, new LocalTransform
