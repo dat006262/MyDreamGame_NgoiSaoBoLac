@@ -11,26 +11,26 @@ public class ItemAuthoring : MonoBehaviour
     public string name = "BaseSheild";
     public int ID = 1000;
     public Modify[] Modifies;
-    public NativeArray<StatModify> arrayMod;
+    //public NativeArray<StatModify> arrayMod;
 
-    private void OnValidate()
-    {
-        arrayMod = new NativeArray<StatModify>(Modifies.Length, Allocator.Temp);
-        for (int i = 0; i < arrayMod.Length; i++)
-        {
+    //private void OnValidate()
+    //{
+    //    arrayMod = new NativeArray<StatModify>(Modifies.Length, Allocator.Temp);
+    //    for (int i = 0; i < arrayMod.Length; i++)
+    //    {
 
-            arrayMod[i] = new StatModify
-            {
-                Value = Modifies[i].Value,
-                statModType = Modifies[i].statModType,
-                statType = Modifies[i].statType,
-                order = Modifies[i].order,
-                Source = Entity.Null
-            };
+    //        arrayMod[i] = new StatModify
+    //        {
+    //            Value = Modifies[i].Value,
+    //            statModType = Modifies[i].statModType,
+    //            statType = Modifies[i].statType,
+    //            order = Modifies[i].order,
+    //            Source = Entity.Null
+    //        };
 
-        }
+    //    }
 
-    }
+    //}
 }
 public class ItemBaker : Baker<ItemAuthoring>
 {
@@ -46,6 +46,7 @@ public class ItemBaker : Baker<ItemAuthoring>
         {
             modifies.Add(new StatModify
             {
+                timeEffect = 99,
                 Value = modify.Value,
                 statModType = modify.statModType,
                 statType = modify.statType,
@@ -64,8 +65,10 @@ public class ItemBaker : Baker<ItemAuthoring>
 [System.Serializable]
 public class Modify
 {
+    public float timeEffect;
     public float Value;
     public StatType statType;
     public StatModType statModType;
     public int order;
+    public GameObject Source;
 }

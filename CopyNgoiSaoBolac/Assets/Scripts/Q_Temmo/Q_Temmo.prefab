@@ -254,13 +254,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flySpeed: 20
   distancesDealDamage: 1
-  cowdControls:
-  - type: 0
-    time: 2
-    sloweffect: 0
-  - type: 1
-    time: 1
-    sloweffect: 0
+  cowdControls: []
+  Debuff:
+  - timeEffect: 3
+    Value: -50
+    statType: 4
+    statModType: 100
+    order: 0
+    Source: {fileID: 0}
+  - timeEffect: 5
+    Value: -20
+    statType: 4
+    statModType: 100
+    order: 0
+    Source: {fileID: 0}
 --- !u!1 &6992291621758053977
 GameObject:
   m_ObjectHideFlags: 0

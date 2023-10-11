@@ -70,7 +70,8 @@ public partial struct Q_TemmoWork : IJobEntity
 
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in Entity ent, ref LocalTransform Q_temmoTrans,
-                        ref Q_TemmoComponent q_Temmo, ref Q_TemmoSaveTargetComponent q_TemmoTarget, in DynamicBuffer<DealHardControl_Component> HardCCs
+                        ref Q_TemmoComponent q_Temmo, ref Q_TemmoSaveTargetComponent q_TemmoTarget,
+                        in DynamicBuffer<DealHardControl_Component> HardCCs, in DynamicBuffer<Debuff> Debuffs
                        )
     {
         if (q_TemmoTarget.TargetTo == Entity.Null)
@@ -116,6 +117,24 @@ public partial struct Q_TemmoWork : IJobEntity
                             statType = StatType.Health
                         }
                         );
+
+                        //Test SlowEffect
+                        foreach (var cc in Debuffs)
+                        {
+                            ecbp.AppendToBuffer<StatModify>(ciqi, q_TemmoTarget.TargetTo, new StatModify
+                            {
+                                timeEffect = cc.timeEffect,
+                                statType = cc.statType,
+                                statModType = cc.statModType,
+                                Value = cc.Value,
+                                order = cc.order,
+                                Source = Entity.Null
+                            });
+                            ecbp.SetComponent<CheckNeedCalculate>(ciqi, q_TemmoTarget.TargetTo, new CheckNeedCalculate { dirty = true });
+
+                        }
+
+                        //
                         ecbp.AddComponent<DeadDestroyTag>(ciqi, ent, new DeadDestroyTag { DeadAfter = -1 });
                         q_Temmo.active = false;
                     }

@@ -100,7 +100,7 @@ public enum StatModType
 public struct StatModify : IBufferElementData
 {
 
-
+    public float timeEffect;
     public float Value;
     public StatType statType;
     public StatModType statModType;
@@ -395,3 +395,13 @@ public struct Q_ZileinComponent : IComponentData
 {
 }
 #endregion
+public struct Debuff : IBufferElementData
+{
+
+    public float timeEffect;
+    public float Value;
+    public StatType statType;
+    public StatModType statModType;
+    public int order;
+    public Entity Source;
+}

@@ -38,6 +38,29 @@ public partial struct Status_CalculateMaxValueSystem : ISystem
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
+        //AutoRemove element of DynamicBuffer<StatModify> here
+        foreach (var (Buffer, check, entity) in
+          SystemAPI.Query<DynamicBuffer<StatModify>, RefRW<CheckNeedCalculate>>().WithEntityAccess())
+        {
+
+            for (var i = Buffer.Length - 1; i >= 0; i--)
+            {
+                if (Buffer.ElementAt(i).timeEffect <= 80)
+                    Buffer.ElementAt(i).timeEffect -= SystemAPI.Time.DeltaTime;
+
+                if (Buffer.ElementAt(i).timeEffect <= 0)
+                {
+                    Buffer.RemoveAt(i);
+                    check.ValueRW.dirty = true;
+
+                }
+            }
+        }
+
+
+
+
+
 
 
         state.Dependency = new ApplyModifyJob
@@ -191,11 +214,11 @@ public partial struct ApplyModifyJob : IJobEntity
 }
 public struct CompareModifierOrder : IComparer<StatModify>
 {
-    public int Compare(StatModify mod1, StatModify mod2)
+    public int Compare(StatModify mod1, StatModify mod2)//be=>lon
     {
-        if (mod1.order < mod2.order)
+        if (mod1.order > mod2.order)
             return -1;
-        else if (mod1.order > mod2.order)
+        else if (mod1.order < mod2.order)
         {
             return 1;
         }
