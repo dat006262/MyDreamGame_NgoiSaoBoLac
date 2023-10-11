@@ -33,7 +33,9 @@ public partial class Status_UpdateSystem : SystemBase
                 if (statValueModifyBuffer.ElementAt(i).statType == StatType.Health)
                 {
                     statValue.ValueRW.PlusHealth(statValueModifyBuffer.ElementAt(i).value);
-                    OnUpdateHealth?.Invoke(statValueModifyBuffer.ElementAt(i).value, transform.Position);
+
+                    //OnUpdateHealth?.Invoke(statValueModifyBuffer.ElementAt(i).value, transform.Position);
+                    GlobalAction.OnUpdateHealth.Invoke(statValueModifyBuffer.ElementAt(i).value, transform.Position);
                     statValueModifyBuffer.RemoveAt(i);
                 }
 

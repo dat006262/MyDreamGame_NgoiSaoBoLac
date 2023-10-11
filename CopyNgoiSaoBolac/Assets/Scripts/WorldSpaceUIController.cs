@@ -11,6 +11,10 @@ public class WorldSpaceUIController : MonoBehaviour
     [SerializeField] private GameObject _damageIconPrefab;
 
     private Transform _mainCameraTransform;
+    private void Awake()
+    {
+
+    }
 
     private void Start()
     {
@@ -20,7 +24,9 @@ public class WorldSpaceUIController : MonoBehaviour
     private void OnEnable()
     {
         var statValue_Update = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<Status_UpdateSystem>();
-        statValue_Update.OnUpdateHealth += DisplayDamageIcon;
+        //statValue_Update.OnUpdateHealth += DisplayDamageIcon;
+        GlobalAction.OnUpdateHealth += DisplayDamageIcon;
+        GlobalAction.OnUpdateHealth += AudioHit;
         // statValue_Update.OnGrantExperience += DisplayExperienceIcon;
 
     }
@@ -29,10 +35,14 @@ public class WorldSpaceUIController : MonoBehaviour
     {
         if (World.DefaultGameObjectInjectionWorld == null) return;
         var statValue_Update = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<Status_UpdateSystem>();
-        statValue_Update.OnUpdateHealth -= DisplayDamageIcon;
-        //statValue_Update.OnGrantExperience -= DisplayExperienceIcon;
+        // statValue_Update.OnUpdateHealth -= DisplayDamageIcon;
+        GlobalAction.OnUpdateHealth -= DisplayDamageIcon;
+        GlobalAction.OnUpdateHealth -= AudioHit;
     }
-
+    private void AudioHit(float damageAmount, float3 startPosition)
+    {
+        AudioManager.intances.PlaySFX(AudioManager.SFX.HIT);
+    }
     private void DisplayDamageIcon(float damageAmount, float3 startPosition)
     {
         var directionToCamera = (Vector3)startPosition - _mainCameraTransform.position;
