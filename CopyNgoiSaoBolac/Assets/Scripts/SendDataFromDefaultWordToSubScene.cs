@@ -11,7 +11,7 @@ public class SendDataFromDefaultWordToSubScene : MonoBehaviour
 {
     EntityManager _entityManager;
     Entity configEntity;
-
+    public bool active = false;
     public Btn_AutoHit btn_AutoHit;
     public btn_AutoTagetSkill btn_AutoTargetSkill;
     public BtnLineSkill btn_LineSkill;
@@ -26,14 +26,15 @@ public class SendDataFromDefaultWordToSubScene : MonoBehaviour
     IEnumerator Start()
     {
         _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2f);
+        active = true;
         configEntity = _entityManager.CreateEntityQuery(typeof(ConfigComponent)).GetSingletonEntity();
         gameConfig = _entityManager.GetComponentData<ConfigComponent>(configEntity);
     }
 
     private void Update()
     {
-
+        if (!active) return;
         if (btn_AutoHit.isOnClick)
         {
             ConfigComponent oldData = _entityManager.GetComponentData<ConfigComponent>(configEntity);

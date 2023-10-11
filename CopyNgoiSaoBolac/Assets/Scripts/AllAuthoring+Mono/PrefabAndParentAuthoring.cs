@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PrefabAndParentAuthoring : MonoBehaviour
 {
+
     [Header("One or more.You can leave the parent empty.")]
     public GameObject[] prefabs;
     public GameObject[] parents;

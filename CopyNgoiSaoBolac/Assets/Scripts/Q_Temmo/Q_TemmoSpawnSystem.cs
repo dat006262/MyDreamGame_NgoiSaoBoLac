@@ -10,7 +10,7 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
 
-[UpdateAfter(typeof(PlayerInputSystem))]
+
 [BurstCompile]
 public partial struct Q_TemmoSpawnSystem : ISystem
 {
@@ -20,9 +20,13 @@ public partial struct Q_TemmoSpawnSystem : ISystem
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<SkillAutoTargetSystemEnable>();
-        state.RequireForUpdate<EnemyAI_OwnerComponent>();
+        state.RequireForUpdate<CharacterStatValue>();
         m_OwnerEQG = state.GetEntityQuery(ComponentType.ReadOnly<SkillAutoTargetSys_OwnerComponent>());
-        EntityCanBeTargetEQG = state.GetEntityQuery(ComponentType.ReadOnly</*EnemyAI_OwnerComponent*/CharacterStatValue>());
+        // EntityCanBeTargetEQG = state.GetEntityQuery(ComponentType.ReadOnly</*EnemyAI_OwnerComponent*/CharacterStatValue>());
+        EntityCanBeTargetEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
+        .WithAll<CharacterStatValue>()
+        .WithAll<HardControl_Component>()
+        );
 
     }
     [BurstCompile]
@@ -34,14 +38,14 @@ public partial struct Q_TemmoSpawnSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         var config = SystemAPI.GetSingleton<ConfigComponent>();
-        var ecbSingleton = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>();
+        var ecbSingleton = SystemAPI.GetSingleton<BeginFixedStepSimulationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
 
         NativeArray<Entity> EntityCanbeTargeted = new NativeArray<Entity>(EntityCanBeTargetEQG.CalculateEntityCount(), Allocator.TempJob);
         NativeArray<float3> EntityCanbeTargetedPos = new NativeArray<float3>(EntityCanBeTargetEQG.CalculateEntityCount(), Allocator.TempJob);
         int i = 0;
-        foreach (var (trans, ent) in SystemAPI.Query<RefRO<LocalTransform>>().WithAll</*EnemyAI_OwnerComponent*/CharacterStatValue>().WithEntityAccess())
+        foreach (var (trans, ent) in SystemAPI.Query<RefRO<LocalTransform>>().WithAll</*EnemyAI_OwnerComponent*/CharacterStatValue>().WithAll<HardControl_Component>().WithEntityAccess())
         {
             EntityCanbeTargeted[i] = ent;
             EntityCanbeTargetedPos[i] = trans.ValueRO.Position;

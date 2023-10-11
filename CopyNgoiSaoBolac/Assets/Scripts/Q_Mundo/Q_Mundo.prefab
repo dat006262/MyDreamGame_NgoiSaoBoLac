@@ -96,8 +96,8 @@ GameObject:
   - component: {fileID: 9044439568912333757}
   - component: {fileID: 6691381305056063542}
   - component: {fileID: 2749284376429629395}
-  - component: {fileID: 6767688786539415491}
-  - component: {fileID: -8374049143095384526}
+  - component: {fileID: 3419883381184776478}
+  - component: {fileID: 7078301349798276060}
   m_Layer: 0
   m_Name: Q_Mundo
   m_TagString: Untagged
@@ -226,22 +226,7 @@ MonoBehaviour:
     x: 1
     y: 1
     z: 0
---- !u!114 &6767688786539415491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2485758048250580795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74415d846f90fed449e5b02853f9c6ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SkillDamage: 10
-  effectFrequenc: 1
-  type: 1
---- !u!114 &-8374049143095384526
+--- !u!114 &3419883381184776478
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -254,7 +239,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DamageBasic: 100
-  flySpeed: 100
+  flySpeed: 10
+--- !u!114 &7078301349798276060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2485758048250580795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06fdb3f5423d2ba439cd87b7801ed4c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6992291621758053977
 GameObject:
   m_ObjectHideFlags: 0

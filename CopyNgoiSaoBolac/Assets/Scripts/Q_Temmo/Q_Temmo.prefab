@@ -254,6 +254,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flySpeed: 20
   distancesDealDamage: 1
+  cowdControls:
+  - type: 0
+    time: 2
+    sloweffect: 0
+  - type: 1
+    time: 1
+    sloweffect: 0
 --- !u!1 &6992291621758053977
 GameObject:
   m_ObjectHideFlags: 0

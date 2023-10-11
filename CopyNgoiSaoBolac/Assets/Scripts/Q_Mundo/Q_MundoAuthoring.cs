@@ -6,7 +6,7 @@ using UnityEngine;
 public class Q_MundoAuthoring : MonoBehaviour
 {
     public float DamageBasic = 100;
-    public float flySpeed = 10;
+    public float flySpeed = 10;//10dv/s
     public class Q_MundoBaker : Baker<Q_MundoAuthoring>
     {
 

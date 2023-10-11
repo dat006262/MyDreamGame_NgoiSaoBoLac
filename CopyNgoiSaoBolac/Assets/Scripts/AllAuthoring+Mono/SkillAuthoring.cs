@@ -7,7 +7,7 @@ public class SkillAuthoring : MonoBehaviour
 {
     public float SkillDamage;
     public float effectFrequenc = 1f;
-    public SkillType type = SkillType.E_Morgana;
+    public SkillType type;
     public class SkillBaker : Baker<SkillAuthoring>
     {
 

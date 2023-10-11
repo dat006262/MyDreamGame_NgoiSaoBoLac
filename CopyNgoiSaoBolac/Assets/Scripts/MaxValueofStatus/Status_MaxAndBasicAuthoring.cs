@@ -8,6 +8,7 @@ public class Status_MaxAndBasicAuthoring : MonoBehaviour
     public float BaseValueHealth = 100;
     public float BaseValueStrength = 100;
     public float BaseValueMana = 100;
+    public float BaseValueSpeed = 100;
     // dieu kien de add vao??? tuong tu Cofig
     public class StatusBaker : Baker<Status_MaxAndBasicAuthoring>
     {
@@ -21,7 +22,9 @@ public class Status_MaxAndBasicAuthoring : MonoBehaviour
                 BaseValueStrength = authoring.BaseValueStrength,
                 _strengMaxValue = authoring.BaseValueStrength,
                 BaseValueMana = authoring.BaseValueMana,
-                _manaMaxValue = authoring.BaseValueMana
+                _manaMaxValue = authoring.BaseValueMana,
+                BaseValueSpeed = authoring.BaseValueSpeed,
+                _speedValue = authoring.BaseValueSpeed,
             });
             AddComponent<CheckNeedCalculate>(new CheckNeedCalculate { dirty = true });
             AddBuffer<StatModify>();
@@ -34,6 +37,24 @@ public class Status_MaxAndBasicAuthoring : MonoBehaviour
             AddBuffer<StatValueModify>();
         }
     }
+}
+public struct CharacterStat : IComponentData
+{
+    public float BaseValueStrength;
+    public float _strengMaxValue;
+    public float BaseValueHealth;
+    public float _healthMaxValue;
+    public float BaseValueMana;
+    public float _manaMaxValue;
+    public float BaseValueSpeed;
+    public float _speedValue;
+}
+public enum StatType
+{
+    Strength = 1,
+    Health = 2,
+    Mana = 3,
+    Speed = 4
 }
 public struct CharacterStatValue : IComponentData
 {

@@ -45,8 +45,9 @@ public struct PlayerInput_OwnerComponent : IComponentData
 #endregion
 //------------------------------------------------------------------
 #region PlayerMoveSys
-public struct PlayerMove_OwnerSystem : IComponentData
+public struct PlayerMove_OwnerComponent : IComponentData
 {
+    public bool active;
     public float moveSpeed;
     public float rotateSpeed;
 }
@@ -87,22 +88,8 @@ public struct TargetToEnemySy_TargetComponent : IComponentData { }
 #endregion
 //-----------------------------------------------------------------------
 #region Status
-public enum StatType
-{
-    Strength = 1,
-    Health = 2,
-    Mana = 3
-}
-public struct CharacterStat : IComponentData
-{
 
-    public float BaseValueStrength;
-    public float _strengMaxValue;
-    public float BaseValueHealth;
-    public float _healthMaxValue;
-    public float BaseValueMana;
-    public float _manaMaxValue;
-}
+
 public enum StatModType
 {
     Flat = 100,//cong
@@ -360,8 +347,8 @@ public struct E_MorganaComponent : IComponentData
 {
     public bool active;
     public float countdown;
-    public int loopCount;
-    public float BasicDamePerloop;
+    public int turnCount;
+    public float BasicDamePerTurn;
     public Entity OriginCharacter;
     public float effectFrequenc;
 }

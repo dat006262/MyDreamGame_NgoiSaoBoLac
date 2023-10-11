@@ -59,6 +59,7 @@ public partial struct SpawnerJob : IJobEntity
                     Value = prefabsAndParents[j].parent//Add tagparent luon
                 });
 
+
             }
         }
     }

@@ -5,8 +5,6 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class PlayerMoveAuthoring : MonoBehaviour
 {
-    public int ExperiencePoints;
-    // public int AttackStrength;
     public float moveSpeed = 1;
     public float rotateSpeed = 1;
 
@@ -15,15 +13,12 @@ public class PlayerMoveAuthoring : MonoBehaviour
         public override void Bake(PlayerMoveAuthoring authoring)
         {
             // var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent<PlayerMove_OwnerSystem>(/*entity, */new PlayerMove_OwnerSystem
+            AddComponent<PlayerMove_OwnerComponent>(/*entity, */new PlayerMove_OwnerComponent
             {
+                active = true,
                 moveSpeed = authoring.moveSpeed,
                 rotateSpeed = authoring.rotateSpeed
             });
-
-            //AddComponent<ChosseItemComponent>(new ChosseItemComponent { ID = 0, item = Entity.Null });
-            //AddComponent(new DealDamageSys_EXPComponent { Value = authoring.ExperiencePoints });
-            //AddComponent(new CharacterAttackStrength { Value = authoring.AttackStrength });
 
         }
     }

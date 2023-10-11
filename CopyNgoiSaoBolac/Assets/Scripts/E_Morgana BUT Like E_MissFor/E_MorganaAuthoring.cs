@@ -15,10 +15,10 @@ public class E_MorganaAuthoring : MonoBehaviour
                 new E_MorganaComponent
                 {
                     active = true,
-                    BasicDamePerloop = 10,
-                    countdown = 0.6f,
+                    BasicDamePerTurn = 10,
+                    countdown = 0.1f,
                     effectFrequenc = 0.6f,
-                    loopCount = 5,
+                    turnCount = 5,
                     OriginCharacter = Entity.Null
                 });
         }

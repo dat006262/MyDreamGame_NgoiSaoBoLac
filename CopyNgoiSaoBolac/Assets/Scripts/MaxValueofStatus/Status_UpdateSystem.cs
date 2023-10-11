@@ -6,21 +6,22 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-
+[BurstCompile]
 public partial class Status_UpdateSystem : SystemBase
 {
     public Action<float, float3> OnUpdateHealth;
-
+    [BurstCompile]
     protected override void OnCreate()
     {
         RequireForUpdate<StatValueModify>();
         RequireForUpdate<CharacterStatValue>();
 
     }
+    [BurstCompile]
     protected override void OnDestroy()
     {
     }
-
+    [BurstCompile]
     protected override void OnUpdate()
     {
         foreach (var (statValue, statValueModifyBuffer, transform, entity) in

@@ -9,9 +9,6 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
 
-[UpdateInGroup(typeof(SimulationSystemGroup))]
-[UpdateBefore(typeof(DealDamageSystem2))]
-[UpdateAfter(typeof(DeadDestroySystem))]
 [BurstCompile]
 public partial struct ExecuteTriggerSystem : ISystem
 {

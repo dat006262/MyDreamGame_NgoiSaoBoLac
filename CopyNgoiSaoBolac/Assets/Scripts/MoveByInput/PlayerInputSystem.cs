@@ -20,6 +20,7 @@ public partial class PlayerInputSystem : SystemBase
     {
         RequireForUpdate<PlayerInputSystemEnable>();
         RequireForUpdate<PlayerInput_OwnerComponent>();
+        RequireForUpdate<CharacterStat>();
     }
 
 
@@ -31,8 +32,10 @@ public partial class PlayerInputSystem : SystemBase
     {
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(World.Unmanaged);
-        Entities.ForEach((in PlayerMove_OwnerSystem plComp, in Entity ent) =>
+
+        Entities.ForEach((in CharacterStat plComp, in Entity ent, in PlayerInput_OwnerComponent input) =>
         {
+
             var plInpComp = SystemAPI.GetComponent<PlayerInput_OwnerComponent>(ent);
             ecb.SetComponent<PlayerInput_OwnerComponent>(ent, new PlayerInput_OwnerComponent
             {
@@ -73,24 +76,27 @@ public partial class PlayerInputSystem : SystemBase
 
 }
 
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateBefore(typeof(PhysicsSystemGroup))]
+//[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+//[UpdateBefore(typeof(PhysicsSystemGroup))]
 [BurstCompile]
 public partial struct PlayerMovementSystem : ISystem
 {
     private EntityQuery m_playersEQG;
-    private EntityQuery m_boundsGroup;
 
 
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         // at least one player in the scene
-        state.RequireForUpdate<PlayerMove_OwnerSystem>();
+        state.RequireForUpdate<CharacterStat>();
         state.RequireForUpdate<PlayerInput_OwnerComponent>();
-        state.RequireForUpdate<PlayerMovementSystemEnable>();
 
-        m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<PlayerMove_OwnerSystem>());
+        m_playersEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
+        .WithAll<CharacterStat>()
+        .WithAll<PlayerInput_OwnerComponent>()
+        .WithAll<HardControlTag>()
+        //.WithNone<HardCowdControl_Component>()
+        );
     }
 
     [BurstCompile]
@@ -106,15 +112,11 @@ public partial struct PlayerMovementSystem : ISystem
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
-        float3 targetAreaBL = float3.zero;
-        float3 targetAreaTR = float3.zero;
         float delta = SystemAPI.Time.DeltaTime;
         state.Dependency = new MovementJob
         {
             deltaTime = delta,
             ecbp = ecb.AsParallelWriter(),
-            targetAreaBL = targetAreaBL,
-            targetAreaTR = targetAreaTR
         }.ScheduleParallel(m_playersEQG, state.Dependency);
         state.Dependency.Complete();
     }
@@ -126,17 +128,15 @@ public partial struct MovementJob : IJobEntity
     [ReadOnly]
     public float deltaTime;
     public EntityCommandBuffer.ParallelWriter ecbp;
-    [ReadOnly]
-    public float3 targetAreaBL;
-    [ReadOnly]
-    public float3 targetAreaTR;
-    public void Execute([ChunkIndexInQuery] int ciqi, in PlayerMove_OwnerSystem plComp,
+    public void Execute([ChunkIndexInQuery] int ciqi, in CharacterStat plComp,
                         ref PhysicsVelocity velocity, in Entity ent,
                         in PlayerInput_OwnerComponent input, in PhysicsMass mass,
+                        HardControlTag hardCC,
                         ref LocalTransform ltrans, in WorldTransform wtrans)
     {
-        float rotateSpeed = plComp.rotateSpeed;
-        float moveSpeed = plComp.moveSpeed;
+        if (hardCC.isCC) return;
+        float moveSpeed = plComp._speedValue;
+
         // rotate
         if (input.Left.keyVal)
             velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, -new float3(1, 0, 0) * moveSpeed * deltaTime, wtrans.Position);

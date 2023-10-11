@@ -19,18 +19,18 @@ public class WorldSpaceUIController : MonoBehaviour
 
     private void OnEnable()
     {
-        var dealDamageSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<DealDamageSystem2>();
-        dealDamageSystem.OnDealDamage += DisplayDamageIcon;
-        dealDamageSystem.OnGrantExperience += DisplayExperienceIcon;
+        var statValue_Update = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<Status_UpdateSystem>();
+        statValue_Update.OnUpdateHealth += DisplayDamageIcon;
+        // statValue_Update.OnGrantExperience += DisplayExperienceIcon;
 
     }
 
     private void OnDisable()
     {
         if (World.DefaultGameObjectInjectionWorld == null) return;
-        var dealDamageSystem = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<DealDamageSystem2>();
-        dealDamageSystem.OnDealDamage -= DisplayDamageIcon;
-        dealDamageSystem.OnGrantExperience -= DisplayExperienceIcon;
+        var statValue_Update = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<Status_UpdateSystem>();
+        statValue_Update.OnUpdateHealth -= DisplayDamageIcon;
+        //statValue_Update.OnGrantExperience -= DisplayExperienceIcon;
     }
 
     private void DisplayDamageIcon(float damageAmount, float3 startPosition)
@@ -39,7 +39,7 @@ public class WorldSpaceUIController : MonoBehaviour
         var rotationToCamera = Quaternion.LookRotation(directionToCamera, Vector3.up);
         var newIcon = Instantiate(_damageIconPrefab, startPosition, Quaternion.identity, transform);
         var newIconText = newIcon.GetComponent<TextMeshProUGUI>();
-        newIconText.text = $"<color=red>-{damageAmount.ToString()}</color>";
+        newIconText.text = $"<color=red>{damageAmount.ToString()}</color>";
     }
 
     private void DisplayExperienceIcon(float experienceAmount, float3 startPosition)
@@ -48,6 +48,6 @@ public class WorldSpaceUIController : MonoBehaviour
         var rotationToCamera = Quaternion.LookRotation(directionToCamera, Vector3.up);
         var newIcon = Instantiate(_damageIconPrefab, startPosition, Quaternion.identity, transform);
         var newIconText = newIcon.GetComponent<TextMeshProUGUI>();
-        newIconText.text = $"<color=yellow>+{experienceAmount.ToString()} EXP</color>";
+        newIconText.text = $"<color=yellow>{experienceAmount.ToString()} EXP</color>";
     }
 }

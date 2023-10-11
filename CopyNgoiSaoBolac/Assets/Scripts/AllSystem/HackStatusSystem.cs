@@ -27,7 +27,7 @@ public partial class HackInputSystem : SystemBase
     {
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(World.Unmanaged);
-        Entities.ForEach((in PlayerMove_OwnerSystem plComp, in Entity ent) =>
+        Entities.ForEach((in PlayerMove_OwnerComponent plComp, in Entity ent) =>
         {
             var hackComp = SystemAPI.GetComponent<HackInputComponent>(ent);
             ecb.SetComponent<HackInputComponent>(ent, new HackInputComponent

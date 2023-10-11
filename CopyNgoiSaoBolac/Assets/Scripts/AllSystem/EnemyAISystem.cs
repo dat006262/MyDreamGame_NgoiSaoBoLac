@@ -18,7 +18,6 @@ public partial struct EnemyAISystem : ISystem
 
         m_playersEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyAISys_TargetComponent>());
         m_UFOsEQG = state.GetEntityQuery(ComponentType.ReadOnly<EnemyAI_OwnerComponent>());
-        //m_boundsGroup = state.GetEntityQuery(ComponentType.ReadOnly<BoundsTagComponent>());
     }
     public void OnDestroy(ref SystemState state)
     {
