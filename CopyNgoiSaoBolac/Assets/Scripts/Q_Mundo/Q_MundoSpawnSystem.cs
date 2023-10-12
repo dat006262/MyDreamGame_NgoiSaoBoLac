@@ -76,7 +76,7 @@ public partial struct LineSkill_SpawnJob : IJobEntity
             ecbp.AddComponent<ConfigComponent>(ciqi, configEntity, new ConfigComponent { islineSkillClick = false });
 
             Entity spawnedProj = ecbp.Instantiate(ciqi, spawnLineSkilSys_Owner.prefab);
-            ecbp.AddComponent<DeadDestroyTag>(ciqi, spawnedProj, new DeadDestroyTag { DeadAfter = 5f });
+            //  ecbp.AddComponent<DeadDestroyTag>(ciqi, spawnedProj, new DeadDestroyTag { DeadAfter = 5f });
             float3 spawnPos = ltrans.Position/* + ltrans.Up() * 0.5f * ltrans.Scale*/;
             float spawnScale = ltrans.Scale;
 

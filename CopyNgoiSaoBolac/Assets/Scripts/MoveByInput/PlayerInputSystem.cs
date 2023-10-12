@@ -7,6 +7,7 @@ using Unity.Physics;
 using Unity.Physics.Authoring;
 using Unity.Physics.Extensions;
 using Unity.Physics.Systems;
+using Unity.Rendering;
 using Unity.Transforms;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -34,43 +35,43 @@ public partial class PlayerInputSystem : SystemBase
         var ecb = ecbSingleton.CreateCommandBuffer(World.Unmanaged);
 
         Entities.ForEach((in CharacterStat plComp, in Entity ent, in PlayerInput_OwnerComponent input) =>
-        {
+    {
 
-            var plInpComp = SystemAPI.GetComponent<PlayerInput_OwnerComponent>(ent);
-            ecb.SetComponent<PlayerInput_OwnerComponent>(ent, new PlayerInput_OwnerComponent
+        var plInpComp = SystemAPI.GetComponent<PlayerInput_OwnerComponent>(ent);
+        ecb.SetComponent<PlayerInput_OwnerComponent>(ent, new PlayerInput_OwnerComponent
+        {
+            Up = new PlayerInput_OwnerComponent.InputPair
             {
-                Up = new PlayerInput_OwnerComponent.InputPair
-                {
-                    keyCode = plInpComp.Up.keyCode,
-                    keyVal = Input.GetKey(plInpComp.Up.keyCode)
-                },
-                Down = new PlayerInput_OwnerComponent.InputPair
-                {
-                    keyCode = plInpComp.Down.keyCode,
-                    keyVal = Input.GetKey(plInpComp.Down.keyCode)
-                },
-                Left = new PlayerInput_OwnerComponent.InputPair
-                {
-                    keyCode = plInpComp.Left.keyCode,
-                    keyVal = Input.GetKey(plInpComp.Left.keyCode)
-                },
-                Right = new PlayerInput_OwnerComponent.InputPair
-                {
-                    keyCode = plInpComp.Right.keyCode,
-                    keyVal = Input.GetKey(plInpComp.Right.keyCode)
-                },
-                Shoot = new PlayerInput_OwnerComponent.InputPair
-                {
-                    keyCode = plInpComp.Shoot.keyCode,
-                    keyVal = Input.GetKeyDown(plInpComp.Shoot.keyCode)
-                },
-                Teleport = new PlayerInput_OwnerComponent.InputPair
-                {
-                    keyCode = plInpComp.Teleport.keyCode,
-                    keyVal = Input.GetKeyUp(plInpComp.Teleport.keyCode)
-                },
-            });
-        }).Run();
+                keyCode = plInpComp.Up.keyCode,
+                keyVal = Input.GetKey(plInpComp.Up.keyCode)
+            },
+            Down = new PlayerInput_OwnerComponent.InputPair
+            {
+                keyCode = plInpComp.Down.keyCode,
+                keyVal = Input.GetKey(plInpComp.Down.keyCode)
+            },
+            Left = new PlayerInput_OwnerComponent.InputPair
+            {
+                keyCode = plInpComp.Left.keyCode,
+                keyVal = Input.GetKey(plInpComp.Left.keyCode)
+            },
+            Right = new PlayerInput_OwnerComponent.InputPair
+            {
+                keyCode = plInpComp.Right.keyCode,
+                keyVal = Input.GetKey(plInpComp.Right.keyCode)
+            },
+            Shoot = new PlayerInput_OwnerComponent.InputPair
+            {
+                keyCode = plInpComp.Shoot.keyCode,
+                keyVal = Input.GetKeyDown(plInpComp.Shoot.keyCode)
+            },
+            Teleport = new PlayerInput_OwnerComponent.InputPair
+            {
+                keyCode = plInpComp.Teleport.keyCode,
+                keyVal = Input.GetKeyUp(plInpComp.Teleport.keyCode)
+            },
+        });
+    }).Run();
     }
 
 
@@ -134,6 +135,7 @@ public partial struct MovementJob : IJobEntity
                         HardControlTag hardCC,
                         ref LocalTransform ltrans, in WorldTransform wtrans)
     {
+
         if (hardCC.isCC) return;
         float moveSpeed = plComp._speedValue;
 

@@ -71,37 +71,3 @@ public partial struct CrowdControlSystem : ISystem
         //state.Dependency.Complete();
     }
 }
-
-//[BurstCompile]
-//public partial struct CownControlJob : IJobEntity
-//{
-
-//    public EntityCommandBuffer.ParallelWriter ecbp;
-//    [BurstCompile]
-//    private void Execute([ChunkIndexInQuery] int ciqi, ref DynamicBuffer<CowdControl_Component> cownControls,
-//        in CowdControlTag spawnerComp, ref PlayerMove_OwnerComponent playerMove_Owner)
-//    {
-//        for (int i = cownControls.Length - 1; i >= 0; i--)
-//        {
-//            if (cownControls[i].type == CowdControlType.Slow)
-//            {
-//                if (cownControls[i].time >= 0)
-//                {
-//                    // cownControls[i].time -= Time.deltaTime;
-
-//                }
-//                // playerMove_Owner.moveSpeed = playerMove_Owner.moveSpeed / 2;
-//            }
-//            if (cownControls[i].type == CowdControlType.Stun)
-//            {
-//                if (cownControls[i].time <= 0)
-//                {
-//                    Debug.Log("Stop Stun");
-//                    cownControls.RemoveAt(i);
-
-//                }
-//            }
-//        }
-//    }
-//}
-

@@ -9,7 +9,7 @@ using UnityEngine;
 [BurstCompile]
 public partial class Status_UpdateSystem : SystemBase
 {
-    public Action<float, float3> OnUpdateHealth;
+    //public Action<float, float3> OnUpdateHealth;
     [BurstCompile]
     protected override void OnCreate()
     {
