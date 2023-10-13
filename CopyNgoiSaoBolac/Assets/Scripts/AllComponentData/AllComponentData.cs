@@ -45,12 +45,7 @@ public struct PlayerInput_OwnerComponent : IComponentData
 #endregion
 //------------------------------------------------------------------
 #region PlayerMoveSys
-public struct PlayerMove_OwnerComponent : IComponentData
-{
-    public bool active;
-    public float moveSpeed;
-    public float rotateSpeed;
-}
+
 #endregion
 //---------------------------------------------------
 #region EnemyAISys

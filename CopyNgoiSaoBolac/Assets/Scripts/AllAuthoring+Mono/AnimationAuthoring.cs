@@ -27,7 +27,7 @@ public class AnimationAuthoring : MonoBehaviour
                 _frameCountdown = authoring._frameCountdown,
                 nextframe = authoring._frameCountdown,
             });
-
+            AddComponent<IsFlipTag>(new IsFlipTag { isRight = true });
         }
     }
 }
@@ -42,4 +42,8 @@ public struct SpriteSheetAnimation : IComponentData
     public int animationFrameIndex;//VD 1.2.3.4
     public int maxSprite;//VD:4
 
+}
+public struct IsFlipTag : IComponentData
+{
+    public bool isRight;
 }

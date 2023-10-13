@@ -10,11 +10,10 @@ public class EnemyAuthoring : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    public float maxChaseDist = 7;
-    public float minChaseDist = 0.05f;
 
-    public int StartingHitPoints;
-    public int ExperiencePointsValue;
+    public float minChaseDist = 2f;
+
+
 
     public class EnemyBaker : Baker<EnemyAuthoring>
     {
@@ -27,24 +26,11 @@ public class EnemyAuthoring : MonoBehaviour
                 moveSpeed = authoring.moveSpeed,
                 rotateSpeed = authoring.rotateSpeed,
                 ///
-                maxChaseDist = authoring.maxChaseDist,
+
                 minChaseDist = authoring.minChaseDist
             });
 
 
-            AddComponent(new DamageSys_HealthComponent { Value = authoring.StartingHitPoints });
-            AddComponent(new DealDamageSys_EXPComponent { Value = authoring.ExperiencePointsValue });
-
-            AddComponent(new DealDamageSys_OwnerComponent
-            {
-                Value = 0,
-                OriginCharacter = entity
-            });
-
-
-            AddComponent(new ExecuteTriggerSys_HealthComponent { Value = authoring.StartingHitPoints });
-
-            AddBuffer<DealDamageSys2_OwnerComponent>();
         }
     }
 }

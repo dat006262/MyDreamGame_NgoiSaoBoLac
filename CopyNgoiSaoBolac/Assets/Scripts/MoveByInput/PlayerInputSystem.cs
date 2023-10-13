@@ -132,31 +132,43 @@ public partial struct MovementJob : IJobEntity
     public float deltaTime;
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in CharacterStat plComp,
-                        ref PhysicsVelocity velocity, in Entity ent,
+                        ref PhysicsVelocity velocity, in Entity ent, ref PlayerMove_OwnerComponent playerMove,
                         in PlayerInput_OwnerComponent input, in PhysicsMass mass,
-                        HardControlTag hardCC,
+                        HardControlTag hardCC, in DynamicBuffer<AnimationParent_ElementComponent> animator,
                         ref LocalTransform ltrans, in WorldTransform wtrans)
     {
-
+        bool isMove = false;
         if (hardCC.isCC) return;
         float moveSpeed = plComp._speedValue;
 
         // rotate
         if (input.Left.keyVal)
-            velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, -new float3(1, 0, 0) * moveSpeed * deltaTime, wtrans.Position);
+        { velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, -new float3(1, 0, 0) * moveSpeed * deltaTime, wtrans.Position); isMove = true; playerMove.isRight = false; }
         //   ltrans.Position += new float3(-1, 0, 0) * moveSpeed * deltaTime;
-        if (input.Right.keyVal)
-            velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, new float3(1, 0, 0) * moveSpeed * deltaTime, wtrans.Position);
+        else if (input.Right.keyVal)
+        { velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, new float3(1, 0, 0) * moveSpeed * deltaTime, wtrans.Position); isMove = true; playerMove.isRight = true; }
         //  ltrans.Position += new float3(1, 0, 0) * moveSpeed * deltaTime;
         // move
         if (input.Up.keyVal)
-            velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, new float3(0, 1, 0) * moveSpeed * deltaTime, wtrans.Position);
+        { velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, new float3(0, 1, 0) * moveSpeed * deltaTime, wtrans.Position); isMove = true; }
         //  ltrans.Position += new float3(0, 1, 0) * moveSpeed * deltaTime;
 
-        if (input.Down.keyVal)
-            velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, -new float3(0, 1, 0) * moveSpeed * deltaTime, wtrans.Position);
+        else if (input.Down.keyVal)
+        { velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, -new float3(0, 1, 0) * moveSpeed * deltaTime, wtrans.Position); isMove = true; }
         //   ltrans.Position += new float3(0, -1, 0) * moveSpeed * deltaTime;
 
+        if (isMove && !playerMove.isMove)
+        {
+
+            ecbp.SetComponent<SpriteSheetAnimation>(ciqi, animator[0].animParent, new SpriteSheetAnimation { indexAnim = 0, maxSprite = 6, _frameCountdown = 0.25f, nextframe = 0.25f, repeatition = SpriteSheetAnimation.RepeatitionType.LOOP });
+        }
+        else if (!isMove && playerMove.isMove)
+        {
+            ecbp.SetComponent<SpriteSheetAnimation>(ciqi, animator[0].animParent, new SpriteSheetAnimation { indexAnim = 1, maxSprite = 4, _frameCountdown = 0.25f, nextframe = 0.25f, repeatition = SpriteSheetAnimation.RepeatitionType.LOOP });
+
+        }
+        playerMove.isMove = isMove;
+        ecbp.SetComponent<IsFlipTag>(ciqi, animator[0].animParent, new IsFlipTag { isRight = playerMove.isRight });
     }
 
 }

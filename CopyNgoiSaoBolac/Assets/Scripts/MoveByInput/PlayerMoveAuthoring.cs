@@ -5,8 +5,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class PlayerMoveAuthoring : MonoBehaviour
 {
-    public float moveSpeed = 1;
-    public float rotateSpeed = 1;
+    public bool isMove;
 
     public class PlayerBaker : Baker<PlayerMoveAuthoring>
     {
@@ -16,10 +15,16 @@ public class PlayerMoveAuthoring : MonoBehaviour
             AddComponent<PlayerMove_OwnerComponent>(/*entity, */new PlayerMove_OwnerComponent
             {
                 active = true,
-                moveSpeed = authoring.moveSpeed,
-                rotateSpeed = authoring.rotateSpeed
+                isMove = false,
+                isRight = true
             });
 
         }
     }
+}
+public struct PlayerMove_OwnerComponent : IComponentData
+{
+    public bool active;
+    public bool isMove;
+    public bool isRight;
 }

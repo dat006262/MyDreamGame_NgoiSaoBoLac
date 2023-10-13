@@ -10,14 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8a22e8dad9a999343bdf5bc5ae2c7394, type: 3}
-  m_Name: Enemy0Walk
+  m_Name: Enemy0Die
   m_EditorClassIdentifier: 
-  animationName: Enemy0Walk
+  animationName: Enemy0Die
   sprites:
-  - {fileID: 156602360, guid: 2aba3e5a91791314992e92f824e98e7d, type: 3}
-  - {fileID: -767113140, guid: 2aba3e5a91791314992e92f824e98e7d, type: 3}
-  - {fileID: 1965690131, guid: 2aba3e5a91791314992e92f824e98e7d, type: 3}
-  - {fileID: -2082060424, guid: 2aba3e5a91791314992e92f824e98e7d, type: 3}
+  - {fileID: -1740136418, guid: 2aba3e5a91791314992e92f824e98e7d, type: 3}
+  - {fileID: 1729384367, guid: 2aba3e5a91791314992e92f824e98e7d, type: 3}
   startIndex: 0
   playOnStart: 1
   repeatitionType: 1

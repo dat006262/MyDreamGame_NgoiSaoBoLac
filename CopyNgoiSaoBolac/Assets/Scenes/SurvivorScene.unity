@@ -420,6 +420,8 @@ MonoBehaviour:
   animations:
   - {fileID: 11400000, guid: fb06fd414e661894fb4e57510e15d6b1, type: 2}
   - {fileID: 11400000, guid: 6c3afe07689eae54b924dc070813ac94, type: 2}
+  - {fileID: 11400000, guid: b9d90d4c55524494695f8906d16f53b1, type: 2}
+  - {fileID: 11400000, guid: b8a12b9401c18fb45aef9522450d506c, type: 2}
 --- !u!4 &913069405
 Transform:
   m_ObjectHideFlags: 0

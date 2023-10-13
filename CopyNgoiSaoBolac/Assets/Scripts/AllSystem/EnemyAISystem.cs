@@ -69,16 +69,16 @@ public partial struct EnemyChaseJob : IJobEntity
     };
 
     [BurstCompile]
-    private void Execute([ChunkIndexInQuery] int ciqi, in LocalTransform localTrEnemy, in EnemyAI_OwnerComponent ufoC, in Entity ufoEnt)
+    private void Execute([ChunkIndexInQuery] int ciqi, in LocalTransform localTr, in EnemyAI_OwnerComponent ufoC, in Entity ufoEnt, in DynamicBuffer<AnimationParent_ElementComponent> animator)
     {
         float sq_MinLengPath = float.MaxValue;
-        float3 target_Pos = localTrEnemy.Position;
+        float3 target_Pos = localTr.Position;
         bool playersExist = false;
         // for now we don't care about any further knowledge than just, closest distance one or another.
         foreach (float3 playerPos in playerPosArr)
         {
             playersExist = true;
-            float sq_leng = math.distancesq(playerPos, localTrEnemy.Position);
+            float sq_leng = math.distancesq(playerPos, localTr.Position);
             if (sq_MinLengPath > sq_leng)
             {
                 sq_MinLengPath = sq_leng;
@@ -89,11 +89,11 @@ public partial struct EnemyChaseJob : IJobEntity
             {
                 // alsocheck through walls
                 float sqDistPortal = float.MaxValue;
-                float3 dirToPlayer = math.normalize(playerPos - localTrEnemy.Position);
+                float3 dirToPlayer = math.normalize(playerPos - localTr.Position);
                 RaycastInput raycastInput = new RaycastInput()
                 {
-                    Start = localTrEnemy.Position,
-                    End = localTrEnemy.Position - dirToPlayer * 10,//gan dung
+                    Start = localTr.Position,
+                    End = localTr.Position - dirToPlayer * 10,//gan dung
                     Filter = new CollisionFilter
                     {
                         BelongsTo = (uint)layer.UFOs,
@@ -114,29 +114,31 @@ public partial struct EnemyChaseJob : IJobEntity
         // GetMinComplete
 
         float totalDist = math.sqrt(sq_MinLengPath);
-        if (playersExist && totalDist <= ufoC.maxChaseDist && totalDist >= ufoC.minChaseDist)
+        if (playersExist && totalDist >= ufoC.minChaseDist)
         {
             var newLtrans = new LocalTransform
             {
-                Position = localTrEnemy.Position,
-                Rotation = localTrEnemy.Rotation,
-                Scale = localTrEnemy.Scale
+                Position = localTr.Position,
+                Rotation = localTr.Rotation,
+                Scale = localTr.Scale
             };
-            if ((target_Pos - localTrEnemy.Position).x != 0)
-                newLtrans.Position += deltaTime * ufoC.moveSpeed * math.normalize(target_Pos - localTrEnemy.Position);
+            if ((target_Pos - localTr.Position).x != 0)
+                newLtrans.Position += deltaTime * ufoC.moveSpeed * math.normalize(target_Pos - localTr.Position);
             ecbp.SetComponent<LocalTransform>(ciqi, ufoEnt, newLtrans);
         }
         else
         {// "patrol state"
             var newLtrans = new LocalTransform
             {
-                Position = localTrEnemy.Position,
-                Rotation = localTrEnemy.Rotation,
-                Scale = localTrEnemy.Scale
+                Position = localTr.Position,
+                Rotation = localTr.Rotation,
+                Scale = localTr.Scale
             };
             newLtrans.Position += deltaTime * ufoC.moveSpeed * newLtrans.Right();
-            ecbp.SetComponent<LocalTransform>(ciqi, ufoEnt, newLtrans);
+            // ecbp.SetComponent<LocalTransform>(ciqi, ufoEnt, newLtrans);
         }
+        bool isRight = target_Pos.x - localTr.Position.x > 0 ? true : false;
+        ecbp.SetComponent<IsFlipTag>(ciqi, animator[0].animParent, new IsFlipTag { isRight = isRight });
 
     }
 }

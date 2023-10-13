@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DamageBasic: 100
-  flySpeed: 10
+  flySpeed: 20
 --- !u!114 &7078301349798276060
 MonoBehaviour:
   m_ObjectHideFlags: 0

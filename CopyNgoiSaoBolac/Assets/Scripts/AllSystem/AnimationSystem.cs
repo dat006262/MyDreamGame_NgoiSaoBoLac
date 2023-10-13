@@ -19,10 +19,13 @@ public partial class AnimationSystem : SystemBase
     {
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(World.Unmanaged);
-        Entities.WithoutBurst().ForEach((in SpriteRenderer spriteRender, in Entity ent, in SpriteSheetAnimation anim) =>
+        bool isRight = true;
+
+        Entities.WithoutBurst().ForEach((in SpriteRenderer spriteRender, in Entity ent, in SpriteSheetAnimation anim, in IsFlipTag isFlipTag) =>
         {
             if (!spriteRender.enabled) { return; }
             spriteRender.sprite = AnimationManager.intances.animations[anim.indexAnim].sprites[anim.animationFrameIndex];
+
         }).Run();
     }
 }
