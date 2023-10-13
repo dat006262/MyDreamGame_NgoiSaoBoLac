@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a22e8dad9a999343bdf5bc5ae2c7394, type: 3}
+  m_Name: Player0Walk
+  m_EditorClassIdentifier: 
+  animationName: Playey0Walk
+  sprites:
+  - {fileID: 1386127439, guid: 65be33dfd6d32484d95758fd85da49ac, type: 3}
+  - {fileID: -257493659, guid: 65be33dfd6d32484d95758fd85da49ac, type: 3}
+  - {fileID: -502069488, guid: 65be33dfd6d32484d95758fd85da49ac, type: 3}
+  - {fileID: 966113450, guid: 65be33dfd6d32484d95758fd85da49ac, type: 3}
+  - {fileID: -370962655, guid: 65be33dfd6d32484d95758fd85da49ac, type: 3}
+  - {fileID: -1160852994, guid: 65be33dfd6d32484d95758fd85da49ac, type: 3}
+  startIndex: 0
+  playOnStart: 1
+  repeatitionType: 1

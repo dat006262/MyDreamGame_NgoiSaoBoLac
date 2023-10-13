@@ -22,8 +22,7 @@ public partial class AnimationSystem : SystemBase
         Entities.WithoutBurst().ForEach((in SpriteRenderer spriteRender, in Entity ent, in SpriteSheetAnimation anim) =>
         {
             if (!spriteRender.enabled) { return; }
-
-            spriteRender.sprite = TEST_ANIMNAME.intaces.allPrite[0].sprites[anim.animationFrameIndex];
+            spriteRender.sprite = AnimationManager.intances.animations[anim.indexAnim].sprites[anim.animationFrameIndex];
         }).Run();
     }
 }

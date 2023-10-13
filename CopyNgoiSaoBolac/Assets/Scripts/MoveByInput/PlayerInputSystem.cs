@@ -22,6 +22,8 @@ public partial class PlayerInputSystem : SystemBase
         RequireForUpdate<PlayerInputSystemEnable>();
         RequireForUpdate<PlayerInput_OwnerComponent>();
         RequireForUpdate<CharacterStat>();
+
+
     }
 
 
@@ -143,7 +145,6 @@ public partial struct MovementJob : IJobEntity
         if (input.Left.keyVal)
             velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, -new float3(1, 0, 0) * moveSpeed * deltaTime, wtrans.Position);
         //   ltrans.Position += new float3(-1, 0, 0) * moveSpeed * deltaTime;
-
         if (input.Right.keyVal)
             velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, new float3(1, 0, 0) * moveSpeed * deltaTime, wtrans.Position);
         //  ltrans.Position += new float3(1, 0, 0) * moveSpeed * deltaTime;
@@ -156,11 +157,6 @@ public partial struct MovementJob : IJobEntity
             velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, -new float3(0, 1, 0) * moveSpeed * deltaTime, wtrans.Position);
         //   ltrans.Position += new float3(0, -1, 0) * moveSpeed * deltaTime;
 
-        // teleport / hyperspace
-        if (input.Shoot.keyVal)
-        {
-
-        }
     }
 
 }
