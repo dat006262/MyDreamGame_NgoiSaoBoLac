@@ -71,13 +71,13 @@ public partial struct LineSkill_AutoSpawnJob : IJobEntity
 
             Entity spawnedProj = ecbp.Instantiate(ciqi, q_MundoAutoSpawnComponent.prefab);
             //  ecbp.AddComponent<DeadDestroyTag>(ciqi, spawnedProj, new DeadDestroyTag { DeadAfter = 5f });
-            float3 spawnPos = ltrans.Position/* + ltrans.Up() * 0.5f * ltrans.Scale*/;
-            float spawnScale = ltrans.Scale;
+            float3 spawnPos = wtrans.Position/* + ltrans.Up() * 0.5f * ltrans.Scale*/;
+            float spawnScale = wtrans.Scale;
 
             ecbp.SetComponent<LocalTransform>(ciqi, spawnedProj, new LocalTransform
             {
                 Position = spawnPos,
-                Rotation = ltrans.Rotation /** Quaternion.Euler(0, 0, 90)*/,
+                Rotation = wtrans.Rotation /** Quaternion.Euler(0, 0, 90)*/,
                 Scale = spawnScale
             });
             plComp.cooldowmRemain = q_MundoAutoSpawnComponent.cooldownTime;

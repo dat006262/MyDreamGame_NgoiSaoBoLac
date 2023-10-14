@@ -41,7 +41,7 @@ public class WorldSpaceUIController : MonoBehaviour
     }
     private void AudioHit(float damageAmount, float3 startPosition)
     {
-        AudioManager.intances.PlaySFX(AudioManager.SFX.HIT);
+        AudioManager.intances.PlaySFX(AudioManager.SFX.MELEE);
     }
     private void DisplayDamageIcon(float damageAmount, float3 startPosition)
     {

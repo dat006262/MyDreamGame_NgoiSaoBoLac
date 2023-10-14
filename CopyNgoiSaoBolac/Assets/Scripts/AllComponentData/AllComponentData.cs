@@ -210,6 +210,10 @@ public struct DeadDestroyTag : IComponentData//Health
 {
     public float DeadAfter;
 }
+public struct DeadCleanTag : ICleanupComponentData//Health
+{
+
+}
 #endregion
 //----------------------------------------------------------
 

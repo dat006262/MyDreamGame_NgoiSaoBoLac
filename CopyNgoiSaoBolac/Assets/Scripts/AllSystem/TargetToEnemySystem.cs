@@ -74,16 +74,16 @@ public partial struct TurnHeadToTarget : IJobEntity
     };
 
     [BurstCompile]
-    private void Execute([ChunkIndexInQuery] int ciqi, ref LocalTransform playerTras, in TargetToEnemySy_OwnerComponent playerC, in Entity playerEnt)
+    private void Execute([ChunkIndexInQuery] int ciqi, ref WorldTransform wTras, ref LocalTransform local, LocalToWorld localToWorld, in TargetToEnemySy_OwnerComponent playerC, in Entity playerEnt)
     {
         float nearestDis = float.MaxValue;
-        float3 targetPos_forLeastDist = playerTras.Position;
+        float3 targetPos_forLeastDist = wTras.Position;
         bool playersExist = false;
         // for now we don't care about any further knowledge than just, closest distance one or another.
         foreach (float3 enemyPos in EnemyPosArr)
         {
             playersExist = true;
-            float sqDistEuclid = math.distancesq(enemyPos, playerTras.Position);
+            float sqDistEuclid = math.distancesq(enemyPos, wTras.Position);
             if (nearestDis > sqDistEuclid)
             {
                 nearestDis = sqDistEuclid;
@@ -95,11 +95,11 @@ public partial struct TurnHeadToTarget : IJobEntity
             {
                 // alsocheck through walls
                 float sqDistPortal = float.MaxValue;
-                float3 dirToPlayer = math.normalize(enemyPos - playerTras.Position);
+                float3 dirToPlayer = math.normalize(enemyPos - wTras.Position);
                 RaycastInput raycastInput = new RaycastInput()
                 {
-                    Start = playerTras.Position,
-                    End = playerTras.Position - dirToPlayer * 10,//lengofRayCast
+                    Start = wTras.Position,
+                    End = wTras.Position - dirToPlayer * 10,//lengofRayCast
                     Filter = new CollisionFilter
                     {
                         BelongsTo = (uint)layer.UFOs,
@@ -118,14 +118,16 @@ public partial struct TurnHeadToTarget : IJobEntity
         }
         //GetMinComplete
 
-        Quaternion lookRotation = Quaternion.LookRotation(playerTras.Position - targetPos_forLeastDist, new float3(0, 0, 1));
+        Quaternion lookRotation = Quaternion.LookRotation(localToWorld.Position - targetPos_forLeastDist, new float3(0, 0, 1));
+        //Xoay dan dan
+        //for (int k = 0; k < playerC.turnSpeed  /*speed*/; k++)
+        //{
+        //    float3 rotation = Quaternion.Lerp(local.Rotation, lookRotation, 0.01f).eulerAngles;//do chinh xac
+        //    local.Rotation = (Quaternion.Euler(0, 0, rotation.z));
+        //}
 
-        for (int k = 0; k < playerC.turnSpeed  /*speed*/; k++)
-        {
-            float3 rotation = Quaternion.Lerp(playerTras.Rotation, lookRotation, 0.01f).eulerAngles;//do chinh xac
-            playerTras.Rotation = (Quaternion.Euler(0, 0, rotation.z));
-        }
-
+        //Xoay do chinh xac 100%
+        local.Rotation = lookRotation;
     }
 }
 public static class MathHelpers

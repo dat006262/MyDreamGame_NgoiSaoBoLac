@@ -53,14 +53,15 @@ public partial struct DeadDestroySystem : ISystem
         {
 
             dedtag.DeadAfter -= deltaTime;
-            if (dedtag.DeadAfter <= 0)
-            {
-                foreach (var child in children)
-                {
-                    ecbp.DestroyEntity(ciqi, child.Value);
-                }
-                ecbp.DestroyEntity(ciqi, ent);
-            }
+            if (dedtag.DeadAfter <= 0) { ecbp.DestroyEntity(ciqi, ent); }
+            //if (dedtag.DeadAfter <= 0)
+            //{
+            //    foreach (var child in children)
+            //    {
+            //        ecbp.DestroyEntity(ciqi, child.Value);
+            //    }
+            //    ecbp.DestroyEntity(ciqi, ent);
+            //}
         }
     }
 }

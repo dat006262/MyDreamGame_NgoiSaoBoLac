@@ -26,7 +26,7 @@ public class AudioManager : MonoBehaviour
     {
         intances = this;
         Init();
-        //PlayBGM(true);//backGroundMusic
+        //  PlayBGM(true);//backGroundMusic
     }
     void Init()
     {
@@ -46,6 +46,7 @@ public class AudioManager : MonoBehaviour
         {
             sfxPlayers[index] = sfxObject.AddComponent<AudioSource>();
             sfxPlayers[index].playOnAwake = false;
+            sfxPlayers[index].loop = false;
             sfxPlayers[index].volume = sfxVolumn;
         }
     }

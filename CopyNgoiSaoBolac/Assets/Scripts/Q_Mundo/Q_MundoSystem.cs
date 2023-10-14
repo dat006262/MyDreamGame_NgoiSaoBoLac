@@ -10,6 +10,7 @@ using Unity.Transforms;
 using UnityEngine;
 //[UpdateInGroup(typeof(PhysicsSystemGroup))]
 //[UpdateAfter(typeof(StatefulTriggerEventSystem))]
+[UpdateAfter(typeof(DeadDestroySystem))]
 public partial struct Q_MundoSystem : ISystem
 {
     private EntityQuery Q_MundoSkillEQG;
@@ -67,6 +68,7 @@ public partial struct Q_MundoSystem : ISystem
                     );
 
                     ecb.AddComponent<DeadDestroyTag>(entity, new DeadDestroyTag { DeadAfter = -1 });
+                    ecb.AddComponent<DeadCleanTag>(entity);
                 }
                 else //Exit
                 {
