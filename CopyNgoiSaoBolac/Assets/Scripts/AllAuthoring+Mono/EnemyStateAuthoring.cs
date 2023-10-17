@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyStateAuthoring : MonoBehaviour
 {
 
-    public EnemyStateComponent.State state = EnemyStateComponent.State.FindingTarget;
+    //public EnemyStateComponent.State state = EnemyStateComponent.State.FindingTarget;
 
 
     public class EnemyStateBaker : Baker<EnemyStateAuthoring>
@@ -15,7 +15,7 @@ public class EnemyStateAuthoring : MonoBehaviour
         {
             AddComponent<EnemyStateComponent>(new EnemyStateComponent
             {
-                state = authoring.state
+                state = EnemyStateComponent.State.Running
             });
         }
     }

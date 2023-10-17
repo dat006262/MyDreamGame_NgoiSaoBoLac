@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 8267945049458660452}
   - component: {fileID: 553463179156258098}
   - component: {fileID: 8017380278199107211}
+  - component: {fileID: 4218943305446022762}
   m_Layer: 8
   m_Name: ZombieEnemy
   m_TagString: Untagged
@@ -242,7 +243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   rotateSpeed: 1
-  minChaseDist: 2
+  minChaseDist: 1
 --- !u!114 &8267945049458660452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,6 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e458b48e34a9dc447a2d8420d835865d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   BaseValueHealth: 100
   BaseValueStrength: 100
   BaseValueMana: 100
@@ -285,6 +287,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animParent:
   - {fileID: 5244104699515192216}
+--- !u!114 &4218943305446022762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3338758749157468369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f945ac9ed2a1604281cd46f53b41634, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  prefab: {fileID: 7298385891917534547, guid: 8d34c72156531c348b4d6bf13b8b3d48, type: 3}
 --- !u!1 &3633955792570537567
 GameObject:
   m_ObjectHideFlags: 0

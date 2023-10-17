@@ -11,7 +11,7 @@ public class EnemyAuthoring : MonoBehaviour
     /// 
     /// </summary>
 
-    public float minChaseDist = 2f;
+    public float minChaseDist = 1f;
 
 
 
@@ -29,8 +29,20 @@ public class EnemyAuthoring : MonoBehaviour
 
                 minChaseDist = authoring.minChaseDist
             });
-
+            AddComponent<EnemyStateComponent>(new EnemyStateComponent { statCountDown = -1, state = EnemyStateComponent.State.Running });
 
         }
     }
+
+
+}
+public struct EnemyStateComponent : IComponentData
+{
+    public enum State
+    {
+        Running = 0,
+        ReceiveDamage = 1
+    }
+    public State state;
+    public float statCountDown;
 }

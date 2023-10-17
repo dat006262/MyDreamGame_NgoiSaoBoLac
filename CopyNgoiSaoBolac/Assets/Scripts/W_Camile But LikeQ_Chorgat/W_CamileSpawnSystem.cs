@@ -8,6 +8,7 @@ using Unity.Physics;
 using Unity.Physics.Extensions;
 using Unity.Physics.Systems;
 using Unity.Transforms;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [UpdateAfter(typeof(PlayerInputSystem))]
@@ -37,21 +38,27 @@ public partial struct W_CamileSpawnSystem : ISystem
 
         state.Dependency = new AutoHit_SpawnJob
         {
-            configEntity = SystemAPI.GetSingletonEntity<ConfigComponent>(),
-            Config = config,
+            //configEntity = SystemAPI.GetSingletonEntity<ConfigComponent>(),
+            //Config = config,
             currentTime = Time.timeAsDouble,
             deltaTime = Time.deltaTime,
             ecbp = ecb.AsParallelWriter(),
         }.ScheduleParallel(m_OwnerEQG, state.Dependency);
         state.Dependency.Complete();
+        state.Dependency = new WaitToHitJob
+        {
+            deltaTime = SystemAPI.Time.DeltaTime,
+            ecbp = ecb.AsParallelWriter()
+
+        }.ScheduleParallel(m_OwnerEQG, state.Dependency);
     }
 }
 
 [BurstCompile]
 public partial struct AutoHit_SpawnJob : IJobEntity
 {
-    public Entity configEntity;
-    public ConfigComponent Config;
+    //public Entity configEntity;
+    //public ConfigComponent Config;
     [ReadOnly]
     public double currentTime;
     [ReadOnly]
@@ -59,7 +66,7 @@ public partial struct AutoHit_SpawnJob : IJobEntity
     public EntityCommandBuffer.ParallelWriter ecbp;
 
     public void Execute([ChunkIndexInQuery] int ciqi, in AutoHitSys_OwnerComponent plComp,
-                        in Entity ent, ref PlayerInput_OwnerComponent input,
+                        in Entity ent, ref AutoHitSys_StatusComponent statusHit,
                         in LocalTransform ltrans, in WorldTransform wtrans)
     {
 
@@ -69,29 +76,49 @@ public partial struct AutoHit_SpawnJob : IJobEntity
         {
 
         }
-        else
-        // shoot
-        if (Config.isAutoHitClick && autoHitSys_Owner.active && autoHitSys_Owner.prefab != Entity.Null)
+        else if (/*Config.isAutoHitClick && */statusHit.CanHit && !statusHit.Hitting && autoHitSys_Owner.active && autoHitSys_Owner.prefab != Entity.Null)
         {
+            statusHit.Hitting = true;
+            statusHit.WaitAnim = 1.5f;
 
-            ecbp.AddComponent<ConfigComponent>(ciqi, configEntity, new ConfigComponent { isAutoHitClick = false });
-            Entity spawnedProj = ecbp.Instantiate(ciqi, autoHitSys_Owner.prefab);
-            //  ecbp.AddComponent<DeadDestroyTag>(ciqi, spawnedProj, new DeadDestroyTag { DeadAfter = 3 });
-            float3 spawnPos = ltrans.Position/* + ltrans.Up() * 0.5f * ltrans.Scale*/;
-            float spawnScale = ltrans.Scale;
-
-
-
-            ecbp.SetComponent<LocalTransform>(ciqi, spawnedProj, new LocalTransform
+        }
+        else if (statusHit.Hitting && autoHitSys_Owner.active && autoHitSys_Owner.prefab != Entity.Null)
+        {
+            if (statusHit.WaitAnim < 0)
             {
-                Position = spawnPos,
-                Rotation = ltrans.Rotation * Quaternion.Euler(0, 0, 90),
-                Scale = spawnScale
-            });
+                //ecbp.AddComponent<ConfigComponent>(ciqi, configEntity, new ConfigComponent { isAutoHitClick = false });
+                Entity spawnedProj = ecbp.Instantiate(ciqi, autoHitSys_Owner.prefab);
+                //  ecbp.AddComponent<DeadDestroyTag>(ciqi, spawnedProj, new DeadDestroyTag { DeadAfter = 3 });
+                float3 spawnPos = ltrans.Position/* + ltrans.Up() * 0.5f * ltrans.Scale*/;
+                float spawnScale = ltrans.Scale;
 
 
+                ecbp.SetComponent<LocalTransform>(ciqi, spawnedProj, new LocalTransform
+                {
+                    Position = spawnPos,
+                    Rotation = ltrans.Rotation,
+                    Scale = spawnScale
+                });
 
+                statusHit.Hitting = false;
+            }
         }
     }
 
+}
+[BurstCompile]
+public partial struct WaitToHitJob : IJobEntity
+{
+    [ReadOnly]
+    public float deltaTime;
+    public EntityCommandBuffer.ParallelWriter ecbp;
+
+    public void Execute([ChunkIndexInQuery] int ciqi, ref AutoHitSys_StatusComponent autoHitSys_Status)
+    {
+
+
+        //  if (dedtag.DeadAfter <= 0) { ecbp.DestroyEntity(ciqi, ent); }
+        if (autoHitSys_Status.WaitAnim >= 0) { autoHitSys_Status.WaitAnim -= deltaTime; }
+
+    }
 }

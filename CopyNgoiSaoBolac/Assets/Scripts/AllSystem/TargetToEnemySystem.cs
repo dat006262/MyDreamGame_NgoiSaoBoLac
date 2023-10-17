@@ -109,8 +109,8 @@ public partial struct TurnHeadToTarget : IJobEntity
                 };
 
 #if UNITY_EDITOR
-                Debug.DrawLine(raycastInput.Start, raycastInput.End, Color.red, 0.25f);
-                Debug.DrawLine(raycastInput.Start, raycastInput.Start + dirToPlayer * 10, Color.green, 0.25f);
+                Debug.DrawLine(raycastInput.Start, raycastInput.End, Color.red, 0);
+                Debug.DrawLine(raycastInput.Start, raycastInput.Start + dirToPlayer * 10, Color.green, 0);
 #endif
 
 

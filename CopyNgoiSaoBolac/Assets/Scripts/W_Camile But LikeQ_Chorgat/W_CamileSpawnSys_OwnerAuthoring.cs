@@ -19,6 +19,13 @@ public class W_CamileSpawnSys_OwnerAuthoring : MonoBehaviour
                 timeToLive = 0,
             }
             );
+            AddComponent<AutoHitSys_StatusComponent>(new AutoHitSys_StatusComponent { CanHit = false, Hitting = false });
         }
     }
+}
+public struct AutoHitSys_StatusComponent : IComponentData
+{
+    public bool CanHit;
+    public bool Hitting;
+    public float WaitAnim;
 }

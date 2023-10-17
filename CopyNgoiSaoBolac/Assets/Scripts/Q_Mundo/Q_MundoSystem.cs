@@ -10,7 +10,7 @@ using Unity.Transforms;
 using UnityEngine;
 //[UpdateInGroup(typeof(PhysicsSystemGroup))]
 //[UpdateAfter(typeof(StatefulTriggerEventSystem))]
-[UpdateAfter(typeof(DeadDestroySystem))]
+[UpdateBefore(typeof(DeadDestroySystem))]
 public partial struct Q_MundoSystem : ISystem
 {
     private EntityQuery Q_MundoSkillEQG;
@@ -18,11 +18,16 @@ public partial struct Q_MundoSystem : ISystem
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
+
         state.RequireForUpdate<ConfigComponent>();
         state.RequireForUpdate<StatefulTriggerEvent>();
         state.RequireForUpdate<Q_MundoSystemEnable>();
         state.RequireForUpdate<Q_MundoComponent>();
-        Q_MundoSkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<Q_MundoComponent>());
+        //   Q_MundoSkillEQG = state.GetEntityQuery(ComponentType.ReadOnly<Q_MundoComponent>());
+        Q_MundoSkillEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
+       .WithAll<Q_MundoComponent>()
+       .WithNone<DeadCleanTag>()
+       );
         //
     }
 
@@ -42,38 +47,44 @@ public partial struct Q_MundoSystem : ISystem
             "The use of EntityQueryMask in this system will not respect the query's active filter settings.");
         var nonTriggerMask = nonTriggerQuery.GetEntityQueryMask();
 
+
         foreach (var (triggerEventBuffer, Q_MunComp, localTrans, entity) in
                    SystemAPI.Query<DynamicBuffer<StatefulTriggerEvent>, RefRW<Q_MundoComponent>, LocalTransform>()
                        .WithEntityAccess())
         {
-            for (int i = 0; i < triggerEventBuffer.Length; i++)
+            if (triggerEventBuffer.Length > 0)
             {
-                var triggerEvent = triggerEventBuffer[i];
-                var otherEntity = triggerEvent.GetOtherEntity(entity);
-
-                // exclude other triggers and processed events
-                if (triggerEvent.State == StatefulEventState.Stay ||
-                    !nonTriggerMask.MatchesIgnoreFilter(otherEntity))
+                for (int i = 0; i < triggerEventBuffer.Length; i++)
                 {
-                    continue;
-                }
+                    var triggerEvent = triggerEventBuffer[i];
+                    var otherEntity = triggerEvent.GetOtherEntity(entity);
 
-                if (triggerEvent.State == StatefulEventState.Enter)
-                {
-                    ecb.AppendToBuffer<StatValueModify>(otherEntity, new StatValueModify
+                    // exclude other triggers and processed events
+                    if (triggerEvent.State == StatefulEventState.Stay ||
+                        !nonTriggerMask.MatchesIgnoreFilter(otherEntity))
                     {
-                        value = -Q_MunComp.ValueRO.DamageBasic,
-                        statType = StatType.Health
+                        continue;
                     }
-                    );
 
-                    ecb.AddComponent<DeadDestroyTag>(entity, new DeadDestroyTag { DeadAfter = -1 });
-                    ecb.AddComponent<DeadCleanTag>(entity);
-                }
-                else //Exit
-                {
+                    if (triggerEvent.State == StatefulEventState.Enter)
+                    {
+                        ecb.AppendToBuffer<StatValueModify>(otherEntity, new StatValueModify
+                        {
+                            value = -Q_MunComp.ValueRO.DamageBasic,
+                            statType = StatType.Health
 
+                        }
+                        );
+
+                        ecb.AddComponent<DeadCleanTag>(entity);
+                        ecb.AddComponent<DeadDestroyTag>(entity, new DeadDestroyTag { DeadAfter = -1 });
+                    }
+                    else //Exit
+                    {
+
+                    }
                 }
+
             }
         }
 

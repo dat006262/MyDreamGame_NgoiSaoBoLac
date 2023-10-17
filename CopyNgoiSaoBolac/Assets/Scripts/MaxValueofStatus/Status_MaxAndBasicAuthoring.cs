@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Status_MaxAndBasicAuthoring : MonoBehaviour
 {
+    public TypeCharac type;
     public float BaseValueHealth = 100;
     public float BaseValueStrength = 100;
     public float BaseValueMana = 100;
@@ -35,8 +36,14 @@ public class Status_MaxAndBasicAuthoring : MonoBehaviour
 
             });
             AddBuffer<StatValueModify>();
+            AddComponent<TypeCharacter>(new TypeCharacter { type = authoring.type });
         }
     }
+}
+public enum TypeCharac { Player, Enemy }
+public struct TypeCharacter : IComponentData
+{
+    public TypeCharac type;
 }
 public struct CharacterStat : IComponentData
 {

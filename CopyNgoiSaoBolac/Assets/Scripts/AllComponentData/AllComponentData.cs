@@ -59,16 +59,7 @@ public struct EnemyAI_OwnerComponent : IComponentData
     public float maxChaseDist;
     public float minChaseDist;
 }
-public struct EnemyStateComponent : IComponentData
-{
-    public enum State
-    {
-        FindingTarget = 0,
-        AtackTarget = 1,
-        StopAtack = 2,
-    }
-    public State state;
-}
+
 
 public struct EnemyAISys_TargetComponent : IComponentData { }
 #endregion

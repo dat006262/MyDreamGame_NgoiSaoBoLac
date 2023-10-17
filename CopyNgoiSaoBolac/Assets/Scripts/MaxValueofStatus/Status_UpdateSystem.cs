@@ -24,9 +24,12 @@ public partial class Status_UpdateSystem : SystemBase
     [BurstCompile]
     protected override void OnUpdate()
     {
-        foreach (var (statValue, statValueModifyBuffer, transform, entity) in
-            SystemAPI.Query<RefRW<CharacterStatValue>, DynamicBuffer<StatValueModify>,
-                LocalTransform>().WithEntityAccess())
+        var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
+        var ecb = ecbSingleton.CreateCommandBuffer(World.Unmanaged);
+
+        foreach (var (statValue, statValueModifyBuffer, animator, transform, type, entity) in
+            SystemAPI.Query<RefRW<CharacterStatValue>, DynamicBuffer<StatValueModify>, DynamicBuffer<AnimationParent_ElementComponent>,
+                LocalTransform, TypeCharacter>().WithEntityAccess().WithNone<DeadCleanTag>())
         {
             for (var i = statValueModifyBuffer.Length - 1; i >= 0; i--)
             {
@@ -37,8 +40,20 @@ public partial class Status_UpdateSystem : SystemBase
 
                     GlobalAction.OnUpdateHealth.Invoke(statValueModifyBuffer.ElementAt(i).value, transform.Position);
                     statValueModifyBuffer.RemoveAt(i);
+                    if (type.type == TypeCharac.Enemy)
+                        GlobalAction.OnEnemyReceiveHit.Invoke(ecb, entity, animator[0].animParent);
+
+
+
                 }
 
+            }
+
+            if (statValue.ValueRO.health <= 0)
+            {
+                GlobalAction.OnGrantEXP.Invoke(1);
+                ecb.AddComponent<DeadCleanTag>(entity);
+                ecb.AddComponent<DeadDestroyTag>(entity, new DeadDestroyTag { DeadAfter = -1 });
             }
         }
 

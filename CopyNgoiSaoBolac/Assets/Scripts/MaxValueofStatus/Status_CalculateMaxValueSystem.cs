@@ -87,13 +87,16 @@ public partial struct ApplyModifyJob : IJobEntity
             var x = dynamicBuffer.AsNativeArray();
             NativeArray<StatModify> copyBuffer = new NativeArray<StatModify>(x.Length, Allocator.Temp);
             x.CopyTo(copyBuffer);
-            copyBuffer.Sort(new CompareModifierOrder());
+            copyBuffer.Sort(new CompareModifierOrder());//nhan chia truoc cong tru sau
 
             var finalHealthValue = stat.BaseValueHealth;
-            var finalStrengthValue = stat.BaseValueHealth;
-            var finalManaValue = stat.BaseValueHealth;
+            var finalStrengthValue = stat.BaseValueStrength;
+            var finalManaValue = stat.BaseValueMana;
             var finalSpeedValue = stat.BaseValueSpeed;
-
+            float Health_SumPercentAdd = 0;
+            float Strength_SumPercentAdd = 0;
+            float Mana_SumPercentAdd = 0;
+            float Speed_SumPercentAdd = 0;
             for (int i = 0; i < copyBuffer.Length; i++)
             {
                 var modify = copyBuffer[i];
@@ -101,19 +104,19 @@ public partial struct ApplyModifyJob : IJobEntity
                 if (modify.statType == StatType.Health)
                 {
 
-                    float sumPercentAdd = 0;
+
                     if (modify.statModType == StatModType.Flat)
                     {
                         finalHealthValue += modify.Value;
                     }
                     else if (modify.statModType == StatModType.PercentAdd)
                     {
-                        sumPercentAdd += modify.Value;
-                        if (i + 1 >= copyBuffer.Length /*|| hits[i].statModType != StatModType.PercentAdd*/)
-                        {
-                            finalHealthValue *= 1 + sumPercentAdd;
-                            sumPercentAdd = 0;
-                        }
+                        Health_SumPercentAdd += modify.Value;
+                        //if (i + 1 >= copyBuffer.Length || copyBuffer[i + 1].statModType != StatModType.PercentAdd)
+                        //{
+                        //    finalHealthValue *= 1 + Health_SumPercentAdd;
+                        //    Health_SumPercentAdd = 0;
+                        //}
                     }
                     else if (modify.statModType == StatModType.PercentMulti)
                     {
@@ -124,19 +127,14 @@ public partial struct ApplyModifyJob : IJobEntity
                 if (modify.statType == StatType.Strength)
                 {
 
-                    float sumPercentAdd = 0;
                     if (modify.statModType == StatModType.Flat)
                     {
                         finalStrengthValue += modify.Value;
                     }
                     else if (modify.statModType == StatModType.PercentAdd)
                     {
-                        sumPercentAdd += modify.Value;
-                        if (i + 1 >= copyBuffer.Length /*|| hits[i].statModType != StatModType.PercentAdd*/)
-                        {
-                            finalStrengthValue *= 1 + sumPercentAdd;
-                            sumPercentAdd = 0;
-                        }
+                        Strength_SumPercentAdd += modify.Value;
+
                     }
                     else if (modify.statModType == StatModType.PercentMulti)
                     {
@@ -146,19 +144,15 @@ public partial struct ApplyModifyJob : IJobEntity
                 if (modify.statType == StatType.Speed)
                 {
 
-                    float sumPercentAdd = 0;
+                    // float sumPercentAdd = 0;
                     if (modify.statModType == StatModType.Flat)
                     {
                         finalSpeedValue += modify.Value;
                     }
                     else if (modify.statModType == StatModType.PercentAdd)
                     {
-                        sumPercentAdd += modify.Value;
-                        if (i + 1 >= copyBuffer.Length /*|| hits[i].statModType != StatModType.PercentAdd*/)
-                        {
-                            finalSpeedValue *= 1 + sumPercentAdd;
-                            sumPercentAdd = 0;
-                        }
+                        Speed_SumPercentAdd += modify.Value;
+
                     }
                     else if (modify.statModType == StatModType.PercentMulti)
                     {
@@ -168,23 +162,34 @@ public partial struct ApplyModifyJob : IJobEntity
                 if (modify.statType == StatType.Mana)
                 {
 
-                    float sumPercentAdd = 0;
+
                     if (modify.statModType == StatModType.Flat)
                     {
                         finalManaValue += modify.Value;
                     }
                     else if (modify.statModType == StatModType.PercentAdd)
                     {
-                        sumPercentAdd += modify.Value;
-                        if (i + 1 >= copyBuffer.Length /*|| hits[i].statModType != StatModType.PercentAdd*/)
-                        {
-                            finalManaValue *= 1 + sumPercentAdd;
-                            sumPercentAdd = 0;
-                        }
+                        Mana_SumPercentAdd += modify.Value;
+
                     }
                     else if (modify.statModType == StatModType.PercentMulti)
                     {
                         finalManaValue *= 1 + modify.Value;
+                    }
+                }
+
+                if (modify.statModType == StatModType.PercentAdd)
+                {
+                    if (i + 1 >= copyBuffer.Length || copyBuffer[i + 1].statModType != StatModType.PercentAdd)
+                    {
+                        finalHealthValue *= 1 + Health_SumPercentAdd;
+                        finalStrengthValue *= 1 + Strength_SumPercentAdd;
+                        finalSpeedValue *= 1 + Speed_SumPercentAdd;
+                        finalManaValue *= 1 + Mana_SumPercentAdd;
+                        Health_SumPercentAdd = 0;
+                        Strength_SumPercentAdd = 0;
+                        Speed_SumPercentAdd = 0;
+                        Mana_SumPercentAdd = 0;
                     }
                 }
             }
@@ -200,10 +205,11 @@ public partial struct ApplyModifyJob : IJobEntity
                 BaseValueHealth = stat.BaseValueHealth,
                 BaseValueMana = stat.BaseValueMana,
                 BaseValueStrength = stat.BaseValueStrength,
-                _healthMaxValue = finalHealthValue,
-                _manaMaxValue = finalStrengthValue,
-                _strengMaxValue = finalManaValue,
                 BaseValueSpeed = stat.BaseValueSpeed,
+                _healthMaxValue = finalHealthValue,
+                _manaMaxValue = finalManaValue,
+                _strengMaxValue = finalStrengthValue,
+
                 _speedValue = finalSpeedValue
 
 
@@ -214,7 +220,7 @@ public partial struct ApplyModifyJob : IJobEntity
 }
 public struct CompareModifierOrder : IComparer<StatModify>
 {
-    public int Compare(StatModify mod1, StatModify mod2)//be=>lon
+    public int Compare(StatModify mod1, StatModify mod2)//order cao se xep dau tien
     {
         if (mod1.order > mod2.order)
             return -1;

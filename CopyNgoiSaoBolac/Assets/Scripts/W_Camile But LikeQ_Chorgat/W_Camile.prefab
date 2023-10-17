@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 8520416822705664232}
   - component: {fileID: 3476143313696806179}
   - component: {fileID: 8847162489341069645}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: '[Shape]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,10 +188,10 @@ MonoBehaviour:
     m_CollidesWithCategories:
       m_Override: 0
       m_Value:
-        Category00: 0
+        Category00: 1
         Category01: 0
         Category02: 0
-        Category03: 1
+        Category03: 0
         Category04: 0
         Category05: 0
         Category06: 0

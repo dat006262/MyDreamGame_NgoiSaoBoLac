@@ -7,6 +7,7 @@ public class ConfigExecute : MonoBehaviour
 
     [Header("AllSystemEnable")]
     public bool SpawnSimpleSystem;
+    public bool RandomSpawnSystem;
     public bool PlayerInputSystemEnable;
     public bool PlayerMovementSystemEnable;
 
@@ -54,6 +55,7 @@ public class ConfigExecute : MonoBehaviour
         {
             var entity = GetEntity(TransformUsageFlags.None);
             if (authoring.DeadDestroySystemEnable) AddComponent<DeadDestroySystemEnable>(entity);
+            if (authoring.RandomSpawnSystem) AddComponent<RandomSpawnSystemEnable>(entity);
             if (authoring.SpawnSimpleSystem) AddComponent<SpawnSimpleSystemEnable>(entity);
             if (authoring.PlayerInputSystemEnable) AddComponent<PlayerInputSystemEnable>(entity);
             if (authoring.PlayerMovementSystemEnable) AddComponent<PlayerMovementSystemEnable>(entity);
@@ -162,5 +164,8 @@ public struct E_MorganaSpawnSystemEnable : IComponentData
 }
 
 public struct CowdControlSystemEnable : IComponentData
+{
+}
+public struct RandomSpawnSystemEnable : IComponentData
 {
 }

@@ -69,8 +69,10 @@ public partial struct EnemyChaseJob : IJobEntity
     };
 
     [BurstCompile]
-    private void Execute([ChunkIndexInQuery] int ciqi, in LocalTransform localTr, in EnemyAI_OwnerComponent ufoC, in Entity ufoEnt, in DynamicBuffer<AnimationParent_ElementComponent> animator)
+    private void Execute([ChunkIndexInQuery] int ciqi, in LocalTransform localTr, in EnemyAI_OwnerComponent enemyAI,
+        in Entity ufoEnt, in DynamicBuffer<AnimationParent_ElementComponent> animator, ref EnemyStateComponent stateComponent, ref AutoHitSys_StatusComponent stateHit)
     {
+
         float sq_MinLengPath = float.MaxValue;
         float3 target_Pos = localTr.Position;
         bool playersExist = false;
@@ -85,7 +87,7 @@ public partial struct EnemyChaseJob : IJobEntity
                 target_Pos = playerPos;
             }
 
-            if (sq_leng > ufoC.minChaseDist)
+            if (sq_leng > enemyAI.minChaseDist)
             {
                 // alsocheck through walls
                 float sqDistPortal = float.MaxValue;
@@ -114,7 +116,7 @@ public partial struct EnemyChaseJob : IJobEntity
         // GetMinComplete
 
         float totalDist = math.sqrt(sq_MinLengPath);
-        if (playersExist && totalDist >= ufoC.minChaseDist)
+        if (playersExist && totalDist >= enemyAI.minChaseDist)
         {
             var newLtrans = new LocalTransform
             {
@@ -122,23 +124,50 @@ public partial struct EnemyChaseJob : IJobEntity
                 Rotation = localTr.Rotation,
                 Scale = localTr.Scale
             };
-            if ((target_Pos - localTr.Position).x != 0)
-                newLtrans.Position += deltaTime * ufoC.moveSpeed * math.normalize(target_Pos - localTr.Position);
+            if (stateComponent.state == EnemyStateComponent.State.Running && !stateHit.Hitting)
+            {
+                if ((target_Pos - localTr.Position).x != 0)
+                {
+                    newLtrans.Position += deltaTime * enemyAI.moveSpeed * math.normalize(target_Pos - localTr.Position);
+                }
+            }
+            else if (stateComponent.state == EnemyStateComponent.State.ReceiveDamage)
+            {
+                if ((target_Pos - localTr.Position).x != 0)
+                {
+                    newLtrans.Position += deltaTime * enemyAI.moveSpeed * 0.5f * (-math.normalize(target_Pos - localTr.Position));
+                }
+            }
             ecbp.SetComponent<LocalTransform>(ciqi, ufoEnt, newLtrans);
+            stateHit.CanHit = false;
         }
         else
-        {// "patrol state"
-            var newLtrans = new LocalTransform
-            {
-                Position = localTr.Position,
-                Rotation = localTr.Rotation,
-                Scale = localTr.Scale
-            };
-            newLtrans.Position += deltaTime * ufoC.moveSpeed * newLtrans.Right();
-            // ecbp.SetComponent<LocalTransform>(ciqi, ufoEnt, newLtrans);
+        {
+            //SpawnHit
+            stateHit.CanHit = true;
+
         }
         bool isRight = target_Pos.x - localTr.Position.x > 0 ? true : false;
         ecbp.SetComponent<IsFlipTag>(ciqi, animator[0].animParent, new IsFlipTag { isRight = isRight });
 
+        if (stateComponent.state == EnemyStateComponent.State.ReceiveDamage)
+        {
+            if (stateComponent.statCountDown >= 0)
+                stateComponent.statCountDown -= deltaTime;
+            else
+            {
+                stateComponent.state = EnemyStateComponent.State.Running;
+                //default Anim
+                ecbp.SetComponent<SpriteSheetAnimation>(ciqi, animator[0].animParent, new SpriteSheetAnimation
+                {
+                    indexAnim = 2,
+                    maxSprite = 4,
+                    _frameCountdown = 0.25f,
+                    nextframe = 0.25f,
+                    repeatition = SpriteSheetAnimation.RepeatitionType.LOOP,
+                    animationFrameIndex = 0
+                });
+            }
+        }
     }
 }

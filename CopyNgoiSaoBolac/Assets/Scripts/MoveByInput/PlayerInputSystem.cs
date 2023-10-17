@@ -160,11 +160,13 @@ public partial struct MovementJob : IJobEntity
         if (isMove && !playerMove.isMove)
         {
 
-            ecbp.SetComponent<SpriteSheetAnimation>(ciqi, animator[0].animParent, new SpriteSheetAnimation { indexAnim = 0, maxSprite = 6, _frameCountdown = 0.25f, nextframe = 0.25f, repeatition = SpriteSheetAnimation.RepeatitionType.LOOP });
+            ecbp.SetComponent<SpriteSheetAnimation>(ciqi, animator[0].animParent, new SpriteSheetAnimation
+            { animationFrameIndex = 0, indexAnim = 0, maxSprite = 6, _frameCountdown = 0.25f, nextframe = 0.25f, repeatition = SpriteSheetAnimation.RepeatitionType.LOOP });
         }
         else if (!isMove && playerMove.isMove)
         {
-            ecbp.SetComponent<SpriteSheetAnimation>(ciqi, animator[0].animParent, new SpriteSheetAnimation { indexAnim = 1, maxSprite = 4, _frameCountdown = 0.25f, nextframe = 0.25f, repeatition = SpriteSheetAnimation.RepeatitionType.LOOP });
+            ecbp.SetComponent<SpriteSheetAnimation>(ciqi, animator[0].animParent, new SpriteSheetAnimation
+            { animationFrameIndex = 0, indexAnim = 1, maxSprite = 4, _frameCountdown = 0.25f, nextframe = 0.25f, repeatition = SpriteSheetAnimation.RepeatitionType.LOOP });
 
         }
         playerMove.isMove = isMove;

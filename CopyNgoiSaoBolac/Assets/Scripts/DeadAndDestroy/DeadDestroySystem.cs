@@ -8,7 +8,7 @@ using Unity.Physics.Extensions;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
-//[UpdateInGroup(typeof(LateSimulationSystemGroup))]
+[UpdateInGroup(typeof(LateSimulationSystemGroup))]
 [BurstCompile]
 public partial struct DeadDestroySystem : ISystem
 {
@@ -19,7 +19,11 @@ public partial struct DeadDestroySystem : ISystem
 
         state.RequireForUpdate<DeadDestroySystemEnable>();
         state.RequireForUpdate<DeadDestroyTag>();
-        m_DeadDestroyEQG = state.GetEntityQuery(ComponentType.ReadOnly<DeadDestroyTag>());
+        // m_DeadDestroyEQG = state.GetEntityQuery(ComponentType.ReadOnly<DeadDestroyTag>());
+        m_DeadDestroyEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
+         .WithAll<DeadDestroyTag>()
+         .WithAll<LocalTransform>()
+         );
     }
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
@@ -53,15 +57,15 @@ public partial struct DeadDestroySystem : ISystem
         {
 
             dedtag.DeadAfter -= deltaTime;
-            if (dedtag.DeadAfter <= 0) { ecbp.DestroyEntity(ciqi, ent); }
-            //if (dedtag.DeadAfter <= 0)
-            //{
-            //    foreach (var child in children)
-            //    {
-            //        ecbp.DestroyEntity(ciqi, child.Value);
-            //    }
-            //    ecbp.DestroyEntity(ciqi, ent);
-            //}
+            //  if (dedtag.DeadAfter <= 0) { ecbp.DestroyEntity(ciqi, ent); }
+            if (dedtag.DeadAfter <= 0)
+            {
+                foreach (var child in children)
+                {
+                    ecbp.DestroyEntity(ciqi, child.Value);
+                }
+                ecbp.DestroyEntity(ciqi, ent);
+            }
         }
     }
 }

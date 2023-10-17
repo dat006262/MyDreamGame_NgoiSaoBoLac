@@ -475,10 +475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   rotateSpeed: 1
-  maxChaseDist: 40
   minChaseDist: 2
-  StartingHitPoints: 1000
-  ExperiencePointsValue: 20
 --- !u!114 &-9160413748891205101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,7 +488,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b742978440025b4f8ce7ff566b04f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
 --- !u!114 &6335872292831447473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -516,6 +512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e458b48e34a9dc447a2d8420d835865d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   BaseValueHealth: 100
   BaseValueStrength: 100
   BaseValueMana: 100
