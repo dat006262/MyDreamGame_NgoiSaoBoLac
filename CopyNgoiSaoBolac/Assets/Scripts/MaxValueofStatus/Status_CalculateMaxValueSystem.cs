@@ -59,10 +59,6 @@ public partial struct Status_CalculateMaxValueSystem : ISystem
 
 
 
-
-
-
-
         state.Dependency = new ApplyModifyJob
         {
             ecbp = ecb.AsParallelWriter()

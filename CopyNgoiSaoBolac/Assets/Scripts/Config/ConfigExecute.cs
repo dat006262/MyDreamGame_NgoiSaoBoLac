@@ -6,6 +6,7 @@ public class ConfigExecute : MonoBehaviour
 {
 
     [Header("AllSystemEnable")]
+    public bool AnimationSystemEnable;
     public bool SpawnSimpleSystem;
     public bool RandomSpawnSystem;
     public bool PlayerInputSystemEnable;
@@ -54,6 +55,7 @@ public class ConfigExecute : MonoBehaviour
         public override void Bake(ConfigExecute authoring)
         {
             var entity = GetEntity(TransformUsageFlags.None);
+            if (authoring.AnimationSystemEnable) AddComponent<AnimationSystemEnable>(entity);
             if (authoring.DeadDestroySystemEnable) AddComponent<DeadDestroySystemEnable>(entity);
             if (authoring.RandomSpawnSystem) AddComponent<RandomSpawnSystemEnable>(entity);
             if (authoring.SpawnSimpleSystem) AddComponent<SpawnSimpleSystemEnable>(entity);
@@ -167,5 +169,8 @@ public struct CowdControlSystemEnable : IComponentData
 {
 }
 public struct RandomSpawnSystemEnable : IComponentData
+{
+}
+public struct AnimationSystemEnable : IComponentData
 {
 }

@@ -23,7 +23,7 @@ public class AnimationAuthoring : MonoBehaviour
                 indexAnim = authoring.indexAnim,
                 repeatition = SpriteSheetAnimation.RepeatitionType.LOOP,
                 animationFrameIndex = 0,
-                maxSprite = AnimationManager.intances.animations[authoring.indexAnim].sprites.Length,
+                maxSprite = authoring.maxSprite,
                 _frameCountdown = authoring._frameCountdown,
                 nextframe = authoring._frameCountdown,
             });

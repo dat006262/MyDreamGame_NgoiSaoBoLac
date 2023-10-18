@@ -76,8 +76,8 @@ public class WorldSpaceUIController : MonoBehaviour
     private void DisplayEXPSlider(float experienceAmount)
     {
         current_EXP++;
-        _EXPSlider.value = (float)current_EXP / 10;
-        if (current_EXP == 10)
+        _EXPSlider.value = (float)current_EXP / 100;
+        if (current_EXP == 100)
         {
             current_EXP = 0;
             _EXPSlider.value = 0;
@@ -88,7 +88,13 @@ public class WorldSpaceUIController : MonoBehaviour
     }
     private void OnLevelUP()
     {
-
+        //StartCoroutine(wait());
         UnityEngine.Debug.Log("LEvelUp");
+    }
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(1);
+        var similateSystemGroup = World.DefaultGameObjectInjectionWorld.GetExistingSystemManaged<SimulationSystemGroup>();
+        similateSystemGroup.Enabled = false;
     }
 }

@@ -433,7 +433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _frameCountdown: 0.25
   indexAnim: 2
-  maxSprite: 0
+  maxSprite: 4
 --- !u!1 &5796548463862235221
 GameObject:
   m_ObjectHideFlags: 0

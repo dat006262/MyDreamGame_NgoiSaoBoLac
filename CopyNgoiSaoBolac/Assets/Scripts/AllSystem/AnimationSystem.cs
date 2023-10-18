@@ -9,6 +9,7 @@ public partial class AnimationSystem : SystemBase
     protected override void OnCreate()
     {
         RequireForUpdate<SpriteSheetAnimation>();
+        RequireForUpdate<AnimationSystemEnable>();
     }
 
 

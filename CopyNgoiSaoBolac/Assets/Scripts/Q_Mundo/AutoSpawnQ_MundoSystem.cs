@@ -36,7 +36,7 @@ public partial struct AutoSpawnQ_Mundo : ISystem
 
         state.Dependency = new LineSkill_AutoSpawnJob
         {
-
+            DameBasic = state.EntityManager.GetComponentData<CharacterStat>(SystemAPI.GetSingletonEntity<PlayerInput_OwnerComponent>())._strengMaxValue,
             currentTime = Time.timeAsDouble,
             deltaTime = Time.deltaTime,
             ecbp = ecb.AsParallelWriter(),
@@ -48,7 +48,7 @@ public partial struct AutoSpawnQ_Mundo : ISystem
 [BurstCompile]
 public partial struct LineSkill_AutoSpawnJob : IJobEntity
 {
-
+    public float DameBasic;
     [ReadOnly]
     public double currentTime;
     [ReadOnly]
@@ -70,6 +70,7 @@ public partial struct LineSkill_AutoSpawnJob : IJobEntity
         {
 
             Entity spawnedProj = ecbp.Instantiate(ciqi, q_MundoAutoSpawnComponent.prefab);
+            ecbp.AddComponent<Q_MundoComponent>(ciqi, spawnedProj, new Q_MundoComponent { active = true, flySpeed = 20, DamageBasic = DameBasic + 1 });
             //  ecbp.AddComponent<DeadDestroyTag>(ciqi, spawnedProj, new DeadDestroyTag { DeadAfter = 5f });
             float3 spawnPos = wtrans.Position/* + ltrans.Up() * 0.5f * ltrans.Scale*/;
             float spawnScale = wtrans.Scale;

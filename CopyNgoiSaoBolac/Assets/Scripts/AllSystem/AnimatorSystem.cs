@@ -16,6 +16,7 @@ public partial struct AnimatorSystem : ISystem
     {
 
         state.RequireForUpdate<SpriteSheetAnimation>();
+        state.RequireForUpdate<AnimationSystemEnable>();
         m_animEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp).WithAll<SpriteSheetAnimation>());
     }
     [BurstCompile]

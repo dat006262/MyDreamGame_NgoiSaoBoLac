@@ -172,7 +172,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &504460748
 Transform:
   m_ObjectHideFlags: 0
@@ -215,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30c032c0feca4534d9711f74d47f3370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPerWave: 5
+  spawnPerWave: 500
   waveTimeColdDown: 5
   PosSpawm:
   - x: -60
@@ -728,21 +728,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d77763be550294f41bf1c6f3ad022569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AnimationSystemEnable: 0
   SpawnSimpleSystem: 0
+  RandomSpawnSystem: 1
   PlayerInputSystemEnable: 1
   PlayerMovementSystemEnable: 1
   SkillCoolDownSystemEnable: 0
   Q_TemmoSpawnSystemEmable: 0
   W_CamileSpawnSystemEnable: 1
-  Q_MundoSpawnSystemEnble: 0
+  Q_MundoSpawnSystemEnble: 1
   E_MorganaSpawnSystemEnable: 0
   Q_TemmoSystemEnable: 0
-  Q_MundoSystemEnable: 0
-  W_CamileSystemEnable: 0
+  Q_MundoSystemEnable: 1
+  W_CamileSystemEnable: 1
   E_MorganaSystemEnable: 0
-  DeadDestroySystemEnable: 0
-  TargetToEnemySystemEnable: 0
-  EnemyAISystemEnable: 0
+  DeadDestroySystemEnable: 1
+  TargetToEnemySystemEnable: 1
+  EnemyAISystemEnable: 1
   CowdControlSystemEnable: 0
 --- !u!114 &1676966492
 MonoBehaviour:
@@ -1154,7 +1156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   BaseValueHealth: 10000
-  BaseValueStrength: 100
+  BaseValueStrength: 200
   BaseValueMana: 100
   BaseValueSpeed: 100
 --- !u!54 &4275887146940778988
@@ -1714,7 +1716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _frameCountdown: 0.25
   indexAnim: 1
-  maxSprite: 100
+  maxSprite: 4
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

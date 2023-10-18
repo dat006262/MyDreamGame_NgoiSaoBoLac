@@ -9,6 +9,7 @@ public partial class FlipXSystem : SystemBase
     protected override void OnCreate()
     {
         RequireForUpdate<SpriteSheetAnimation>();
+        RequireForUpdate<AnimationSystemEnable>();
     }
 
 

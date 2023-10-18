@@ -33,8 +33,9 @@ public partial struct RandomSpawnSystem : ISystem
         var randomint = UnityEngine.Random.Range(1, 100000);
         state.Dependency = new RandomSpawmJob
         {
+
             randomint = randomint,
-            ecbp = ecb.AsParallelWriter(),
+            ecbp = ecb.AsParallelWriter()
         }.ScheduleParallel(spawnerEQG, state.Dependency);
         state.Dependency.Complete();
         state.Dependency = new SpawnWaveCoolDownJob
@@ -66,6 +67,7 @@ public partial struct SpawnWaveCoolDownJob : IJobEntity
 [BurstCompile]
 public partial struct RandomSpawmJob : IJobEntity
 {
+
     public int randomint;
     public EntityCommandBuffer.ParallelWriter ecbp;
     [BurstCompile]
@@ -80,6 +82,7 @@ public partial struct RandomSpawmJob : IJobEntity
         {
             for (int j = 0; j < prefabsAndParents.Length; j++)
             {
+
                 Entity prefabInstance = ecbp.Instantiate(ciqi, prefabsAndParents[j].prefab);
 
 

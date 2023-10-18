@@ -21,6 +21,7 @@ public class UpgradeController : MonoBehaviour
 
     [Header("DATA")]
     public int FASTER_UPGRADE = 0;
+    public int DAMAGEHIT_UPGRADE = 0;
     IEnumerator Start()
     {
         intances = this;
