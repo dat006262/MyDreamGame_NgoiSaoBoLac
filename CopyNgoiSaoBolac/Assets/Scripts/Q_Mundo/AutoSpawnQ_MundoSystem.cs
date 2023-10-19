@@ -36,7 +36,7 @@ public partial struct AutoSpawnQ_Mundo : ISystem
 
         state.Dependency = new LineSkill_AutoSpawnJob
         {
-            DameBasic = state.EntityManager.GetComponentData<CharacterStat>(SystemAPI.GetSingletonEntity<PlayerInput_OwnerComponent>())._strengMaxValue,
+            DameBasic = state.EntityManager.GetComponentData<CharacterStat>(SystemAPI.GetSingletonEntity<PlayerInput_OwnerComponentOld>())._strengMaxValue,
             currentTime = Time.timeAsDouble,
             deltaTime = Time.deltaTime,
             ecbp = ecb.AsParallelWriter(),

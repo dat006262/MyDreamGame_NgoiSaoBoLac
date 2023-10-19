@@ -20,7 +20,7 @@ public partial class PlayerInputSystem : SystemBase
     protected override void OnCreate()
     {
         RequireForUpdate<PlayerInputSystemEnable>();
-        RequireForUpdate<PlayerInput_OwnerComponent>();
+        RequireForUpdate<PlayerInput_OwnerComponentOld>();
         RequireForUpdate<CharacterStat>();
 
 
@@ -36,38 +36,38 @@ public partial class PlayerInputSystem : SystemBase
         var ecbSingleton = SystemAPI.GetSingleton<BeginInitializationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(World.Unmanaged);
 
-        Entities.ForEach((in CharacterStat plComp, in Entity ent, in PlayerInput_OwnerComponent input) =>
+        Entities.ForEach((in CharacterStat plComp, in Entity ent, in PlayerInput_OwnerComponentOld input) =>
     {
 
-        var plInpComp = SystemAPI.GetComponent<PlayerInput_OwnerComponent>(ent);
-        ecb.SetComponent<PlayerInput_OwnerComponent>(ent, new PlayerInput_OwnerComponent
+        var plInpComp = SystemAPI.GetComponent<PlayerInput_OwnerComponentOld>(ent);
+        ecb.SetComponent<PlayerInput_OwnerComponentOld>(ent, new PlayerInput_OwnerComponentOld
         {
-            Up = new PlayerInput_OwnerComponent.InputPair
+            Up = new PlayerInput_OwnerComponentOld.InputPair
             {
                 keyCode = plInpComp.Up.keyCode,
                 keyVal = Input.GetKey(plInpComp.Up.keyCode)
             },
-            Down = new PlayerInput_OwnerComponent.InputPair
+            Down = new PlayerInput_OwnerComponentOld.InputPair
             {
                 keyCode = plInpComp.Down.keyCode,
                 keyVal = Input.GetKey(plInpComp.Down.keyCode)
             },
-            Left = new PlayerInput_OwnerComponent.InputPair
+            Left = new PlayerInput_OwnerComponentOld.InputPair
             {
                 keyCode = plInpComp.Left.keyCode,
                 keyVal = Input.GetKey(plInpComp.Left.keyCode)
             },
-            Right = new PlayerInput_OwnerComponent.InputPair
+            Right = new PlayerInput_OwnerComponentOld.InputPair
             {
                 keyCode = plInpComp.Right.keyCode,
                 keyVal = Input.GetKey(plInpComp.Right.keyCode)
             },
-            Shoot = new PlayerInput_OwnerComponent.InputPair
+            Shoot = new PlayerInput_OwnerComponentOld.InputPair
             {
                 keyCode = plInpComp.Shoot.keyCode,
                 keyVal = Input.GetKeyDown(plInpComp.Shoot.keyCode)
             },
-            Teleport = new PlayerInput_OwnerComponent.InputPair
+            Teleport = new PlayerInput_OwnerComponentOld.InputPair
             {
                 keyCode = plInpComp.Teleport.keyCode,
                 keyVal = Input.GetKeyUp(plInpComp.Teleport.keyCode)
@@ -92,11 +92,11 @@ public partial struct PlayerMovementSystem : ISystem
     {
         // at least one player in the scene
         state.RequireForUpdate<CharacterStat>();
-        state.RequireForUpdate<PlayerInput_OwnerComponent>();
+        state.RequireForUpdate<PlayerInput_OwnerComponentOld>();
 
         m_playersEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
         .WithAll<CharacterStat>()
-        .WithAll<PlayerInput_OwnerComponent>()
+        .WithAll<PlayerInput_OwnerComponentOld>()
         .WithAll<HardControlTag>()
         //.WithNone<HardCowdControl_Component>()
         );
@@ -133,7 +133,7 @@ public partial struct MovementJob : IJobEntity
     public EntityCommandBuffer.ParallelWriter ecbp;
     public void Execute([ChunkIndexInQuery] int ciqi, in CharacterStat plComp,
                         ref PhysicsVelocity velocity, in Entity ent, ref PlayerMove_OwnerComponent playerMove,
-                        in PlayerInput_OwnerComponent input, in PhysicsMass mass,
+                        in PlayerInput_OwnerComponentOld input, in PhysicsMass mass,
                         HardControlTag hardCC, in DynamicBuffer<AnimationParent_ElementComponent> animator,
                         ref LocalTransform ltrans, in WorldTransform wtrans)
     {

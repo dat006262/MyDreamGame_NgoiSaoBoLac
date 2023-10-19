@@ -26,14 +26,14 @@ public class PlayerInputAuthoring : MonoBehaviour
     {
         public override void Bake(PlayerInputAuthoring authoring)
         {
-            AddComponent<PlayerInput_OwnerComponent>(new PlayerInput_OwnerComponent
+            AddComponent<PlayerInput_OwnerComponentOld>(new PlayerInput_OwnerComponentOld
             {
-                Up = new PlayerInput_OwnerComponent.InputPair { keyCode = authoring.Up },
-                Down = new PlayerInput_OwnerComponent.InputPair { keyCode = authoring.Down },
-                Left = new PlayerInput_OwnerComponent.InputPair { keyCode = authoring.Left },
-                Right = new PlayerInput_OwnerComponent.InputPair { keyCode = authoring.Right },
-                Shoot = new PlayerInput_OwnerComponent.InputPair { keyCode = authoring.Shoot },
-                Teleport = new PlayerInput_OwnerComponent.InputPair { keyCode = authoring.Teleport }
+                Up = new PlayerInput_OwnerComponentOld.InputPair { keyCode = authoring.Up },
+                Down = new PlayerInput_OwnerComponentOld.InputPair { keyCode = authoring.Down },
+                Left = new PlayerInput_OwnerComponentOld.InputPair { keyCode = authoring.Left },
+                Right = new PlayerInput_OwnerComponentOld.InputPair { keyCode = authoring.Right },
+                Shoot = new PlayerInput_OwnerComponentOld.InputPair { keyCode = authoring.Shoot },
+                Teleport = new PlayerInput_OwnerComponentOld.InputPair { keyCode = authoring.Teleport }
             });
 
             //AddComponent<HackInputComponent>(new HackInputComponent

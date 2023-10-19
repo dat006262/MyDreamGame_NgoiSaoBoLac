@@ -56,7 +56,7 @@ public partial struct E_Morgana_SpawnJob : IJobEntity
     public EntityCommandBuffer.ParallelWriter ecbp;
 
     public void Execute([ChunkIndexInQuery] int ciqi, in E_MorganaSpawn_OwnerComponent plComp,
-                        in Entity ent, ref PlayerInput_OwnerComponent input,
+                        in Entity ent, ref PlayerInput_OwnerComponentOld input,
                         in LocalTransform ltrans, in WorldTransform wtrans)
     {
 

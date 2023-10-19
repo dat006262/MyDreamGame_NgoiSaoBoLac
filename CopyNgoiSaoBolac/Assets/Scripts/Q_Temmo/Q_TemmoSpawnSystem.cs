@@ -84,7 +84,7 @@ public partial struct SkillAutoTarget_SpawnJob : IJobEntity
     public EntityCommandBuffer.ParallelWriter ecbp;
 
     public void Execute([ChunkIndexInQuery] int ciqi, in SkillAutoTargetSys_OwnerComponent plComp,
-                        in Entity ent, ref PlayerInput_OwnerComponent input,
+                        in Entity ent, ref PlayerInput_OwnerComponentOld input,
                         ref LocalTransform ltrans, in WorldTransform wtrans)
     {
 

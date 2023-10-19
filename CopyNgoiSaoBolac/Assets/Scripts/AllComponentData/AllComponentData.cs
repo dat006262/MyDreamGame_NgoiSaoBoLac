@@ -25,7 +25,7 @@ public struct SimpleSpawner_PrefabAndParentBufferComponent : IBufferElementData
 #endregion
 //----------------------------------------------------------------------------
 #region PlayerInputSys
-public struct PlayerInput_OwnerComponent : IComponentData
+public struct PlayerInput_OwnerComponentOld : IComponentData
 {
     public struct InputPair
     {
