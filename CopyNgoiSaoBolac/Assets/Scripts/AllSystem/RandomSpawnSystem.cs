@@ -4,8 +4,7 @@ using Unity.Entities;
 using Unity.Physics;
 using Unity.Transforms;
 
-using UnityEngine;
-using static DeadDestroySystem;
+
 
 public partial struct RandomSpawnSystem : ISystem
 {

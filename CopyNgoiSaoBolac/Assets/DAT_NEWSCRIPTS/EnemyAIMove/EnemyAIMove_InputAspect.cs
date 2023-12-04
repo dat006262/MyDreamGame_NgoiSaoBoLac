@@ -1,10 +1,7 @@
 
 using DAT;
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
-using Unity.Transforms;
-using UnityEngine;
 
 public readonly partial struct EnemyAIMove_InputAspect : IAspect
 {

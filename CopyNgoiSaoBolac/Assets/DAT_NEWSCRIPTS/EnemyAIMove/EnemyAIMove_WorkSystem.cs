@@ -7,6 +7,8 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Extensions;
 using Unity.Transforms;
+using UnityEngine;
+
 
 
 [BurstCompile]
@@ -19,7 +21,7 @@ public partial struct EnemyAI_WorkSystem : ISystem
     {
         state.RequireForUpdate<EnemyAIMoveTag>();
         state.RequireForUpdate<ConfigComponent>();
-        //state.RequireForUpdate<PlayerMovementSystemEnable>();
+        state.RequireForUpdate<EnemyAISystemEnable>();
 
         m_ownerEQG = state.GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
         .WithAll<EnemyAIMoveTag>()
@@ -72,6 +74,21 @@ public partial struct EnemyAIMoveJob : IJobEntity
 
         InputAspect.distances.ValueRW.distances = distances;
         velocity.ApplyImpulse(mass, wtrans.Position, wtrans.Rotation, direction * speed * deltaTime, wtrans.Position);
+        RaycastInput raycastInput = new RaycastInput()
+        {
+            Start = ltrans.Position,
+            End = ltrans.Position - direction * 10,//gan dung
+            Filter = new CollisionFilter
+            {
+                //BelongsTo = (uint)layer.UFOs,
+                //  CollidesWith = (uint)layer.WorldBounds,
+                GroupIndex = 0
+            }
+        };
+#if UNITY_EDITOR
+        Debug.DrawLine(raycastInput.Start, raycastInput.End, Color.red, 0);
+        Debug.DrawLine(raycastInput.Start, raycastInput.Start + direction * 10, Color.green, 0);
+#endif
     }
 
 }
